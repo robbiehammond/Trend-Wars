@@ -8,6 +8,8 @@ class MessageType(Enum):
     PLAYER_LEAVE = auto()
     CREATE_LOBBY = auto()
     LOBBY_STATE = auto()
+    START_GAME = auto()
+    SUBMIT_WORD = auto()
 
     # returns string value of json 
     def __str__(self):

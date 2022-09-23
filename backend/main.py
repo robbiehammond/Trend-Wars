@@ -1,3 +1,5 @@
+from cgi import test
+from pydoc import plain
 import warnings
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit
@@ -6,6 +8,7 @@ from Message import Message, MessageType
 from Handlers import * 
 from Player import Player 
 from Lobby import LobbyIDGenerator
+import json
 
 # connection setup stuff
 app = Flask(__name__)
@@ -15,6 +18,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 lobbyIDGenerator = LobbyIDGenerator() # struct to easily generate unique, 6-uppercase-letter lobby IDs 
 lobbies = [] # List of all active lobbies
 socketToPlayers = {} # map socket connection to player  
+idToPlayer = {} #map player id to player object for quick access
 nextValidId = 0 # Each player needs a unique ID: this variable keeps track of the next valid one to assign
 
 # abstraction around socketio library
@@ -106,10 +110,83 @@ def onMessage(msg):
             
 
 
+# Similar to on message, but stuff doesn't need to be passed with a socket
+# We will get rid of this once more of the frontend <-> backend communication is set up 
+def onMessageLocal(msg):
+    global idToPlayer
+    global lobbies
+    decodedMessage = Message.fromJSON(msg)
+    sendingPlayerID = decodedMessage.msgData["playerID"]
+    msgType = decodedMessage.msgType
+
+    for lobby in lobbies:
+        if sendingPlayerID in lobby.playerIDs:
+            lobby.handleMessage(decodedMessage, idToPlayer, sendingPlayerID)
+
+
+
+
+# Tests the functionality of the lobby and game, without having to mess with frontend/connection stuff
+# Things still are passed in message format, so it's still mostly 'realistic' in the context of the game and lobby
+def testLobbyAndGame():
+    global idToPlayer
+    global lobbies
+
+    # create some test players 
+    test_player1 = Player(0, "test1", False)
+    test_player2 = Player(1, "test2", False)
+    idToPlayer[0] = test_player1
+    idToPlayer[1] = test_player2
+
+    # create a tes tlobby
+    test_lobby = Lobby("AAAAAA")
+    lobbies.append(test_lobby)
+
+    # simulate adding players to the lobby 
+    test_lobby.addPlayer(test_player1)
+    test_lobby.addPlayer(test_player2)
+    test_player1.lobbyID = test_lobby.id
+    test_player2.lobbyID = test_lobby.id
+
+    # simulate players readying up in the lobby
+    onMessageLocal(Message(MessageType.READY, {"playerID": test_player1.id} ).toJSON())
+    onMessageLocal(Message(MessageType.READY, {"playerID": test_player2.id}).toJSON())
+    onMessageLocal(Message(MessageType.START_GAME, {"playerID": test_player1.id}).toJSON())
+
+    test_lobby.printLobbyState()
+
+    # simulate round 1
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "big", "playerID": test_player1.id }).toJSON())
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "hairy", "playerID": test_player2.id }).toJSON())
+    test_lobby.printLobbyState()
+
+    # simulate round 2
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "large", "playerID": test_player1.id }).toJSON())
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "tiny", "playerID": test_player2.id }).toJSON())
+    test_lobby.printLobbyState()
+
+    # simulate round 3 
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "mega", "playerID": test_player1.id }).toJSON())
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "giga", "playerID": test_player2.id }).toJSON())
+    test_lobby.printLobbyState()
+
+    # simulate round 4
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "huge", "playerID": test_player1.id }).toJSON())
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "small", "playerID": test_player2.id }).toJSON())
+    test_lobby.printLobbyState()
+
+
+    # simulate round 5 (game should end here)
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "nonexistant", "playerID": test_player1.id }).toJSON())
+    onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "scary", "playerID": test_player2.id }).toJSON())
+
+
+
 def main():
     #msg = Message(MessageType.USERNAME, "Hello World")
     #print(msg.toJSON())
-    socketio.run(app, host='0.0.0.0', port='8080')
+    testLobbyAndGame()
+    #socketio.run(app, host='0.0.0.0', port='8080')
     
 
 if __name__ == '__main__':
