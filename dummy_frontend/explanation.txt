@@ -1,0 +1,1 @@
+In order to see if socket stuff was working, I needed a way to connect to the server. So I made a stock Reat app with a single useEffect thing that would try and connect. Go ahead and delete all of this code once real frontend development starts.

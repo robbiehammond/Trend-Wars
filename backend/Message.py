@@ -1,9 +1,5 @@
 from enum import Enum, auto
 
-#decode a message sent from frontend into a Message object
-def fromJSON(json):
-    return Message(json['type'], json['data'])
-
 #I'm sure we'll need more message types, but this is a start
 class MessageType(Enum):
     USERNAME = auto()
@@ -31,3 +27,8 @@ class Message:
             "type": str(self.msgType),
             "data": self.msgData
         }
+
+    #decode a message sent from frontend into a Message object
+    @staticmethod
+    def fromJSON(json):
+        return Message(json['type'], json['data'])
