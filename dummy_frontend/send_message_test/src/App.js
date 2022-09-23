@@ -5,15 +5,8 @@ import React, { useEffect } from 'react';
 
 function App()  {
   useEffect(() => {
-    const socket = io('http://localhost:8080');
-    socket.emit('message', {
-      type: 'CREATE_LOBBY',
-      data: "Yeah pls create lobby"
-    });
-    socket.on('connect', () => {
-      console.log('connected');
-    })
-  })
+    const socket = io('http://localhost:8080', {reconnection:false}); //connect to server
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
