@@ -1,10 +1,11 @@
 class Game:
-    def __init__(self, players):
+    def __init__(self, players, maxTurns):
         self.players = players
         self.turn = 0
         self.curWord = ""
         self.scores = {} # map each player to their score
         self.wordSubmissions = {} # map each player to their submitted word. Is cleared and re-populated every turn
+        self.maxTurns = maxTurns
 
         # initialize all player scores to 0
         for player in players:
@@ -12,7 +13,7 @@ class Game:
 
     # clear previous submissions and generate new starting word at the beginning of each turn
     def startNewTurn(self):
-        if self.turn > self.max_turns:
+        if self.turn > self.maxTurns:
             self.endGame()
             return
 
