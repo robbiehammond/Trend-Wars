@@ -6,9 +6,9 @@ def handleUsernameMsg(msg):
 def handlePlayerJoinMsg(msg):
     pass
 
-def handleCreateLobbyMsg(msg, sid, socketToPlayers, lobbies, newID):
-    if sid not in socketToPlayers:
-        print("Unknown socket tried to create lobby")
+def handleCreateLobbyMsg(msg, lobbyCreator, socketToPlayers, sid, lobbies, newID):
+    if lobbyCreator == None:
+        print("Unknown socket tried to create lobby. No player associated with the socket. Not handling request.")
         return
 
     lobby = Lobby(newID)
@@ -18,4 +18,7 @@ def handleCreateLobbyMsg(msg, sid, socketToPlayers, lobbies, newID):
     
 
 def handleLobbyStateMsg(msg):
+    pass
+
+def handleInGameRequest(msg, sendingPlayer, socketToPlayers, sid, lobbies):
     pass

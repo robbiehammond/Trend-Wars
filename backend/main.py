@@ -1,3 +1,4 @@
+import warnings
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
@@ -5,11 +6,13 @@ from Message import Message, MessageType
 from Handlers import * 
 from Player import Player 
 from Lobby import LobbyIDGenerator
+
+# connection setup stuff
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-lobbyIDGenerator = LobbyIDGenerator()
+lobbyIDGenerator = LobbyIDGenerator() # struct to easily generate unique, 6-uppercase-letter lobby IDs 
 lobbies = [] # List of all active lobbies
 socketToPlayers = {} # map socket connection to player  
 nextValidId = 0 # Each player needs a unique ID: this variable keeps track of the next valid one to assign
@@ -46,6 +49,8 @@ def connect():
 
 # This function is called whenever a player disconnects from the server 
 # i.e. if they close the tab or refresh the page
+# Note that it takes a while before the disconnect is registered, so when testing, it might say there are more players connected then there really are
+# They (should) be removed eventually however
 @socketio.on('disconnect')
 def disconnect():
     # Have to loop over all sockets to remove the disconnected one
@@ -60,16 +65,34 @@ def disconnect():
     
 
 
-# Function is called whenever a client sends any information to the server
+# Function is called whenever a client sends any information to the server 
 # The message is decoded, and the correct function is called based on the message type
 @socketio.on('message')
 def onMessage(msg):
     global lobbyIDGenerator
-    decodedMessage = Message.fromJSON(msg)
-    msgType = decodedMessage.msgType
-    print(len(lobbies))
+    global lobbies 
+    global socketToPlayers
 
-    # for each new message type we make, add a new case here for how to handle it + associated handler functio n
+    decodedMessage = Message.fromJSON(msg)
+    sendingPlayer = None
+
+    # Check if we've registered this player (we should have whenever this function is called)
+    # "Registering a player" -> mapping a socket (i.e. individual connection) to a player object
+    if (Socket(request.sid) in socketToPlayers):
+        sendingPlayer = socketToPlayers[Socket(request.sid)]
+    else:
+        warnings.warn("Warning: Socket not associated with a player. \'none\' will be used as the sending player. Bad things will probably happen")
+
+
+    #if the player who sent this message has been registered and is in a lobby/game, handle the message there
+    if sendingPlayer is not None and sendingPlayer.lobbyID is not None:
+        handleInGameRequest(decodedMessage, sendingPlayer, socketToPlayers, request.sid, lobbies)
+
+
+    msgType = decodedMessage.msgType
+    # Most messages will be interpreted by the player's corresponding lobby and are routed there 
+    # However, some must be interpreted before a player is in any lobby
+    # for each new message type we make, add a new case here for how to handle it + associated handler function
     match msgType:
         case "USERNAME":
             handleUsernameMsg(decodedMessage)
@@ -77,7 +100,7 @@ def onMessage(msg):
             handlePlayerJoinMsg(decodedMessage)
         case "CREATE_LOBBY":
             sid = request.sid
-            handleCreateLobbyMsg(decodedMessage, sid, socketToPlayers, lobbies, lobbyIDGenerator.generateNewID())
+            handleCreateLobbyMsg(decodedMessage, sendingPlayer, socketToPlayers, sid, lobbies, lobbyIDGenerator.generateNewID())
         case _:
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
             
@@ -87,8 +110,6 @@ def main():
     #msg = Message(MessageType.USERNAME, "Hello World")
     #print(msg.toJSON())
     socketio.run(app, host='0.0.0.0', port='8080')
-    
-
     
 
 if __name__ == '__main__':

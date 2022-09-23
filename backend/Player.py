@@ -4,6 +4,7 @@ class Player:
         self.lobbyID = None
         self.username = username
         self.ready = ready
+        self.guessedWord = "N/A" # will be overrided with their guessed word during the game 
 
     # encode a player (in json) to be sent to frontend
     # also not sure if we'll ever need this 
