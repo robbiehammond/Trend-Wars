@@ -10,6 +10,7 @@ class MessageType(Enum):
     LOBBY_STATE = auto()
     START_GAME = auto()
     SUBMIT_WORD = auto()
+    READY_FOR_NEXT_ROUND = auto()
 
     # returns string value of json 
     def __str__(self):
@@ -19,7 +20,7 @@ class Message:
     # A message requires 
     #   - it's type (which can be used to determine what to do with the message, like create a lobby, send the current word to players, etc) 
     #   - the data (which contains the actual information)
-    def __init__(self, msgType, msgData):
+    def __init__(self, msgType: MessageType, msgData: dict):
         self.msgType = msgType
         self.msgData = msgData
 

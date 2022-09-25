@@ -22,3 +22,9 @@ def handleLobbyStateMsg(msg):
 
 def handleInGameRequest(msg, sendingPlayer, socketToPlayers, sid, lobbies):
     pass
+
+def sendToPlayer(playerSocket, msg):
+    pass
+
+def sendToAllInLobby(lobby, msg):
+    pass

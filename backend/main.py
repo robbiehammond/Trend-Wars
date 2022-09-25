@@ -158,29 +158,29 @@ def testLobbyAndGame():
     # simulate round 1
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "big", "playerID": test_player1.id }).toJSON())
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "hairy", "playerID": test_player2.id }).toJSON())
-    onMessageLocal(Message("READY_FOR_NEXT_ROUND", {"playerID": 0}).toJSON())
-    onMessageLocal(Message("READY_FOR_NEXT_ROUND", {"playerID": 1}).toJSON())
+    onMessageLocal(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": 0}).toJSON())
+    onMessageLocal(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": 1}).toJSON())
     test_lobby.printLobbyState()
 
     # simulate round 2
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "large", "playerID": test_player1.id }).toJSON())
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "tiny", "playerID": test_player2.id }).toJSON())
-    onMessageLocal(Message("READY_FOR_NEXT_ROUND", {"playerID": 0}).toJSON())
-    onMessageLocal(Message("READY_FOR_NEXT_ROUND", {"playerID": 1}).toJSON())
+    onMessageLocal(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": 0}).toJSON())
+    onMessageLocal(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": 1}).toJSON())
     test_lobby.printLobbyState()
 
     # simulate round 3 
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "mega", "playerID": test_player1.id }).toJSON())
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "giga", "playerID": test_player2.id }).toJSON())
-    onMessageLocal(Message("READY_FOR_NEXT_ROUND", {"playerID": 0}).toJSON())
-    onMessageLocal(Message("READY_FOR_NEXT_ROUND", {"playerID": 1}).toJSON())
+    onMessageLocal(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": 0}).toJSON())
+    onMessageLocal(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": 1}).toJSON())
     test_lobby.printLobbyState()
 
     # simulate round 4
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "huge", "playerID": test_player1.id }).toJSON())
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "small", "playerID": test_player2.id }).toJSON())
-    onMessageLocal(Message("READY_FOR_NEXT_ROUND", {"playerID": 0}).toJSON())
-    onMessageLocal(Message("READY_FOR_NEXT_ROUND", {"playerID": 1}).toJSON())
+    onMessageLocal(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": 0}).toJSON())
+    onMessageLocal(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": 1}).toJSON())
     test_lobby.printLobbyState()
 
 
