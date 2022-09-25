@@ -2,7 +2,7 @@ import random
 import string
 from Game import Game 
 from Player import Player
-from Handlers import sendToAllInLobby, sendToPlayer
+from Handlers import *
 
 class Lobby:
     def __init__(self, id):
