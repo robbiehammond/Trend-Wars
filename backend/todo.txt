@@ -1,6 +1,6 @@
 Things to do for backend
     - Actually make socket connections n stuff work seamlessly (4/5 difficulty)
     - Send info on server to the frontend when things change (i.e. notify frontned people when the turn has changed, who has submitted a word, etc) (3/5 difficulty)
-    - Add a turn timer (2/5 difficulty)
+    - Add a turn timer that still allows the server to process events (so you can't just sleep the whole thing) (2/5 difficulty)
     - Use the Trends API to rank words (2/5 difficulty)
     - Be able to generate starting words that work well (2/5 difficulty)

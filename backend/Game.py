@@ -45,7 +45,6 @@ class Game:
         # if all players have submitted, evaluate the submissions 
         if len(self.wordSubmissions) == len(self.players):
             self.evaluateSubmissions()
-
         
 
     # Once all players have submitted a word, submit to the Trends API and update scores accordingly 
@@ -88,6 +87,3 @@ class Game:
 
     def __str__(self):
         return f'Game: Current Turn: {self.turn}, current starting word: {self.curWord}, current scores: {self.scores}'
-
-
-

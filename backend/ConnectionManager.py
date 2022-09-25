@@ -29,6 +29,7 @@ class ConnectionManager:
         self.connections.append(sock)
         self.socketToPlayer[sock] = Player(self.nextValidId, "N/A", False)
         self.nextValidId += 1
+        print("New connection added. Total connections: ", len(self.connections))
 
     # This function is called whenever a player disconnects from the server 
     # i.e. if they close the tab or refresh the page
@@ -43,6 +44,7 @@ class ConnectionManager:
                 self.connections.remove(sock)
                 del self.socketToPlayer[sock]
                 break
+        print("Connection removed. Total connections: ", len(self.connections))
 
     def is_connected(self, sid):
         return Socket(sid) in self.connections

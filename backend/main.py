@@ -26,13 +26,13 @@ CM = ConnectionManager(app) # Manages all the connections and messages so you do
 @socketio.on('connect')
 def connect():
     global CM
-    CM.add_connection(request.sid)
+    CM.add_connection(request)
     
 
 @socketio.on('disconnect')
 def disconnect():
     global CM
-    CM.remove_connection(request.sid)
+    CM.remove_connection(request)
     
 
 # Function is called whenever a client sends any information to the server 
@@ -159,7 +159,7 @@ def main():
     #msg = Message(MessageType.USERNAME, "Hello World")
     #print(msg.toJSON())
     testLobbyAndGame()
-    #socketio.run(app, host='0.0.0.0', port='8080')
+    socketio.run(app, host='0.0.0.0', port='8080')
     
 
 if __name__ == '__main__':

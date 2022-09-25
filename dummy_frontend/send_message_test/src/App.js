@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 function App()  {
   useEffect(() => {
     const socket = io('http://localhost:8080', {reconnection:false}); //connect to server
+    console.log("test")
   }, [])
   return (
     <div className="App">
