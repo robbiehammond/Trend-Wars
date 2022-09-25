@@ -1,3 +1,5 @@
+import warnings
+
 class Game:
     def __init__(self, players, maxTurns):
         # also need to implement a turn timer at some point so turns don't just end when everyone submits
@@ -7,11 +9,14 @@ class Game:
         self.scores = {} # map each player to their score
         self.wordSubmissions = {} # map each player to their submitted word. Is cleared and re-populated every turn
         self.maxTurns = maxTurns
+        self.readyForNextTurn = [True] * len(players) # Once the game has started, all players start as ready
         self.gameEnded = False
 
         # initialize all player scores to 0
         for player in players:
             self.scores[player] = 0
+
+        self.startNewTurn()
 
 
     # clear previous submissions and generate new starting word at the beginning of each turn
@@ -32,11 +37,15 @@ class Game:
 
     # when a player submits a word in a given turn, remember it 
     def processPlayerSubmission(self, player, submission):
-        self.wordSubmissions[player] = submission
+        if self.wordSubmissions.get(player) is not None:
+            warnings.warn(f'Player {player.id} has already submitted a word for this turn. Their previous submission was {self.wordSubmissions[player]} and their new submission is {submission}. The new submission will be ignored.')
+            return
 
+        self.wordSubmissions[player] = submission
         # if all players have submitted, evaluate the submissions 
         if len(self.wordSubmissions) == len(self.players):
             self.evaluateSubmissions()
+
         
 
     # Once all players have submitted a word, submit to the Trends API and update scores accordingly 
@@ -49,9 +58,19 @@ class Game:
 
 
     def endTurn(self):
-        self.startNewTurn()
+        for player in self.players:
+            self.readyForNextTurn[player.id] = False
         if self.turn == self.maxTurns:
             self.endGame()
+
+
+    def processReadyForNextRound(self, player):
+        if self.wordSubmissions.get(player) is None:
+            warnings.warn(f'Player {player.id} has readied up for the next round, but has not submitted a word for the current round. This request will be ignored.')
+            return
+        self.readyForNextTurn[player.id] = True
+        if all(self.readyForNextTurn):
+            self.startNewTurn()
 
 
     # show everyone player's scores at the end of the game 
@@ -68,7 +87,7 @@ class Game:
 
 
     def __str__(self):
-        return f'Game: last completed turn: {self.turn}, current starting word: {self.curWord}, current scores: {self.scores}'
+        return f'Game: Current Turn: {self.turn}, current starting word: {self.curWord}, current scores: {self.scores}'
 
 
 

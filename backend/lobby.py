@@ -27,6 +27,8 @@ class Lobby:
             case "SUBMIT_WORD":
                 if self.game is not None:
                     self.game.processPlayerSubmission(player, message.msgData['word'])
+            case "READY_FOR_NEXT_ROUND":
+                self.game.processReadyForNextRound(player)
             # insert cases for this lobby to handle certain types of messages
             case _:
                 raise Exception(f'Invalid message type. A type of {msgType} was received by lobby {self.id}, but no corresponding function exists')
