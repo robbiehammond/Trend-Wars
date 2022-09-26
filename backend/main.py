@@ -128,6 +128,7 @@ def testLobbyAndGame():
     test_lobby.printLobbyState()
 
     # simulate round 2
+    m = Message(MessageType.SUBMIT_WORD, { "word": "large", "playerID": test_player1.id })
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "large", "playerID": test_player1.id }).toJSON())
     onMessageLocal(Message(MessageType.SUBMIT_WORD, { "word": "tiny", "playerID": test_player2.id }).toJSON())
     onMessageLocal(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": 0}).toJSON())
