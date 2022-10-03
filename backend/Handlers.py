@@ -6,14 +6,14 @@ def handleUsernameMsg(msg):
 def handlePlayerJoinMsg(msg):
     pass
 
-def handleCreateLobbyMsg(msg, lobbyCreator, socketToPlayers, sid, lobbies, newID):
+def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID):
     if lobbyCreator == None:
         print("Unknown socket tried to create lobby. No player associated with the socket. Not handling request.")
         return
 
     lobby = Lobby(newID)
     lobbies.append(Lobby(newID))
-    socketToPlayers[sid].lobbyID = lobby.id
+    sidToPlayer[sid].lobbyID = lobby.id
     print("Created new lobby with ID: ", newID)
     
 
