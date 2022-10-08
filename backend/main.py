@@ -56,7 +56,7 @@ def onMessage(msg):
         lobbyID = sendingPlayer.lobbyID
         for lobby in lobbies:
             if lobby.id == lobbyID:
-                lobby.handleMessage(decodedMessage, idToPlayer, sendingPlayer.playerID)
+                lobby.handleMessage(decodedMessage, idToPlayer, sendingPlayer.id)
                 break
         return 
 
