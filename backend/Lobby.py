@@ -12,6 +12,7 @@ class Lobby:
         self.players = [] 
         self.sockets = {} # retrieve a socket from a player id 
 
+
     # Works the same way as the socketio.on('message') function in main.py
     def handleMessage(self, message, idToPlayer, sendingPlayerID):
         msgType = message.msgType
@@ -92,4 +93,5 @@ class LobbyIDGenerator:
         if (newID in self.IDsInUse):
             return self.generateNewID()
         else:
+            self.IDsInUse.append(newID)
             return newID

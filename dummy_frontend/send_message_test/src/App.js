@@ -3,26 +3,25 @@ import './App.css';
 import io from 'socket.io-client';
 import React, { useEffect } from 'react'; 
 
+
 function App()  {
-  useEffect(() => {
-    const socket = io('http://localhost:8080', {reconnection:false}); //connect to server
-    console.log("test")
-  }, [])
+  const socket = io('http://localhost:8080', {reconnection:false}); //connect to server
+
+  function sendCreateLobbyMessage() {
+    socket.emit('message', {type: 'CREATE_LOBBY', data: "meme"});
+  }
+
+
+  function sendJoinLobbyMessage() {
+    socket.emit('message', {type: 'PLAYER_JOIN', data: "meme"});
+  }
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <button onClick={sendCreateLobbyMessage}>Create Lobby</button>
+        <button onClick={sendJoinLobbyMessage}>Join Lobby</button>
+        <button onClick={() => {}}>Ready Up</button>
+        <button onClick={() => {}}>Submit "test"</button>
       </header>
     </div>
   );

@@ -19,7 +19,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 lobbyIDGenerator = LobbyIDGenerator() # struct to easily generate unique, 6-uppercase-letter lobby IDs 
 lobbies = [] # List of all active lobbies
 idToPlayer = {} #map player id to player object for quick access
-CM = ConnectionManager(app) # Manages all the connections and messages so you don't need to worry too much about it's details
+CM = ConnectionManager(app, socketio) # Manages all the connections and messages so you don't need to worry too much about it's details
 
 
 # This function is called whenever a new player connects to the server
@@ -39,9 +39,7 @@ def disconnect():
 # The message is decoded, and the correct function is called based on the message type
 @socketio.on('message')
 def onMessage(msg):
-    global lobbyIDGenerator
-    global lobbies 
-
+    global CM
     decodedMessage = Message.fromJSON(msg)
     sendingPlayer = None
 
@@ -55,7 +53,13 @@ def onMessage(msg):
 
     #if the player who sent this message has been registered and is in a lobby/game, handle the message there
     if sendingPlayer is not None and sendingPlayer.lobbyID is not None:
-        handleInGameRequest(decodedMessage, sendingPlayer, CM.get_socket_to_player(), request.sid, lobbies)
+        lobbyID = sendingPlayer.lobbyID
+        for lobby in lobbies:
+            if lobby.id == lobbyID:
+                lobby.handleMessage(decodedMessage, idToPlayer, sendingPlayer.playerID)
+                break
+        return 
+
 
 
     msgType = decodedMessage.msgType
@@ -66,10 +70,13 @@ def onMessage(msg):
         case "USERNAME":
             handleUsernameMsg(decodedMessage)
         case "PLAYER_JOIN":
-            handlePlayerJoinMsg(decodedMessage)
+            handlePlayerJoinMsg(sendingPlayer, "placeholder text")
         case "CREATE_LOBBY":
             sid = request.sid
-            handleCreateLobbyMsg(decodedMessage, sendingPlayer, CM.get_socket_to_player(), sid, lobbies, lobbyIDGenerator.generateNewID())
+            if sendingPlayer.lobbyID is None:
+                handleCreateLobbyMsg(decodedMessage, sendingPlayer, CM.get_sid_to_player(), sid, lobbies, lobbyIDGenerator.generateNewID())
+            else:
+                warnings.warn("Warning: Player in a lobby tried to create another lobby. That shouldn't happen")
         case _:
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
             

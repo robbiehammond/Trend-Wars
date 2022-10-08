@@ -16,18 +16,24 @@ class Socket:
         return self.sid
 
 class ConnectionManager:
-    def __init__(self, app):
+    def __init__(self, app, socketio):
         self.connections = []
         self.nextValidId = 0
         self.socketToPlayer = {}
+        self.sidToPlayer = {}
         self.idToPlayer = {}
         self.app = app
+        self.socketio = socketio
+        self.activeSids = []
 
     def add_connection(self, req):
         sid = req.sid
+        self.activeSids.append(sid)
         sock = Socket(self.app, sid)
         self.connections.append(sock)
-        self.socketToPlayer[sock] = Player(self.nextValidId, "N/A", False)
+        player = Player(self.nextValidId, "N/A", False)
+        self.socketToPlayer[sock] = player
+        self.sidToPlayer[sid] = player
         self.nextValidId += 1
         print("New connection added. Total connections: ", len(self.connections))
 
@@ -39,6 +45,7 @@ class ConnectionManager:
         # Have to loop over all sockets to remove the disconnected one
         # kinda ugly, but shouldn't be a problem if this game doesn't get too big (which it won't lol)
         sid = req.sid
+        self.activeSids.remove(sid)
         for sock in self.connections:
             if sock.getSocketID() == sid:
                 self.connections.remove(sock)
@@ -47,13 +54,15 @@ class ConnectionManager:
         print("Connection removed. Total connections: ", len(self.connections))
 
     def is_connected(self, sid):
-        return Socket(sid) in self.connections
+        return sid in self.activeSids
 
     def get_player(self, sid):
-        return self.socketToPlayer[Socket(sid)]
+        return self.sidToPlayer[sid]
 
-    def get_socket_to_player(self):
-        return self.socketToPlayer
+    def get_sid_to_player(self):
+        return self.sidToPlayer
+
+    
 
     
 
