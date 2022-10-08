@@ -50,12 +50,12 @@ def onMessage(msg):
     else:
         warnings.warn("Warning: Socket not associated with a player. \'none\' will be used as the sending player. Bad things will probably happen")
 
-
     #if the player who sent this message has been registered and is in a lobby/game, handle the message there
     if sendingPlayer is not None and sendingPlayer.lobbyID is not None:
         lobbyID = sendingPlayer.lobbyID
         for lobby in lobbies:
             if lobby.id == lobbyID:
+                print(decodedMessage.toJSON())
                 lobby.handleMessage(decodedMessage, idToPlayer, sendingPlayer.id)
                 break
         return 
@@ -74,7 +74,7 @@ def onMessage(msg):
         case "CREATE_LOBBY":
             sid = request.sid
             if sendingPlayer.lobbyID is None:
-                handleCreateLobbyMsg(decodedMessage, sendingPlayer, CM.get_sid_to_player(), sid, lobbies, lobbyIDGenerator.generateNewID())
+                handleCreateLobbyMsg(decodedMessage, sendingPlayer, CM.get_sid_to_player(), sid, lobbies, lobbyIDGenerator.generateNewID(), CM)
             else:
                 warnings.warn("Warning: Player in a lobby tried to create another lobby. That shouldn't happen")
         case _:
@@ -111,7 +111,7 @@ def testLobbyAndGame():
     idToPlayer[1] = test_player2
 
     # create a tes tlobby
-    test_lobby = Lobby("AAAAAA")
+    test_lobby = Lobby("AAAAAA", CM)
     lobbies.append(test_lobby)
 
     # simulate adding players to the lobby 

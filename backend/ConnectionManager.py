@@ -1,5 +1,7 @@
 from flask_socketio import SocketIO, emit
 from Player import Player
+from Message import Message, MessageType
+from warnings import warn
 
 # abstraction around socketio library
 # unless you're messing with connection stuff, you probably don't need to worry about this 
@@ -10,7 +12,7 @@ class Socket:
         self.socketio = socketio
 
     def emit(self, event, data):
-        self.socketio.emit(event, data, room=self.id)
+        emit(event, data, room=self.sid)
 
     def getSocketID(self):
         return self.sid
@@ -29,7 +31,7 @@ class ConnectionManager:
     def add_connection(self, req):
         sid = req.sid
         self.activeSids.append(sid)
-        sock = Socket(self.app, sid)
+        sock = Socket(self.socketio, sid)
         self.connections.append(sock)
         player = Player(self.nextValidId, "N/A", False)
         self.socketToPlayer[sock] = player
@@ -62,7 +64,24 @@ class ConnectionManager:
     def get_sid_to_player(self):
         return self.sidToPlayer
 
-    
+    def get_socket(self, player: Player):
+        for sock in self.connections:
+            if self.socketToPlayer[sock] == player:
+                return sock
+        return None
 
-    
+    def send_message(self, player: Player, message_type: MessageType, message: Message):
+        sock = self.get_socket(player)
+        if sock is not None:
+            sock.emit(message_type, message)
+        else:
+            warn("Tried to send message to player with no socket")
+
+    def send_message_to_all(self, message: Message):
+        for sock in self.connections:
+            sock.emit('message', message)
+
+
+
+
 

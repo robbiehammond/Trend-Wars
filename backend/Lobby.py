@@ -3,24 +3,28 @@ import string
 from Game import Game 
 from Player import Player
 from Handlers import *
+from ConnectionManager import ConnectionManager
+from Message import Message, MessageType
+
 
 class Lobby:
-    def __init__(self, id):
+    def __init__(self, id, CM: ConnectionManager):
         self.game = None
         self.id = id
         self.playerIDs = set() # set of player IDs in this lobby (so we don't need to loop over players list to see who's here)
         self.players = [] 
         self.sockets = {} # retrieve a socket from a player id 
+        self.CM = CM
 
 
     # Works the same way as the socketio.on('message') function in main.py
     def handleMessage(self, message, idToPlayer, sendingPlayerID):
         msgType = message.msgType
         player = idToPlayer[sendingPlayerID]
-
         match msgType:
             case "READY":
                 player.ready = True
+                self.CM.send_message_to_all(Message(MessageType.READY, {"playerID": player.id}).toJSON())
             case "START_GAME":
                 if self.gameCanStart():
                     self.startGame()
