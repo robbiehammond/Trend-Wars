@@ -1,34 +1,23 @@
 import logo from './logo.svg';
 import './App.css';
 import io from 'socket.io-client';
-import React, { useEffect } from 'react'; 
+import React from 'react'; 
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import Lobby from './Lobby/Lobby';
+import Homepage from './Homepage/Homepage.js';
 import ws from './socketConfig.js';
 
 
 function App()  {
-  ws.on('message', (message) => {
-    console.log(message);
-  });
-
-  function sendCreateLobbyMessage() {
-    ws.emit('message', {type: 'CREATE_LOBBY', data: "meme"});
-  }
-
-
-  function sendJoinLobbyMessage() {
-    ws.emit('message', {type: 'PLAYER_JOIN', data: "meme"});
-  }
-
-  function sendReadyMsg() {
-    ws.emit('message', {type: 'READY', data: "meme"});
-  }
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={sendCreateLobbyMessage}>Create Lobby</button>
-        <button onClick={sendJoinLobbyMessage}>Join Lobby</button>
-        <button onClick={sendReadyMsg}>Ready Up</button>
-        <button onClick={() => {}}>Submit "test"</button>
+        <h1>TREND WARS</h1>
+
+        <Routes>
+          <Route path="/lobby" element={<Lobby />} />
+          <Route path="/" element={<Homepage />} />
+        </Routes>
       </header>
     </div>
   );
