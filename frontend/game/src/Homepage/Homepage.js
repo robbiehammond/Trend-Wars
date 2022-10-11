@@ -2,6 +2,8 @@ import './Homepage.css';
 import React from 'react'; 
 import { useNavigate }from 'react-router-dom';
 import ws from '../socketConfig.js';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 function Homepage()  {
   ws.on('message', (message) => {
@@ -24,11 +26,21 @@ function Homepage()  {
   return (
     <div className="Homepage">
       <header className="Homepage-header">
-      <button onClick={sendCreateLobbyMessage}>Create Lobby</button>
-        <button onClick={sendJoinLobbyMessage}>Join Lobby</button>
-        <button onClick={sendReadyMsg}>Ready Up</button>
-        <button onClick={() => {}}>Submit "test"</button>
-        <button onClick={() => navigate('/lobby', {replace: true})}>go to lobby</button>
+        <Box m={1}>
+          <Button className="Button" variant='contained' onClick={sendCreateLobbyMessage}>Create Lobby</Button>
+        </Box>
+        <Box m={1}>
+          <Button className="Button" variant='contained' onClick={sendJoinLobbyMessage}>Join Lobby</Button>
+        </Box>
+        <Box m={1}>
+         <Button className="Button" variant='contained' onClick={sendReadyMsg}>Ready Up</Button>
+        </Box>
+        <Box m={1}>
+         <Button className="Button" variant='contained' onClick={() => {}}>Submit "test"</Button>
+        </Box>
+        <Box m={1}>
+          <Button className="Button" variant='contained' onClick={() => navigate('/lobby', {replace: true})}>go to lobby</Button>
+        </Box>
       </header>
     </div>
   );
