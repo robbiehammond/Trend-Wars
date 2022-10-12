@@ -1,16 +1,21 @@
 from Lobby import Lobby 
 from Message import MessageType, Message
+import ConnectionManager
 import warnings
 
 def handleUsernameMsg(msg):
     pass
 
-def handlePlayerJoinMsg(player, lobbyID):
+def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
     if player.lobbyID is not None:
         warnings.warn("Player already in a lobby. Not handling request.")
     else:
-        player.lobbyID = lobbyID
-    # probably want send some info back to frontend indicating that the player joined the lobby, send info about the lobby back
+        for lobby in lobbies:
+            if lobby.id == lobbyID:
+                lobby.addPlayer(player)
+                player.lobbyID = lobby.id
+                CM.send_to_player(player, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id}))
+                CM.send_to_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
     pass
 
 def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM):
@@ -21,6 +26,7 @@ def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM
     lobby = Lobby(newID, CM)
     lobbies.append(lobby)
     player = sidToPlayer[sid]
+    lobby.addPlayer(player)
     player.lobbyID = lobby.id
     print("Created new lobby with ID: ", newID)
     CM.send_to_player(player, Message(MessageType.LOBBY_CREATED, {"lobbyID": lobby.id}))

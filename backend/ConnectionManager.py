@@ -38,6 +38,7 @@ class ConnectionManager:
         self.socketToPlayer[sock] = player
         self.sidToPlayer[sid] = player
         self.nextValidId += 1
+        self.send_to_player(player, Message(MessageType.PLAYER_ID, {"your_id": player.id})) # client side should remember this number
         print("New connection added. Total connections: ", len(self.connections))
 
     # This function is called whenever a player disconnects from the server 
@@ -75,14 +76,6 @@ class ConnectionManager:
                 return sock
         return None
 
-    # send a message from the server to a specific player
-    def send_message(self, player: Player, message_type: MessageType, message: Message):
-        sock = self.get_socket(player)
-        if sock is not None:
-            sock.emit(message_type, message)
-        else:
-            warn("Tried to send message to player with no socket")
-
     # send a message from the server to everyone connected (i.e. all lobbies)
     # This function should probably not be used very often, if at all
     def send_message_to_all(self, message: Message):
@@ -98,7 +91,6 @@ class ConnectionManager:
     
     def send_to_player(self, player: Player, message: Message):
         sock = self.get_socket(player)
-        message_type = message.msgType
         if sock is not None:
             sock.emit('message', message.toJSON())
         else:

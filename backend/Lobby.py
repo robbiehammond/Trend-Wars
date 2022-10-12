@@ -28,7 +28,7 @@ class Lobby:
 
             case "START_GAME":
                 if self.gameCanStart():
-                    self.CM.send_to_all_in_lobby(Message(MessageType.GAME_STARTED, {}).toJSON(), self.id)
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}).toJSON())
                     self.startGame()
                 else:
                     print("Game cannot start yet. Probably want to send a message to the frontend to tell them why")
@@ -36,6 +36,11 @@ class Lobby:
             case "SUBMIT_WORD":
                 if self.game is not None:
                     self.game.processPlayerSubmission(player, message.msgData['word'])
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}).toJSON())
+                    if self.game.everyoneHasSubmitted():
+                        self.game.evaluateSubmissions()
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()).toJSON())
+
 
             case "READY_FOR_NEXT_ROUND":
                 self.game.processReadyForNextRound(player)
@@ -47,6 +52,7 @@ class Lobby:
 
 
     def addPlayer(self, player):
+        print("here")
         self.players.append(player)
         self.playerIDs.add(player.id)
 
@@ -59,11 +65,23 @@ class Lobby:
 
     # If there are 2 or more players and they're all ready, game can start
     def gameCanStart(self):
-        return len(self.players) >= 2 and all([player.ready for player in self.players])
+        return True # this is just how things are for the sake of testing!
+
+        # Uncomment this line and delete the 'return True' for real behavior
+        #return len(self.players) >= 2 and all([player.ready for player in self.players])
 
 
     def startGame(self):
         self.game = Game(self.players, 5)
+
+    def getLobbyState(self) -> dict:
+        return {
+            "id": self.id,
+            "players": len(self.players),
+            "gameStarted": self.game is not None
+        }
+
+
 
 
     def printLobbyState(self):

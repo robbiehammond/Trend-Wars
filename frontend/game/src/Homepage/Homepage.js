@@ -23,6 +23,14 @@ function Homepage()  {
   function sendReadyMsg() {
     ws.emit('message', {type: 'READY', data: "meme"});
   }
+
+  function sendStartGameMsg() {
+    ws.emit('message', {type: 'START_GAME', data: "meme"});
+  }
+
+  function submitWordMsg() {
+    ws.emit('message', {type: 'SUBMIT_WORD', data: {word: "meme"}});
+  }
   return (
     <div className="Homepage">
       <header className="Homepage-header">
@@ -36,7 +44,10 @@ function Homepage()  {
          <Button className="Button" variant='contained' onClick={sendReadyMsg}>Ready Up</Button>
         </Box>
         <Box m={1}>
-         <Button className="Button" variant='contained' onClick={() => {}}>Submit "test"</Button>
+         <Button className="Button" variant='contained' onClick={sendStartGameMsg}>Start Game</Button>
+        </Box>
+        <Box m={1}>
+         <Button className="Button" variant='contained' onClick={submitWordMsg}>Submit "test"</Button>
         </Box>
         <Box m={1}>
           <Button className="Button" variant='contained' onClick={() => navigate('/lobby', {replace: true})}>go to lobby</Button>

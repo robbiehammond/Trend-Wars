@@ -39,6 +39,7 @@ def disconnect():
 @socketio.on('message')
 def onMessage(msg):
     global CM
+    global lobbies
     decodedMessage = Message.fromJSON(msg)
     sendingPlayer = None
 
@@ -68,7 +69,7 @@ def onMessage(msg):
         case "USERNAME":
             handleUsernameMsg(decodedMessage)
         case "PLAYER_JOIN":
-            handlePlayerJoinMsg(sendingPlayer, "placeholder text")
+            handlePlayerJoinMsg(sendingPlayer, CM, lobbies, "placeholder text")
         case "CREATE_LOBBY":
             sid = request.sid
             if sendingPlayer.lobbyID is None:

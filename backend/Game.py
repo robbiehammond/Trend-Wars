@@ -1,5 +1,5 @@
 import warnings
-
+import ConnectionManager
 from Player import Player
 
 class Game:
@@ -11,12 +11,13 @@ class Game:
         self.scores = {} # map each player to their score
         self.wordSubmissions = {} # map each player to their submitted word. Is cleared and re-populated every turn
         self.maxTurns = maxTurns
-        self.readyForNextTurn = [True] * len(players) # Once the game has started, all players start as ready
+        self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
 
-        # initialize all player scores to 0
+        # initialize all player scores to 0 and set all players as not ready for next turn
         for player in players:
             self.scores[player] = 0
+            self.readyForNextTurn[player.id] = False
 
         self.startNewTurn()
 
@@ -42,11 +43,7 @@ class Game:
         if self.wordSubmissions.get(player) is not None:
             warnings.warn(f'Player {player.id} has already submitted a word for this turn. Their previous submission was {self.wordSubmissions[player]} and their new submission is {submission}. The new submission will be ignored.')
             return
-
         self.wordSubmissions[player] = submission
-        # if all players have submitted, evaluate the submissions 
-        if len(self.wordSubmissions) == len(self.players):
-            self.evaluateSubmissions()
         
 
     # Once all players have submitted a word, submit to the Trends API and update scores accordingly 
@@ -56,6 +53,12 @@ class Game:
             # call API, see how their word + starting word did 
             # rank players accordingly, update score
         self.endTurn()
+
+
+    # if all players have submitted, evaluate the submissions 
+    # send messsage to everyone connected to this lobby that this player has submitted a word
+    def everyoneHasSubmitted(self):
+        return len(self.wordSubmissions) == len(self.players)
 
 
     def endTurn(self):
