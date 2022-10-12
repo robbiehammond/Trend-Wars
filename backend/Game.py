@@ -1,5 +1,7 @@
 import warnings
 
+from Player import Player
+
 class Game:
     def __init__(self, players, maxTurns):
         # also need to implement a turn timer at some point so turns don't just end when everyone submits
@@ -36,7 +38,7 @@ class Game:
 
 
     # when a player submits a word in a given turn, remember it 
-    def processPlayerSubmission(self, player, submission):
+    def processPlayerSubmission(self, player: Player, submission: str):
         if self.wordSubmissions.get(player) is not None:
             warnings.warn(f'Player {player.id} has already submitted a word for this turn. Their previous submission was {self.wordSubmissions[player]} and their new submission is {submission}. The new submission will be ignored.')
             return
@@ -63,7 +65,7 @@ class Game:
             self.endGame()
 
 
-    def processReadyForNextRound(self, player):
+    def processReadyForNextRound(self, player: Player):
         if self.wordSubmissions.get(player) is None:
             warnings.warn(f'Player {player.id} has readied up for the next round, but has not submitted a word for the current round. This request will be ignored.')
             return

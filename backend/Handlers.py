@@ -1,4 +1,5 @@
 from Lobby import Lobby 
+from Message import MessageType, Message
 import warnings
 
 def handleUsernameMsg(msg):
@@ -19,5 +20,7 @@ def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM
 
     lobby = Lobby(newID, CM)
     lobbies.append(lobby)
-    sidToPlayer[sid].lobbyID = lobby.id
+    player = sidToPlayer[sid]
+    player.lobbyID = lobby.id
     print("Created new lobby with ID: ", newID)
+    CM.send_to_player(player, Message(MessageType.LOBBY_CREATED, {"lobbyID": lobby.id}))

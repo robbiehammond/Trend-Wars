@@ -18,24 +18,30 @@ class Lobby:
 
 
     # Works the same way as the socketio.on('message') function in main.py
-    def handleMessage(self, message, idToPlayer, sendingPlayerID):
+    # Takes a message from a player and handles it accordingly
+    def handleMessage(self, message: Message, player: Player):
         msgType = message.msgType
-        player = idToPlayer[sendingPlayerID]
         match msgType:
             case "READY":
-                player.ready = True
-                self.CM.send_message_to_all(Message(MessageType.READY, {"playerID": player.id}).toJSON())
+                player.ready = not player.ready
+                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.READY, {"playerID": player.id, "ready": player.ready}).toJSON())
+
             case "START_GAME":
                 if self.gameCanStart():
+                    self.CM.send_to_all_in_lobby(Message(MessageType.GAME_STARTED, {}).toJSON(), self.id)
                     self.startGame()
                 else:
                     print("Game cannot start yet. Probably want to send a message to the frontend to tell them why")
+
             case "SUBMIT_WORD":
                 if self.game is not None:
                     self.game.processPlayerSubmission(player, message.msgData['word'])
+
             case "READY_FOR_NEXT_ROUND":
                 self.game.processReadyForNextRound(player)
+                self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}).toJSON(), self.id)
             # insert cases for this lobby to handle certain types of messages
+
             case _:
                 raise Exception(f'Invalid message type. A type of {msgType} was received by lobby {self.id}, but no corresponding function exists')
 
@@ -71,8 +77,6 @@ class Lobby:
             print('{' + str(self.game) + '}')
         print("=====================================")
         print()
-
-
 
 
 class LobbyIDGenerator:

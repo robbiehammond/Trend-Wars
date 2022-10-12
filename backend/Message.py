@@ -2,13 +2,15 @@ from enum import Enum, auto
 
 #I'm sure we'll need more message types, but this is a start
 class MessageType(Enum):
-    USERNAME = auto()
-    READY = auto()
-    PLAYER_JOIN = auto()
-    PLAYER_LEAVE = auto()
-    CREATE_LOBBY = auto()
-    LOBBY_STATE = auto()
+    USERNAME = auto() # submitted to the server to register a player's username 
+    READY = auto() # used to denote that a player is ready for the game to start 
+    PLAYER_JOIN = auto() # used to notify the server that a player has joined a lobby
+    PLAYER_LEAVE = auto() # used to notify the server that a player has left a lobby
+    CREATE_LOBBY = auto() # used to notify the server that a lobby was requested to be created
+    LOBBY_CREATED = auto() # used to notify the player that their CREATE_LOBBY request was successful
+    LOBBY_STATE = auto() 
     START_GAME = auto()
+    GAME_STARTED = auto() # used to notify the players that the game has started 
     SUBMIT_WORD = auto()
     READY_FOR_NEXT_ROUND = auto()
 
