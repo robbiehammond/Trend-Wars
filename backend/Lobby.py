@@ -24,11 +24,11 @@ class Lobby:
         match msgType:
             case "READY":
                 player.ready = not player.ready
-                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.READY, {"playerID": player.id, "ready": player.ready}).toJSON())
+                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.READY, {"playerID": player.id, "ready": player.ready}))
 
             case "START_GAME":
                 if self.gameCanStart():
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}).toJSON())
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}))
                     self.startGame()
                 else:
                     print("Game cannot start yet. Probably want to send a message to the frontend to tell them why")
@@ -36,15 +36,15 @@ class Lobby:
             case "SUBMIT_WORD":
                 if self.game is not None:
                     self.game.processPlayerSubmission(player, message.msgData['word'])
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}).toJSON())
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
                     if self.game.everyoneHasSubmitted():
                         self.game.evaluateSubmissions()
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()).toJSON())
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
 
 
             case "READY_FOR_NEXT_ROUND":
                 self.game.processReadyForNextRound(player)
-                self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}).toJSON(), self.id)
+                self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}), self.id)
             # insert cases for this lobby to handle certain types of messages
 
             case _:

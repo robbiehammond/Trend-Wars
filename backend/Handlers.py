@@ -2,6 +2,7 @@ from Lobby import Lobby
 from Message import MessageType, Message
 import ConnectionManager
 import warnings
+warnings.simplefilter('always', UserWarning)
 
 def handleUsernameMsg(msg):
     pass
@@ -16,7 +17,8 @@ def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
                 player.lobbyID = lobby.id
                 CM.send_to_player(player, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id}))
                 CM.send_to_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
-    pass
+                return
+        warnings.warn("No lobby with that ID exists. Not handling request.")
 
 def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM):
     if lobbyCreator == None:

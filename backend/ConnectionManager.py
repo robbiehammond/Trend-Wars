@@ -83,11 +83,11 @@ class ConnectionManager:
             sock.emit('message', message.toJSON())
 
     # send a message from the server to everyone in a specific lobby
-    def send_to_all_in_lobby(self, lobbyID, message):
+    def send_to_all_in_lobby(self, lobbyID, message: Message):
         # loop through all sockets, send this message to all players sharing the same lobby ID
         for sock in self.connections:
             if self.socketToPlayer[sock].lobbyID == lobbyID:
-                sock.emit('message', message)
+                sock.emit('message', message.toJSON())
     
     def send_to_player(self, player: Player, message: Message):
         sock = self.get_socket(player)

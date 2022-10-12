@@ -17,7 +17,7 @@ function Homepage()  {
 
 
   function sendJoinLobbyMessage() {
-    ws.emit('message', {type: 'PLAYER_JOIN', data: "meme"});
+    ws.emit('message', {type: 'PLAYER_JOIN', data: {lobbyID: "AAAAAA"}});
   }
 
   function sendReadyMsg() {
