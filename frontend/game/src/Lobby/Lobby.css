@@ -1,11 +1,19 @@
-.Lobby-header {
-  display: flex;
-  flex-direction: column;
+.Lobby {
+  display: grid;
+  grid-template-columns: 75% 25%;
+  grid-gap: 1em;
+}
+
+.Lobby-div {
+  /* display: flex;
+  flex-direction: column; */
   align-items: center;
   justify-content: center;
+  text-align: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  margin-top: 100px;
+  height: 100%;
+  width: 100%;
 }
 
 .Input {
