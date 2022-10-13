@@ -8,7 +8,6 @@ from Message import Message, MessageType
 from Handlers import * 
 from Player import Player 
 from Lobby import LobbyIDGenerator
-import json
 from ConnectionManager import ConnectionManager
 
 # connection setup stuff
@@ -40,6 +39,7 @@ def disconnect():
 @socketio.on('message')
 def onMessage(msg):
     global CM
+    global lobbies
     decodedMessage = Message.fromJSON(msg)
     sendingPlayer = None
 
@@ -55,8 +55,7 @@ def onMessage(msg):
         lobbyID = sendingPlayer.lobbyID
         for lobby in lobbies:
             if lobby.id == lobbyID:
-                print(decodedMessage.toJSON())
-                lobby.handleMessage(decodedMessage, idToPlayer, sendingPlayer.id)
+                lobby.handleMessage(decodedMessage, sendingPlayer)
                 break
         return 
 
@@ -70,7 +69,7 @@ def onMessage(msg):
         case "USERNAME":
             handleUsernameMsg(decodedMessage)
         case "PLAYER_JOIN":
-            handlePlayerJoinMsg(sendingPlayer, "placeholder text")
+            handlePlayerJoinMsg(sendingPlayer, CM, lobbies, "placeholder text")
         case "CREATE_LOBBY":
             sid = request.sid
             if sendingPlayer.lobbyID is None:
@@ -89,11 +88,12 @@ def onMessageLocal(msg):
     global lobbies
     decodedMessage = Message.fromJSON(msg)
     sendingPlayerID = decodedMessage.msgData["playerID"]
+    player = idToPlayer[sendingPlayerID]
     msgType = decodedMessage.msgType
 
     for lobby in lobbies:
         if sendingPlayerID in lobby.playerIDs:
-            lobby.handleMessage(decodedMessage, idToPlayer, sendingPlayerID)
+            lobby.handleMessage(decodedMessage, player)
 
 
 

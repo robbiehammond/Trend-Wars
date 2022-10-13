@@ -2,15 +2,22 @@ from enum import Enum, auto
 
 #I'm sure we'll need more message types, but this is a start
 class MessageType(Enum):
-    USERNAME = auto()
-    READY = auto()
-    PLAYER_JOIN = auto()
-    PLAYER_LEAVE = auto()
-    CREATE_LOBBY = auto()
-    LOBBY_STATE = auto()
-    START_GAME = auto()
-    SUBMIT_WORD = auto()
-    READY_FOR_NEXT_ROUND = auto()
+    PLAYER_ID = auto() # a client's ID is sent to client when they connect to the server
+    USERNAME = auto() # submitted to the server to register a player's username (sent by client when they set their username )
+    READY = auto() # used to denote that a player is ready for the game to start (sent by client when they ready up, and sent by server to alert connected clients that a player is ready)
+    PLAYER_DATA = auto() # used to send all info regarding a player (username, id, ready status). A PLAYER_DATA message arriving on the frontend should indicate that this player needs to be rendered
+    PLAYER_JOIN = auto() # used to notify the server that a player has joined a lobby (sent from client to server)
+    LOBBY_JOINED = auto() # used to notify the client that they have successfully joined a lobby
+    PLAYER_JOINED = auto() # used to notify the clients in a lobby that a player has joined
+    PLAYER_LEAVE = auto() # used to notify the server that a player has left a lobby (client to server)
+    CREATE_LOBBY = auto() # used to notify the server that a lobby was requested to be created (client to server)
+    LOBBY_CREATED = auto() # used to notify the player that their CREATE_LOBBY request was successful (server to client)
+    LOBBY_STATE = auto() # used to send all infor regarding the servers state (current word, time left, current players, etc) to clients. Just sent whenever a non-trivial amount of state changes.
+    START_GAME = auto() # used to notify the server that a start game request was made
+    GAME_STARTED = auto() # used to notify the players that the game has started 
+    SUBMIT_WORD = auto() # used by the client to send a message to the serverA
+    WORD_SUBMITTED = auto() # used to indicate to the client that a player has submitted a word
+    READY_FOR_NEXT_ROUND = auto() # used to notify the server that a player is ready for the next round 
 
     # returns string value of json 
     def __str__(self):

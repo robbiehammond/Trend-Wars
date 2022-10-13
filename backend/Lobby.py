@@ -18,29 +18,41 @@ class Lobby:
 
 
     # Works the same way as the socketio.on('message') function in main.py
-    def handleMessage(self, message, idToPlayer, sendingPlayerID):
+    # Takes a message from a player and handles it accordingly
+    def handleMessage(self, message: Message, player: Player):
         msgType = message.msgType
-        player = idToPlayer[sendingPlayerID]
         match msgType:
             case "READY":
-                player.ready = True
-                self.CM.send_message_to_all(Message(MessageType.READY, {"playerID": player.id}).toJSON())
+                player.ready = not player.ready
+                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.READY, {"playerID": player.id, "ready": player.ready}))
+
             case "START_GAME":
                 if self.gameCanStart():
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}))
                     self.startGame()
                 else:
                     print("Game cannot start yet. Probably want to send a message to the frontend to tell them why")
+
             case "SUBMIT_WORD":
                 if self.game is not None:
                     self.game.processPlayerSubmission(player, message.msgData['word'])
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
+                    if self.game.everyoneHasSubmitted():
+                        self.game.evaluateSubmissions()
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
+
+
             case "READY_FOR_NEXT_ROUND":
                 self.game.processReadyForNextRound(player)
+                self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}), self.id)
             # insert cases for this lobby to handle certain types of messages
+
             case _:
                 raise Exception(f'Invalid message type. A type of {msgType} was received by lobby {self.id}, but no corresponding function exists')
 
 
     def addPlayer(self, player):
+        print("here")
         self.players.append(player)
         self.playerIDs.add(player.id)
 
@@ -53,11 +65,23 @@ class Lobby:
 
     # If there are 2 or more players and they're all ready, game can start
     def gameCanStart(self):
-        return len(self.players) >= 2 and all([player.ready for player in self.players])
+        return True # this is just how things are for the sake of testing!
+
+        # Uncomment this line and delete the 'return True' for real behavior
+        #return len(self.players) >= 2 and all([player.ready for player in self.players])
 
 
     def startGame(self):
         self.game = Game(self.players, 5)
+
+    def getLobbyState(self) -> dict:
+        return {
+            "id": self.id,
+            "players": len(self.players),
+            "gameStarted": self.game is not None
+        }
+
+
 
 
     def printLobbyState(self):
@@ -71,8 +95,6 @@ class Lobby:
             print('{' + str(self.game) + '}')
         print("=====================================")
         print()
-
-
 
 
 class LobbyIDGenerator:

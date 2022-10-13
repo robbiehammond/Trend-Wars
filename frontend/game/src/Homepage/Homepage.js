@@ -17,11 +17,19 @@ function Homepage()  {
 
 
   function sendJoinLobbyMessage() {
-    ws.emit('message', {type: 'PLAYER_JOIN', data: "meme"});
+    ws.emit('message', {type: 'PLAYER_JOIN', data: {lobbyID: "AAAAAA"}});
   }
 
   function sendReadyMsg() {
     ws.emit('message', {type: 'READY', data: "meme"});
+  }
+
+  function sendStartGameMsg() {
+    ws.emit('message', {type: 'START_GAME', data: "meme"});
+  }
+
+  function submitWordMsg() {
+    ws.emit('message', {type: 'SUBMIT_WORD', data: {word: "meme"}});
   }
   return (
     <div className="Homepage">
@@ -36,7 +44,10 @@ function Homepage()  {
          <Button className="Button" variant='contained' onClick={sendReadyMsg}>Ready Up</Button>
         </Box>
         <Box m={1}>
-         <Button className="Button" variant='contained' onClick={() => {}}>Submit "test"</Button>
+         <Button className="Button" variant='contained' onClick={sendStartGameMsg}>Start Game</Button>
+        </Box>
+        <Box m={1}>
+         <Button className="Button" variant='contained' onClick={submitWordMsg}>Submit "test"</Button>
         </Box>
         <Box m={1}>
           <Button className="Button" variant='contained' onClick={() => navigate('/lobby', {replace: true})}>go to lobby</Button>
