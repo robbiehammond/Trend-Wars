@@ -2,4 +2,9 @@
   float: right;
   margin-right: 1em;
   min-height: 50vh;
+  background-color: gray;
+}
+
+.playerList h2 {
+  text-align: center;
 }

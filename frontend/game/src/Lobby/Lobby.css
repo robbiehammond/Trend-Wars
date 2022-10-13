@@ -5,15 +5,28 @@
 }
 
 .Lobby-div {
-  /* display: flex;
-  flex-direction: column; */
-  align-items: center;
   justify-content: center;
   text-align: center;
   font-size: calc(10px + 2vmin);
   color: white;
   height: 100%;
-  width: 100%;
+  width: 100vw;
+}
+
+.word {
+  font-size: 5rem !important;
+  font-weight: bold !important;
+}
+.Input.word{
+  margin-left: 15px;
+  min-width: 10% !important;
+  max-width: 35%!important;
+}
+
+.word-container {
+  padding: 15px;
+  margin-top: 10%;
+  margin-bottom: 15px;
 }
 
 .Input {
@@ -23,4 +36,5 @@
 
 .Button {
   margin: 15px;
+  font-size: 1.5rem !important;
 }

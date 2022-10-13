@@ -13,7 +13,8 @@ class PlayerList  extends React.Component{
   render(){
     return (
       <div className="playerList">
-          <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <h2>Player List</h2>
+          <List dense sx={{}}>
       {[0, 1, 2, 3].map((value) => {
         const labelId = `checkbox-list-secondary-label-${value}`;
         return (
