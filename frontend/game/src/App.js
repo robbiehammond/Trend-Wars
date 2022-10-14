@@ -3,11 +3,15 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Lobby from './Lobby/Lobby';
 import Homepage from './Homepage/Homepage.js';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { themeOptions } from './MuiTheme';
+const theme = createTheme(themeOptions);
 
 function App()  {
   return (
     <div className="App">
-      <header className="App-header">
+       <ThemeProvider theme={theme}>
+       <header className="App-header">
         <h1>TREND WARS</h1>
       </header>
       <div className='main'>
@@ -16,6 +20,7 @@ function App()  {
             <Route path="/" element={<Homepage />} />
         </Routes>
       </div>
+       </ThemeProvider>
     </div>
   );
 }

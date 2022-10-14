@@ -7,7 +7,7 @@
 .Lobby-div {
   text-align: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #F1F1F6;
   height: 100%;
   width: 100vw;
 }
@@ -15,23 +15,18 @@
 .word {
   font-size: 5rem !important;
   font-weight: bold !important;
-}
-.Input.word{
-  margin-left: 15px;
-  min-width: 10% !important;
-  max-width: 25%!important;
+  background-color: #8FBB90;
+  border-radius: 8px;
+  margin: 20px !important;
+  color: #F1F1F6; 
+  padding: 15px !important; 
 }
 
 .word-container {
-  padding: 15px;
   margin-top: 10%;
   margin-bottom: 15px;
 }
 
-.Input {
-  margin-bottom: 15px;
-  color: white; 
-}
 
 .Button {
   margin: 15px;

@@ -30,12 +30,10 @@ class Lobby extends React.Component{
       <div className="Lobby">
         <div className="Lobby-div">
           <div className='word-container'>
-            <span class='word'>{this.word} +</span>
-            <Input sx={{ color: 'white' }} className="Input word" id="word-input" label='Type your word here..' variant="standard"></Input>
+            <span className='word'>{this.word}</span> <span className='word'> +</span>
+            <Input sx={{ color: 'white', backgroundColor: '#8FBB90', borderRadius: '8px', width: '25%'}} className='word' id="word-input" variant="filled"></Input>
           </div>
-          <Box m={1}>
-            <Button className="Button" variant="contained" color="success" onClick={() => {}}>Submit Word</Button>
-          </Box>  
+            <Button className="Button" variant="contained" sx={{backgroundColor: '#8FBB90', border: 'none' }} onClick={() => {}}>Submit Word</Button>
         </div>
         <PlayerList>
         </PlayerList> 
