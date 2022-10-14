@@ -10,8 +10,22 @@ import MessageType from '../Message/MessageType';
 function Homepage()  {
   ws.on('message', (message) => {
     console.log(message);
+    
+    switch (message.msgType) {
+      case "LOBBY_CREATED":
+        rerouteToLobby(message.msgData);
+        break;
+      default:
+        break;
+    }
   });
+  
   const navigate = useNavigate();
+
+  function rerouteToLobby(data){
+    navigate(`/lobby/${data.lobbyID}`, {replace: true});
+    console.log('tried to join lobby');
+  }
 
   function sendCreateLobbyMessage() {
     const msg = new Message(MessageType.CREATE_LOBBY, {data: "test"});
@@ -57,7 +71,7 @@ function Homepage()  {
          <Button className="Button" variant='contained' onClick={submitWordMsg}>Submit "test"</Button>
         </Box>
         <Box m={1}>
-          <Button className="Button" variant='contained' onClick={() => navigate('/lobby', {replace: true})}>go to lobby</Button>
+          <Button className="Button" variant='contained' onClick={() => navigate(`/lobby/`, {replace: true})}>go to lobby</Button>
         </Box>
       </header>
     </div>
