@@ -1,8 +1,11 @@
 .playerList {
   float: right;
-  margin-right: 1em;
-  min-height: 50vh;
+  margin-right: 75px;
+  padding: 15px 10px 20px 10px;
   background-color: gray;
+  border-radius: 25px;
+  height: fit-content;
+  margin-top: 15%;
 }
 
 .playerList h2 {
