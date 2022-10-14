@@ -21,5 +21,10 @@ export const themeOptions = {
   },
   typography: {
     fontFamily: 'Signika, Crimson Text, serif',
+  },
+  components: {
+    MuiInputBase: {
+        
+    }
   }
 };
