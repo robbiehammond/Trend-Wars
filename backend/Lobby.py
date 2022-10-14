@@ -40,7 +40,6 @@ class Lobby:
                         self.game.evaluateSubmissions()
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
 
-
             case "READY_FOR_NEXT_ROUND":
                 self.game.processReadyForNextRound(player)
                 self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}), self.id)
@@ -51,7 +50,6 @@ class Lobby:
 
 
     def addPlayer(self, player):
-        print("here")
         self.players.append(player)
         self.playerIDs.add(player.id)
 

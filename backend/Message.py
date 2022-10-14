@@ -1,4 +1,5 @@
 from enum import Enum, auto
+import json
 
 #I'm sure we'll need more message types, but this is a start
 class MessageType(Enum):
@@ -34,11 +35,12 @@ class Message:
     #encode a message (in json) to be sent to frontend
     def toJSON(self):
         return {
-            "type": str(self.msgType),
-            "data": self.msgData
+            "msgType": str(self.msgType),
+            "msgData": self.msgData
         }
 
     #decode a message sent from frontend into a Message object
     @staticmethod
-    def fromJSON(json):
-        return Message(json['type'], json['data'])
+    def fromJSON(str_json):
+        json_data = json.loads(str_json)
+        return Message(json_data['msgType'], json_data['msgData'])

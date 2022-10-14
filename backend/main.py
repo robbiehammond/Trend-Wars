@@ -166,7 +166,6 @@ def testLobbyAndGame():
 def main():
     #msg = Message(MessageType.USERNAME, "Hello World")
     #print(msg.toJSON())
-    testLobbyAndGame()
     socketio.run(app, host='0.0.0.0', port='8080')
     
 

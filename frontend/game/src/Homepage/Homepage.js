@@ -4,6 +4,7 @@ import { useNavigate }from 'react-router-dom';
 import ws from '../socketConfig.js';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Message from '../Message';
 
 function Homepage()  {
   ws.on('message', (message) => {
@@ -12,24 +13,29 @@ function Homepage()  {
   const navigate = useNavigate();
 
   function sendCreateLobbyMessage() {
-    ws.emit('message', {type: 'CREATE_LOBBY', data: "meme"});
+    const msg = new Message('CREATE_LOBBY', {data: "test"});
+    ws.emit('message', msg.toJSON());
   }
 
 
   function sendJoinLobbyMessage() {
-    ws.emit('message', {type: 'PLAYER_JOIN', data: {lobbyID: "AAAAAA"}});
+    const msg = new Message('PLAYER_JOIN', {data: {lobbyID: "AAAAAA"}});
+    ws.emit('message', msg.toJSON());
   }
 
   function sendReadyMsg() {
-    ws.emit('message', {type: 'READY', data: "meme"});
+    const msg = new Message('READY', {data: "meme"});
+    ws.emit('message', msg.toJSON());
   }
 
   function sendStartGameMsg() {
-    ws.emit('message', {type: 'START_GAME', data: "meme"});
+    const msg = new Message('START_GAME', {data: "meme"});
+    ws.emit('message', msg.toJSON());
   }
 
   function submitWordMsg() {
-    ws.emit('message', {type: 'SUBMIT_WORD', data: {word: "meme"}});
+    const msg = new Message('SUBMIT_WORD', {data: "meme", word: "test"});
+    ws.emit('message', msg.toJSON());
   }
   return (
     <div className="Homepage">

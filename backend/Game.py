@@ -4,7 +4,7 @@ import time
 from Player import Player
 
 class Game:
-    def __init__(self, players, maxTurns, countdown):
+    def __init__(self, players, maxTurns):
         # also need to implement a turn timer at some point so turns don't just end when everyone submits
         self.players = players
         self.turn = 0
@@ -14,7 +14,7 @@ class Game:
         self.maxTurns = maxTurns
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
-        self.countdown = countdown
+        #self.countdown = countdown
 
         # initialize all player scores to 0 and set all players as not ready for next turn
         for player in players:
