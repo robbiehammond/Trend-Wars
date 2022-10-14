@@ -16,7 +16,6 @@ class Lobby:
         self.sockets = {} # retrieve a socket from a player id 
         self.CM = CM
 
-
     # Works the same way as the socketio.on('message') function in main.py
     # Takes a message from a player and handles it accordingly
     def handleMessage(self, message: Message, player: Player):

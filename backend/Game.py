@@ -1,9 +1,10 @@
 import warnings
 import ConnectionManager
+import time
 from Player import Player
 
 class Game:
-    def __init__(self, players, maxTurns):
+    def __init__(self, players, maxTurns, countdown):
         # also need to implement a turn timer at some point so turns don't just end when everyone submits
         self.players = players
         self.turn = 0
@@ -13,6 +14,7 @@ class Game:
         self.maxTurns = maxTurns
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
+        self.countdown = countdown
 
         # initialize all player scores to 0 and set all players as not ready for next turn
         for player in players:
@@ -59,6 +61,14 @@ class Game:
     # send messsage to everyone connected to this lobby that this player has submitted a word
     def everyoneHasSubmitted(self):
         return len(self.wordSubmissions) == len(self.players)
+    
+    def turnTimer(self):
+        while self:
+            mins, secs = divmod(self, 60)
+            timeformat = '{:02d}:{:02d}'.format(mins, secs)
+            print(timeformat, end='\r')
+            time.sleep(1)
+            self -= 1
 
 
     def endTurn(self):
