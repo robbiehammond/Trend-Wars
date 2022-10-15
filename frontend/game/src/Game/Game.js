@@ -6,17 +6,31 @@ import Input from '@mui/material/Input';
 class Game extends React.Component{
   constructor(props) {
     super(props);
-    this.word = 'balls'; // todo: change this to be what the server gives us
+    this.submitWordMsg = this.submitWordMsg.bind(this);
+    this.state = {
+      wordThisTurn: 'balls', // todo: change this to be what the server gives us
+      userWord: ''
+    }
   }
+
+  submitWordMsg() {
+    userWord = document.getElementById("word-input").get
+    const msg = new Message(MessageType.SUBMIT_WORD, {data: "meme", word: userWord});
+    ws.emit('message', msg.toJSON());
+  }
+
+  handleChange = (e) => this.setState({ 
+		userWord: e.target.value 
+	}) 
 
   render(){
     return (
       <div className="Game">
         <div className='word-container'>
-            <span className='word'>{this.word}</span> <span className='word'> +</span> 
-            <Input autoFocus sx={{ color: 'white', backgroundColor: '#8FBB90', borderRadius: '8px', width: '25%'}} className='word' id="word-input" variant="filled" ></Input>
+            <span className='word'>{this.state.wordThisTurn}</span> <span className='word'> +</span> 
+            <Input onChange={this.handleChange} autoFocus sx={{ color: 'white', backgroundColor: '#8FBB90', borderRadius: '8px', width: '25%'}} className='word' id="word-input" variant="filled" ></Input>
           </div>
-            <Button className="Button" variant="contained" sx={{backgroundColor: '#8FBB90', border: 'none' }} onClick={() => {}}>Submit Word</Button>
+            <Button className="Button" variant="contained" sx={{backgroundColor: '#8FBB90', border: 'none' }} onClick={this.submitWordMsg}>Submit Word</Button>
       </div>
     );
   } 

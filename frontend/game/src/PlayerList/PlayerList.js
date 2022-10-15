@@ -30,7 +30,7 @@ class PlayerList  extends React.Component{
             const labelId = `checkbox-list-secondary-label-${player}`;
             return (
               <ListItem
-                key={player}
+                key={player.name}
                 disablePadding
               >
                 <ListItemButton>
