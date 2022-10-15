@@ -13,7 +13,7 @@ Message.prototype.toJSON = function() {
 
 Message.fromJSON = function(json) {
     var obj = JSON.parse(json);
-    return new Message(obj.type, obj.data);
+    return new Message(obj.msgType, obj.msgData);
 }
 
 export default Message;
