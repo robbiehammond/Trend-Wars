@@ -74,11 +74,9 @@ class Lobby:
     def getLobbyState(self) -> dict:
         return {
             "id": self.id,
-            "players": len(self.players),
+            "players": [player.id for player in self.players],
             "gameStarted": self.game is not None
         }
-
-
 
 
     def printLobbyState(self):

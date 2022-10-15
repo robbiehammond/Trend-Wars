@@ -32,3 +32,4 @@ def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM
     player.lobbyID = lobby.id
     print("Created new lobby with ID: ", newID)
     CM.send_to_player(player, Message(MessageType.LOBBY_CREATED, {"lobbyID": lobby.id}))
+    CM.send_to_all_in_lobby(lobby.id, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
