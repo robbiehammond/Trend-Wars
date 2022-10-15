@@ -1,24 +1,45 @@
 import './Lobby.css';
 import React from 'react'; 
-import Button from '@mui/material/Button';
-import Input from '@mui/material/Input';
 import PlayerList from '../PlayerList/PlayerList.js';
-import Game from '../Landing/Landing.js';
+import Game from '../Game/Game.js';
 import Landing from '../Landing/Landing.js';
+import ws from '../socketConfig.js';
 
 class Lobby extends React.Component{
   constructor(props) {
-    super(props);
+    super();
     this.state = {
       hasGameStarted: false
     }
   }
 
   render(){
+    let component = this;
+    ws.on('message', function(message){
+      console.log(message);
+      
+      switch (message.msgType) {
+        case "GAME_STARTED":
+          this.setState({
+            hasGameStarted: true
+          });
+          break;
+        default:
+          break;
+      }
+    }.bind(this));   
+
+    let gameOrLanding;
+    console.log(this.state)
+    if (this.state.hasGameStarted) {
+      gameOrLanding =<Game></Game>;
+    } else {
+      gameOrLanding = <Landing></Landing>;
+    }
     return (
       <div className="Lobby">
         <div className="Lobby-div">
-          { this.state.hasGameStarted ? <Game></Game> : <Landing></Landing> }
+          {gameOrLanding}
         </div>
         <PlayerList>
         </PlayerList> 

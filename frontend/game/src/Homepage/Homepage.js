@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Message from '../Message/Message';
 import MessageType from '../Message/MessageType';
 
-function Homepage()  {
+function Homepage() {
   ws.on('message', (message) => {
     console.log(message);
     
