@@ -8,29 +8,41 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Checkbox from '@mui/material/Checkbox';
 import Avatar from '@mui/material/Avatar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
+import ws from '../socketConfig.js';
 class PlayerList  extends React.Component{
   constructor(props){
     super(props);
     // todo: make this what the server says the players are 
-    this.players = [
-      { name: 'Rob B'}, 
-      { name: 'Tyler Nish', submitted: true }, 
-      { name: 'Big Andy-rew', submitted: false }, 
-      { name: 'Your mom', submitted: false }, 
-      { name: 'Burger', submitted: true }]; 
+    this.state = {
+      players: [{ id: ''}]
+    }
   }
 
   render(){
+    let component = this;
+    ws.on('message', function(message){
+      console.log(message);
+      
+      switch (message.msgType) {
+        case "LOBBY_STATE":
+          console.log('on lobby state');
+          this.setState({
+            players: message.msgData.players
+          });
+          break;
+        default:
+          break;
+      }
+    }.bind(this));   
     return (
       <div className="playerList">
         <h2>Player List</h2>
-        <List dense sx={{}}>
-          {this.players.map((player) => {
+        <List dense>
+          {this.state.players.map((player) => {
             const labelId = `checkbox-list-secondary-label-${player}`;
             return (
               <ListItem
-                key={player.name}
+                key={player.id}
                 disablePadding
               >
                 <ListItemButton>
@@ -42,7 +54,7 @@ class PlayerList  extends React.Component{
                   </ListItemAvatar>
                   <ListItemText
                     id={labelId}
-                    primary={`${player.name} ${
+                    primary={`${player.id} ${
                       player.word ? "wrote " + player.word : ""
                     }`}
                   />

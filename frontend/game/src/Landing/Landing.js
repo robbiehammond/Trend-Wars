@@ -23,7 +23,6 @@ class Landing extends React.Component {
     ws.emit('message', msg.toJSON());
   }
 
-
   render() {
     return (
       <div className="Landing">
