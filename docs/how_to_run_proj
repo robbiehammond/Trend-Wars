@@ -5,6 +5,7 @@
 - after that's done, to start front end use `npm start`
 - open another terminal
 - (only done once) set up ur venv if on windows unless you're robbie and don't care (`python -m venv venv`)
+- if windows run Set-ExecuionPolicy unrestricted 
 - start your venv with `venv\Scripts\activate` if you're on windows and use virtual environments
 - run `pip install flask`, `pip install flask_cors`, `pip install socketio`, and anything else u need to (only do this once)
 - cd to backend
