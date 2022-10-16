@@ -14,15 +14,20 @@ class Game:
         self.maxTurns = maxTurns
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
-    
+
+        #dictionary to hold the ranks of each player
+        self.playerRank = {}
+
         #self.countdown = countdown
         #values hardcoded in, can implement so that users can configure values here.
         self.connector = google_connector(connect_region = 'en-US', search_region = 'US', timeframe = 'today 12-m', gprop = '')
 
         # initialize all player scores to 0 and set all players as not ready for next turn
+        #intializes player ranks to 0
         for player in players:
             self.scores[player] = 0
             self.readyForNextTurn[player.id] = False
+            self.playerRank[player] = 0
 
         self.startNewTurn()
 
@@ -59,6 +64,9 @@ class Game:
         for player, submission in self.wordSubmissions.items():
             self.scores[player] += resuts[submission]
             # rank players accordingly, update score
+
+        #found this on StackOverflow, we will see if this works later 
+        self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
         self.endTurn()
 
 
