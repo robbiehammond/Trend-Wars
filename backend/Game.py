@@ -14,7 +14,10 @@ class Game:
         self.maxTurns = maxTurns
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
+    
         #self.countdown = countdown
+        #values hardcoded in, can implement so that users can configure values here.
+        self.connector = google_connector(connect_region = 'en-US', search_region = 'US', timeframe = 'today 12-m', gprop = '')
 
         # initialize all player scores to 0 and set all players as not ready for next turn
         for player in players:
@@ -50,9 +53,11 @@ class Game:
 
     # Once all players have submitted a word, submit to the Trends API and update scores accordingly 
     def evaluateSubmissions(self):
+
+        #right now, the command returns the "max" search value of the input words
+        results = self.connector.get_word_results(wordSubmissions.values()).max()
         for player, submission in self.wordSubmissions.items():
-            self.scores[player] += len(submission) # not at all how we want to calculate scores, but just for testing purposes
-            # call API, see how their word + starting word did 
+            self.scores[player] += resuts[submission]
             # rank players accordingly, update score
         self.endTurn()
 
