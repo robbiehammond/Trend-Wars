@@ -1,16 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
 
 body {
-  background-color: #30303E;
-  color: #F1F1F6;
+  background-color: #30303e;
+  color: #f1f1f6;
   text-align: center;
-  font-family: 'Signika', sans-serif;
+  font-family: "Signika", sans-serif;
 }
 
 .App-header {
   font-size: calc(10px + 3vmin);
   font-weight: bold;
-  color: #908FBB;
+  color: #908fbb;
   text-align: center;
 }
 
