@@ -34,10 +34,11 @@ class Message:
 
     #encode a message (in json) to be sent to frontend
     def toJSON(self):
-        return {
+        obj = {
             "msgType": str(self.msgType),
             "msgData": self.msgData
         }
+        return json.dumps(obj)
 
     #decode a message sent from frontend into a Message object
     @staticmethod

@@ -2,6 +2,7 @@ import warnings
 import ConnectionManager
 import time
 from Player import Player
+from google_connector import google_connector
 
 class Game:
     def __init__(self, players, maxTurns):
@@ -55,9 +56,9 @@ class Game:
     def evaluateSubmissions(self):
 
         #right now, the command returns the "max" search value of the input words
-        results = self.connector.get_word_results(wordSubmissions.values()).max()
+        results = self.connector.get_word_results(self.wordSubmissions.values()).max()
         for player, submission in self.wordSubmissions.items():
-            self.scores[player] += resuts[submission]
+            self.scores[player] += results[submission]
             # rank players accordingly, update score
         self.endTurn()
 

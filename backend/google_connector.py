@@ -1,4 +1,4 @@
-import pytrends
+from pytrends.request import TrendReq
 import pandas as pd
 
 class google_connector:
