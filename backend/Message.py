@@ -1,7 +1,7 @@
 from enum import Enum, auto
 import json
 
-#I'm sure we'll need more message types, but this is a start
+# This list can be pruned once more of the game is implemented. I'm basically just adding a new one for whatever I can think of, so some certainly won't be used/are redundant.
 class MessageType(Enum):
     PLAYER_ID = auto() # a client's ID is sent to client when they connect to the server
     USERNAME = auto() # submitted to the server to register a player's username (sent by client when they set their username )
@@ -19,6 +19,8 @@ class MessageType(Enum):
     SUBMIT_WORD = auto() # used by the client to send a message to the serverA
     WORD_SUBMITTED = auto() # used to indicate to the client that a player has submitted a word
     READY_FOR_NEXT_ROUND = auto() # used to notify the server that a player is ready for the next round 
+    SCORE = auto() # used to notify players about a certain player's score
+    GAME_CANNOT_START = auto() # used to notify the client if they try starting the game before there are enough players readied up
 
     # returns string value of json 
     def __str__(self):

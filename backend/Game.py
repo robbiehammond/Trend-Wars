@@ -15,6 +15,7 @@ class Game:
         self.maxTurns = maxTurns
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
+        self.pointsForTheirWord = {} # map each player to the score they got for their word for this turn
     
         #self.countdown = countdown
         #values hardcoded in, can implement so that users can configure values here.
@@ -27,15 +28,18 @@ class Game:
 
         self.startNewTurn()
 
+    def getPointsForTheirWord(self):
+        return self.pointsForTheirWord
+
+    def getPlayerScore(self, player: Player):
+        return self.scores[player]
 
     # clear previous submissions and generate new starting word at the beginning of each turn
     def startNewTurn(self):
         self.turn += 1
-        self.wordSubmissions = {}
         self.curWord = self.generateStartingWord()
-
+        self.pointsForTheirWord = {}
         self.wordSubmissions = {}
-        self.generateStartingWord()
         # certainly will need more logic here
 
 
@@ -54,14 +58,17 @@ class Game:
 
     # Once all players have submitted a word, submit to the Trends API and update scores accordingly 
     def evaluateSubmissions(self):
-
         #right now, the command returns the "max" search value of the input words
         results = self.connector.get_word_results(self.wordSubmissions.values()).max()
         for player, submission in self.wordSubmissions.items():
             self.scores[player] += results[submission]
+            self.pointsForTheirWord[player] = results[submission]
             # rank players accordingly, update score
         self.endTurn()
 
+    # After all players have submitted their words and they've been submitted to the Trends API, alert those in the lobby on how everyone did
+    def getSubmittedWords(self):
+        return self.wordSubmissions
 
     # if all players have submitted, evaluate the submissions 
     # send messsage to everyone connected to this lobby that this player has submitted a word
