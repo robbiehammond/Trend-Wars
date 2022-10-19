@@ -30,7 +30,7 @@ class Lobby:
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}))
                     self.startGame()
                 else:
-                    print("Game cannot start yet. Probably want to send a message to the frontend to tell them why")
+                    self.CM.send_to_player(player.id, Message(MessageType.GAME_CANNOT_START, {}))
 
             case "SUBMIT_WORD":
                 if self.game is not None:
@@ -38,7 +38,14 @@ class Lobby:
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
                     if self.game.everyoneHasSubmitted():
                         self.game.evaluateSubmissions()
+                        submittedWords = self.game.getSubmittedWords()
+                        respectivePoints = self.game.getPointsForTheirWord()
+                        for player in self.players: # send to everyone in the lobby the username, word, point value, and updated score for each player
+                            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.SCORE, {"username": player.username, "added_points": respectivePoints[player], "word": submittedWords[player], "new_score": self.game.getPlayerScore(player)}))
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
+                else: # if there is no game and a word was submitted somehow
+                    warnings.warn(f"Game has not started for lobby {self.id}. Not handling request.")
+
 
             case "READY_FOR_NEXT_ROUND":
                 self.game.processReadyForNextRound(player)
@@ -73,9 +80,10 @@ class Lobby:
 
     def getLobbyState(self) -> dict:
         return {
-            "id": self.id,
+            "lobbyID": self.id,
             "players": [player.id for player in self.players],
             "gameStarted": self.game is not None
+
         }
 
 

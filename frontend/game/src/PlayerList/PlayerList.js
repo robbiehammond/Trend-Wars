@@ -1,39 +1,41 @@
-import './PlayerList.css';
-import React from 'react'; 
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Checkbox from '@mui/material/Checkbox';
-import Avatar from '@mui/material/Avatar';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ws from '../socketConfig.js';
-class PlayerList  extends React.Component{
-  constructor(props){
+import "./PlayerList.css";
+import React from "react";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ws from "../socketConfig.js";
+class PlayerList extends React.Component {
+  constructor(props) {
     super(props);
-    // todo: make this what the server says the players are 
+    // todo: make this what the server says the players are
     this.state = {
-      players: [{ id: ''}]
-    }
+      players: [{ id: "" }],
+    };
   }
 
-  render(){
+  render() {
     let component = this;
-    ws.on('message', function(message){
-      console.log(message);
-      
-      switch (message.msgType) {
-        case "LOBBY_STATE":
-          console.log('on lobby state');
-          this.setState({
-            players: message.msgData.players
-          });
-          break;
-        default:
-          break;
-      }
-    }.bind(this));   
+    ws.on(
+      "message",
+      function (message) {
+        console.log(message);
+
+        switch (message.msgType) {
+          case "LOBBY_STATE":
+            console.log("on lobby state");
+            this.setState({
+              players: message.msgData.players,
+            });
+            break;
+          default:
+            break;
+        }
+      }.bind(this)
+    );
     return (
       <div className="playerList">
         <h2>Player List</h2>
@@ -41,10 +43,7 @@ class PlayerList  extends React.Component{
           {this.state.players.map((player) => {
             const labelId = `checkbox-list-secondary-label-${player}`;
             return (
-              <ListItem
-                key={player.id}
-                disablePadding
-              >
+              <ListItem key={player.id} disablePadding>
                 <ListItemButton>
                   <ListItemAvatar>
                     <Avatar
@@ -58,9 +57,13 @@ class PlayerList  extends React.Component{
                       player.word ? "wrote " + player.word : ""
                     }`}
                   />
-                  <>{player.submitted ? 
-                  <CheckCircleIcon></CheckCircleIcon> : ''
-                }</>
+                  <>
+                    {player.submitted ? (
+                      <CheckCircleIcon></CheckCircleIcon>
+                    ) : (
+                      ""
+                    )}
+                  </>
                 </ListItemButton>
               </ListItem>
             );
@@ -68,8 +71,7 @@ class PlayerList  extends React.Component{
         </List>
       </div>
     );
-  } 
+  }
 }
 
 export default PlayerList;
-

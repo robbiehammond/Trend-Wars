@@ -1,10 +1,10 @@
-import './Landing.css';
-import React from 'react'; 
-import ws from '../socketConfig.js';
-import Button from '@mui/material/Button';
-import Message from '../Message/Message';
-import MessageType from '../Message/MessageType';
-import { Box } from '@mui/system';
+import "./Landing.css";
+import React from "react";
+import ws from "../socketConfig.js";
+import Button from "@mui/material/Button";
+import Message from "../Message/Message";
+import MessageType from "../Message/MessageType";
+import { Box } from "@mui/system";
 
 class Landing extends React.Component {
   constructor(props) {
@@ -14,24 +14,28 @@ class Landing extends React.Component {
   }
 
   sendReadyMsg() {
-    const msg = new Message(MessageType.READY, {data: "meme"});
-    ws.emit('message', msg.toJSON());
+    const msg = new Message(MessageType.READY, { data: "meme" });
+    ws.emit("message", msg.toJSON());
   }
 
   sendStartGameMsg() {
-    const msg = new Message(MessageType.START_GAME, {data: "meme"});
-    ws.emit('message', msg.toJSON());
+    const msg = new Message(MessageType.START_GAME, { data: "meme" });
+    ws.emit("message", msg.toJSON());
   }
 
   render() {
     return (
       <div className="Landing">
         <Box m={1}>
-          <Button className="Button" variant="contained" onClick={this.sendReadyMsg}>
+          <Button
+            className="Button"
+            variant="contained"
+            onClick={this.sendReadyMsg}
+          >
             Ready Up
           </Button>
         </Box>
-      <Box m={1}>
+        <Box m={1}>
           <Button
             className="Button"
             variant="contained"
@@ -39,8 +43,7 @@ class Landing extends React.Component {
           >
             Start Game
           </Button>
-      </Box>
-
+        </Box>
       </div>
     );
   }
