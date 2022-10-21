@@ -8,17 +8,6 @@ import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 
 function Homepage() {
-  ws.on("message", (message) => {
-    console.log(message);
-
-    switch (message.msgType) {
-      case "LOBBY_CREATED":
-        rerouteToLobby(message.msgData);
-        break;
-      default:
-        break;
-    }
-  });
 
   const navigate = useNavigate();
 
@@ -38,6 +27,18 @@ function Homepage() {
     });
     ws.emit("message", msg.toJSON());
   }
+
+  ws.on("message", (message) => {
+    console.log(message);
+
+    switch (message.msgType) {
+      case "LOBBY_CREATED":
+        rerouteToLobby(message.msgData);
+        break;
+      default:
+        break;
+    }
+  });
 
   return (
     <div className="Homepage">
