@@ -17,10 +17,10 @@ class Game extends React.Component {
   }
 
   submitWordMsg() {
-    this.state.userWord = document.getElementById("word-input").get;
+    let userWord = document.getElementById("word-input").getValue();
     const msg = new Message(MessageType.SUBMIT_WORD, {
       data: "meme",
-      word: this.state.userWord
+      word: userWord
     });
     ws.emit("message", msg.toJSON());
   }

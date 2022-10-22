@@ -4,6 +4,7 @@ import PlayerList from "../PlayerList/PlayerList.js";
 import Game from "../Game/Game.js";
 import Landing from "../Landing/Landing.js";
 import ws from "../socketConfig.js";
+import Message from "../Message/Message";
 
 class Lobby extends React.Component {
   constructor(props) {
@@ -14,10 +15,10 @@ class Lobby extends React.Component {
   }
 
   render() {
-    let component = this;
     ws.on(
       "message",
-      function (message) {
+      function (json) {
+        let message = Message.fromJSON(json);
         console.log(message);
 
         switch (message.msgType) {
