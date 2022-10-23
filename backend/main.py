@@ -67,7 +67,7 @@ def onMessage(msg):
     # for each new message type we make, add a new case here for how to handle it + associated handler function
     match msgType:
         case "USERNAME":
-            handleUsernameMsg(decodedMessage)
+            handleUsernameMsg(sendingPlayer, decodedMessage.msgData, CM)
         case "PLAYER_JOIN":
             handlePlayerJoinMsg(sendingPlayer, CM, lobbies, "placeholder text")
         case "CREATE_LOBBY":

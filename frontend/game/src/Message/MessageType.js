@@ -6,6 +6,7 @@ let MessageType = {
   SUBMIT_WORD: "SUBMIT_WORD",
   GAME_STATE: "GAME_STATE",
   GAME_OVER: "GAME_OVER",
+  USERNAME: "USERNAME"
   //insert more types as needed, make sure one exists on backend too
 };
 

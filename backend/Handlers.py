@@ -1,11 +1,17 @@
 from Lobby import Lobby 
+from Player import Player 
 from Message import MessageType, Message
 import ConnectionManager
 import warnings
 warnings.simplefilter('always', UserWarning)
 
-def handleUsernameMsg(msg):
-    pass
+def handleUsernameMsg(player: Player, username: str, CM: ConnectionManager):
+    if player.lobbyID is not None:
+        warnings.warn("Player already in a lobby. Usernames should only be edited when on homepage. Not handling request.")
+    else:
+        player.username = username
+        CM.send_to_player(player, Message(MessageType.USERNAME_CHANGED, {"username": player.username}))
+
 
 def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
     if player.lobbyID is not None:

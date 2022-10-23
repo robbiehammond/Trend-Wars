@@ -5,6 +5,7 @@ import json
 class MessageType(Enum):
     PLAYER_ID = auto() # a client's ID is sent to client when they connect to the server
     USERNAME = auto() # submitted to the server to register a player's username (sent by client when they set their username )
+    USERNAME_CHANGED = auto() # sent back to client when their username has been successfully changed 
     READY = auto() # used to denote that a player is ready for the game to start (sent by client when they ready up, and sent by server to alert connected clients that a player is ready)
     PLAYER_DATA = auto() # used to send all info regarding a player (username, id, ready status). A PLAYER_DATA message arriving on the frontend should indicate that this player needs to be rendered
     PLAYER_JOIN = auto() # used to notify the server that a player has joined a lobby (sent from client to server)
@@ -21,6 +22,7 @@ class MessageType(Enum):
     READY_FOR_NEXT_ROUND = auto() # used to notify the server that a player is ready for the next round 
     SCORE = auto() # used to notify players about a certain player's score
     GAME_CANNOT_START = auto() # used to notify the client if they try starting the game before there are enough players readied up
+
 
     # returns string value of json 
     def __str__(self):
