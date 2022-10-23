@@ -95,7 +95,3 @@ class ConnectionManager:
             sock.emit('message', message.toJSON())
         else:
             warn("Tried to send message to player with no socket")
-
-
-
-

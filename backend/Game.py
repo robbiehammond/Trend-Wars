@@ -105,9 +105,14 @@ class Game:
             warnings.warn(f'Player {player.id} has readied up for the next round, but has not submitted a word for the current round. This request will be ignored.')
             return
         self.readyForNextTurn[player.id] = True
-        if all(self.readyForNextTurn):
+        if (self.allReadyForNextTurn()):
             self.startNewTurn()
 
+    def allReadyForNextTurn(self):
+        for player, status in self.readyForNextTurn.items():
+            if not status:
+                return False
+        return True
 
     # show everyone player's scores at the end of the game 
     def showScores(self):

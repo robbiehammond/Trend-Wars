@@ -110,7 +110,7 @@ def testLobbyAndGame():
     idToPlayer[0] = test_player1
     idToPlayer[1] = test_player2
 
-    # create a tes tlobby
+    # create a test tlobby
     test_lobby = Lobby("AAAAAA", CM)
     lobbies.append(test_lobby)
 
