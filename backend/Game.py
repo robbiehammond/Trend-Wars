@@ -17,7 +17,6 @@ class Game:
         self.gameEnded = False
 
         
-
         #dictionary to hold the ranks of each player
         self.playerRank = {}
 
@@ -69,7 +68,6 @@ class Game:
         for player, submission in self.wordSubmissions.items():
             self.scores[player] += results[submission]
             self.pointsForTheirWord[player] = results[submission]
-            # rank players accordingly, update score
 
         #found this on StackOverflow, we will see if this works later 
         self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
@@ -83,6 +81,7 @@ class Game:
     # send messsage to everyone connected to this lobby that this player has submitted a word
     def everyoneHasSubmitted(self):
         return len(self.wordSubmissions) == len(self.players)
+
     
     def turnTimer(self):
         while self:

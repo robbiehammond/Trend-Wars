@@ -17,7 +17,7 @@ class Game extends React.Component {
   }
 
   submitWordMsg() {
-    let userWord = document.getElementById("word-input").getValue();
+    let userWord = this.state.userWord;
     const msg = new Message(MessageType.SUBMIT_WORD, {
       data: "meme",
       word: userWord

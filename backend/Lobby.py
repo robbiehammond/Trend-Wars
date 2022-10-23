@@ -41,7 +41,10 @@ class Lobby:
                         submittedWords = self.game.getSubmittedWords()
                         respectivePoints = self.game.getPointsForTheirWord()
                         for player in self.players: # send to everyone in the lobby the username, word, point value, and updated score for each player
-                            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.SCORE, {"username": player.username, "added_points": respectivePoints[player], "word": submittedWords[player], "new_score": self.game.getPlayerScore(player)}))
+                            added_points = int(respectivePoints[player])
+                            word = submittedWords[player]
+                            new_score = int(self.game.getPlayerScore(player))
+                            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.SCORE, {"username": player.username, "added_points": added_points, "word": word, "new_score": new_score}))
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                 else: # if there is no game and a word was submitted somehow
                     warnings.warn(f"Game has not started for lobby {self.id}. Not handling request.")
