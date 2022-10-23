@@ -28,8 +28,8 @@ function Homepage() {
     ws.emit("message", msg.toJSON());
   }
 
-  ws.on("message", (message) => {
-    console.log(message);
+  ws.on("message", (json) => {
+    let message = Message.fromJSON(json);
 
     switch (message.msgType) {
       case "LOBBY_CREATED":
