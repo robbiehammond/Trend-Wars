@@ -9,6 +9,7 @@ def handleUsernameMsg(player: Player, username: str, CM: ConnectionManager):
     if player.lobbyID is not None:
         warnings.warn("Player already in a lobby. Usernames should only be edited when on homepage. Not handling request.")
     else:
+        print(username)
         player.username = username
         CM.send_to_player(player, Message(MessageType.USERNAME_CHANGED, {"username": player.username}))
 
