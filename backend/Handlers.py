@@ -9,7 +9,6 @@ def handleUsernameMsg(player: Player, username: str, CM: ConnectionManager):
     if player.lobbyID is not None:
         warnings.warn("Player already in a lobby. Usernames should only be edited when on homepage. Not handling request.")
     else:
-        print(username)
         player.username = username
         CM.send_to_player(player, Message(MessageType.USERNAME_CHANGED, {"username": player.username}))
 
@@ -23,9 +22,10 @@ def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
                 lobby.addPlayer(player)
                 player.lobbyID = lobby.id
                 CM.send_to_player(player, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id}))
-                CM.send_to_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
+                CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
                 return
-        warnings.warn("No lobby with that ID exists. Not handling request.")
+        CM.send_to_player(player, Message(MessageType.LOBBY_DOESNT_EXIST, {'data': 'bruh moment'}))
+        warnings.warn(f"No lobby with ID {lobbyID} exists. Not handling request.")
 
 def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM):
     if lobbyCreator == None:

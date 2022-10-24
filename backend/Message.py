@@ -22,6 +22,7 @@ class MessageType(Enum):
     READY_FOR_NEXT_ROUND = auto() # used to notify the server that a player is ready for the next round 
     SCORE = auto() # used to notify players about a certain player's score
     GAME_CANNOT_START = auto() # used to notify the client if they try starting the game before there are enough players readied up
+    LOBBY_DOESNT_EXIST = auto() # send server to client to inform the client that the lobby they tried to join doesn't exist
 
 
     # returns string value of json 

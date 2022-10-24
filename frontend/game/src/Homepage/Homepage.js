@@ -11,6 +11,7 @@ import { TextField } from "@mui/material";
 
 function Homepage() {
   const [username, setUsername] = useState('');
+  const [lobbyID, setLobbyID] = useState('');
   const navigate = useNavigate();
 
   function rerouteToLobby(data) {
@@ -24,7 +25,7 @@ function Homepage() {
 
   function sendJoinLobbyMessage() {
     const msg = new Message(MessageType.PLAYER_JOIN, {
-      data: { lobbyID: "AAAAAA" },
+      data: { lobbyID: lobbyID },
     });
     ws.emit("message", msg.toJSON());
   }
@@ -42,6 +43,8 @@ function Homepage() {
         break;
       case "USERNAME_CHANGED":
         //if you wanna visually show that the username has been changed or somethin, do that here
+      case "LOBBY_JOINED":
+        rerouteToLobby(message.msgData);
         break;
       default:
         break;
@@ -60,6 +63,7 @@ function Homepage() {
             Create Lobby
           </Button>
         </Box>
+        <TextField value= {lobbyID} onChange={(e) => { setLobbyID(e.target.value)}}></TextField>
         <Box m={1}>
           <Button
             className="Button"

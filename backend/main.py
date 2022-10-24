@@ -69,7 +69,7 @@ def onMessage(msg):
         case "USERNAME":
             handleUsernameMsg(sendingPlayer, decodedMessage.msgData['data'], CM)
         case "PLAYER_JOIN":
-            handlePlayerJoinMsg(sendingPlayer, CM, lobbies, "placeholder text")
+            handlePlayerJoinMsg(sendingPlayer, CM, lobbies, decodedMessage.msgData['data']['lobbyID'])
         case "CREATE_LOBBY":
             sid = request.sid
             if sendingPlayer.lobbyID is None:
