@@ -52,6 +52,11 @@ class ConnectionManager:
         self.activeSids.remove(sid)
         for sock in self.connections:
             if sock.getSocketID() == sid:
+                player = self.socketToPlayer[sock]
+                #if player was in lobby, alert people in lobby that this player has left
+                if player.lobbyID is not None: 
+                    print("here")
+                    self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.PLAYER_LEAVE, { 'playerID': player.id, 'username': player.username }))
                 self.connections.remove(sock)
                 del self.socketToPlayer[sock]
                 break
