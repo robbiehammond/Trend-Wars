@@ -1,4 +1,5 @@
 import warnings
+
 import ConnectionManager
 import time
 from Player import Player
@@ -15,8 +16,7 @@ class Game:
         self.maxTurns = maxTurns
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
-
-        
+        self.timer = 10
         #dictionary to hold the ranks of each player
         self.playerRank = {}
 
@@ -45,6 +45,7 @@ class Game:
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
         self.wordSubmissions = {}
+        self.turnTimer(10)
         # certainly will need more logic here
 
 
@@ -90,6 +91,8 @@ class Game:
             print(timeformat, end='\r')
             time.sleep(1)
             self -= 1
+            if (self == 0):
+                print("Time's up")
 
 
     def endTurn(self):
@@ -101,7 +104,7 @@ class Game:
 
     def processReadyForNextRound(self, player: Player):
         if self.wordSubmissions.get(player) is None:
-            warnings.warn(f'Player {player.id} has readied up for the next round, but has not submitted a word for the current round. This request will be ignored.')
+            warnings.warn(f'Player {player.id} has read ied up for the next round, but has not submitted a word for the current round. This request will be ignored.')
             return
         self.readyForNextTurn[player.id] = True
         if (self.allReadyForNextTurn()):
