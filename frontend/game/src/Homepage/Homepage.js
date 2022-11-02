@@ -42,6 +42,7 @@ function Homepage() {
         rerouteToLobby(message.msgData);
         break;
       case "USERNAME_CHANGED":
+        break;
         //if you wanna visually show that the username has been changed or somethin, do that here
       case "LOBBY_JOINED":
         rerouteToLobby(message.msgData);

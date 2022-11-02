@@ -45,7 +45,7 @@ class Game:
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
         self.wordSubmissions = {}
-        self.turnTimer(10)
+        # self.turnTimer(10)
         # certainly will need more logic here
 
 
@@ -68,6 +68,7 @@ class Game:
         results = self.connector.get_word_results(self.wordSubmissions.values()).max()
         for player, submission in self.wordSubmissions.items():
             self.scores[player] += results[submission]
+            player.score = self.scores[player] # redundant, eventually we should switch over to exclusively using the score field rather than the map
             self.pointsForTheirWord[player] = results[submission]
 
         #found this on StackOverflow, we will see if this works later 

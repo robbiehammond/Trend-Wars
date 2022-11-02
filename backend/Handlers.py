@@ -29,7 +29,7 @@ def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
 
 def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM):
     if lobbyCreator == None:
-        print("Unknown socket tried to create lobby. No player associated with the socket. Not handling request.")
+        warnings.warn("Unknown socket tried to create lobby. No player associated with the socket. Not handling request.")
         return
 
     lobby = Lobby(newID, CM)

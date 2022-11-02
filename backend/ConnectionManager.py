@@ -55,7 +55,6 @@ class ConnectionManager:
                 player = self.socketToPlayer[sock]
                 #if player was in lobby, alert people in lobby that this player has left
                 if player.lobbyID is not None: 
-                    print("here")
                     self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.PLAYER_LEAVE, { 'playerID': player.id, 'username': player.username }))
                 self.connections.remove(sock)
                 del self.socketToPlayer[sock]
@@ -92,7 +91,6 @@ class ConnectionManager:
         # loop through all sockets, send this message to all players sharing the same lobby ID
         for sock in self.connections:
             if self.socketToPlayer[sock].lobbyID == lobbyID:
-                print(message.msgData)
                 sock.emit('message', message.toJSON())
     
     def send_to_player(self, player: Player, message: Message):
