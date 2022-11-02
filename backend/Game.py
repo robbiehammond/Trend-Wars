@@ -4,6 +4,7 @@ import ConnectionManager
 import time
 from Player import Player
 from google_connector import google_connector
+from termcolor import colored
 
 class Game:
     def __init__(self, players, maxTurns):
@@ -57,7 +58,7 @@ class Game:
     # when a player submits a word in a given turn, remember it 
     def processPlayerSubmission(self, player: Player, submission: str):
         if self.wordSubmissions.get(player) is not None:
-            warnings.warn(f'Player {player.id} has already submitted a word for this turn. Their previous submission was {self.wordSubmissions[player]} and their new submission is {submission}. The new submission will be ignored.')
+            warnings.warn(colored(f'Player {player.id} has already submitted a word for this turn. Their previous submission was {self.wordSubmissions[player]} and their new submission is {submission}. The new submission will be ignored.', 'yellow'))
             return
         self.wordSubmissions[player] = submission
         
@@ -105,7 +106,7 @@ class Game:
 
     def processReadyForNextRound(self, player: Player):
         if self.wordSubmissions.get(player) is None:
-            warnings.warn(f'Player {player.id} has read ied up for the next round, but has not submitted a word for the current round. This request will be ignored.')
+            warnings.warn(colored(f'Player {player.id} has read ied up for the next round, but has not submitted a word for the current round. This request will be ignored.', 'yellow'))
             return
         self.readyForNextTurn[player.id] = True
         if (self.allReadyForNextTurn()):

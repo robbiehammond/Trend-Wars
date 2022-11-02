@@ -9,6 +9,7 @@ from Handlers import *
 from Player import Player 
 from Lobby import LobbyIDGenerator
 from ConnectionManager import ConnectionManager
+from termcolor import colored
 
 # connection setup stuff
 app = Flask(__name__)
@@ -48,7 +49,7 @@ def onMessage(msg):
     if CM.is_connected(request.sid):
         sendingPlayer = CM.get_player(request.sid)
     else:
-        warnings.warn("Warning: Socket not associated with a player. \'none\' will be used as the sending player. Bad things will probably happen")
+        warnings.warn(colored("Warning: Socket not associated with a player. \'none\' will be used as the sending player. Bad things will probably happen", "yellow"))
 
     #if the player who sent this message has been registered and is in a lobby/game, handle the message there
     if sendingPlayer is not None and sendingPlayer.lobbyID is not None:
@@ -75,7 +76,7 @@ def onMessage(msg):
             if sendingPlayer.lobbyID is None:
                 handleCreateLobbyMsg(decodedMessage, sendingPlayer, CM.get_sid_to_player(), sid, lobbies, lobbyIDGenerator.generateNewID(), CM)
             else:
-                warnings.warn("Warning: Player in a lobby tried to create another lobby. That shouldn't happen")
+                warnings.warn(colored("Warning: Player in a lobby tried to create another lobby. That shouldn't happen", "yellow"))
         case _:
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
             

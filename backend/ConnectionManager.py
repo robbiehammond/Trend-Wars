@@ -2,6 +2,7 @@ from flask_socketio import SocketIO, emit
 from Player import Player
 from Message import Message, MessageType
 from warnings import warn
+from termcolor import colored
 
 # abstraction around socketio library
 # unless you're messing with connection stuff, you probably don't need to worry about this 
@@ -98,4 +99,4 @@ class ConnectionManager:
         if sock is not None:
             sock.emit('message', message.toJSON())
         else:
-            warn("Tried to send message to player with no socket")
+            warn(colored("Tried to send message to player with no socket", "yellow"))

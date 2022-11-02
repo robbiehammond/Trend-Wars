@@ -5,7 +5,7 @@ from Player import Player
 from Handlers import *
 from ConnectionManager import ConnectionManager
 from Message import Message, MessageType
-
+from termcolor import colored
 
 class Lobby:
     def __init__(self, id, CM: ConnectionManager):
@@ -47,10 +47,13 @@ class Lobby:
                             self.CM.send_to_all_in_lobby(self.id, Message(MessageType.SCORE, {"username": player.username, "added_points": added_points, "word": word, "new_score": new_score}))
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                 else: # if there is no game and a word was submitted somehow
-                    warnings.warn(f"Game has not started for lobby {self.id}. Not handling request.")
+                    warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
 
 
             case "READY_FOR_NEXT_ROUND":
+                if not self.game.everyoneHasSubmitted():
+                    warnings.warn(colored("Someone readied up for the next round, even though not everyone has submitted. Something wrong is happening here that needs to be fixed."), 'yellow')
+                    return
                 self.game.processReadyForNextRound(player)
                 self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}), self.id)
             # insert cases for this lobby to handle certain types of messages

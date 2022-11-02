@@ -3,11 +3,12 @@ from Player import Player
 from Message import MessageType, Message
 import ConnectionManager
 import warnings
+from termcolor import colored
 warnings.simplefilter('always', UserWarning)
 
 def handleUsernameMsg(player: Player, username: str, CM: ConnectionManager):
     if player.lobbyID is not None:
-        warnings.warn("Player already in a lobby. Usernames should only be edited when on homepage. Not handling request.")
+        warnings.warn(colored("Player already in a lobby. Usernames should only be edited when on homepage. Not handling request.", 'yellow'))
     else:
         player.username = username
         CM.send_to_player(player, Message(MessageType.USERNAME_CHANGED, {"username": player.username}))
@@ -15,7 +16,7 @@ def handleUsernameMsg(player: Player, username: str, CM: ConnectionManager):
 
 def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
     if player.lobbyID is not None:
-        warnings.warn("Player already in a lobby. Not handling request.")
+        warnings.warn(colored("Player already in a lobby. Not handling request.", "yellow"))
     else:
         for lobby in lobbies:
             if lobby.id == lobbyID:
@@ -29,7 +30,7 @@ def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
 
 def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM):
     if lobbyCreator == None:
-        warnings.warn("Unknown socket tried to create lobby. No player associated with the socket. Not handling request.")
+        warnings.warn(colored("Unknown socket tried to create lobby. No player associated with the socket. Not handling request.", "yellow"))
         return
 
     lobby = Lobby(newID, CM)
