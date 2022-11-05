@@ -31,7 +31,7 @@ class Lobby:
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}))
                     self.startGame()
                 else:
-                    self.CM.send_to_player(player.id, Message(MessageType.GAME_CANNOT_START, {}))
+                    self.CM.send_to_player(player, Message(MessageType.GAME_CANNOT_START, {}))
 
             case "SUBMIT_WORD":
                 if self.game is not None:
@@ -79,10 +79,7 @@ class Lobby:
 
     # If there are 2 or more players and they're all ready, game can start
     def gameCanStart(self):
-        return True # this is just how things are for the sake of testing!
-
-        # Uncomment this line and delete the 'return True' for real behavior
-        #return len(self.players) >= 2 and all([player.ready for player in self.players])
+        return len(self.players) >= 2 and all([player.ready for player in self.players])
 
 
     def startGame(self):

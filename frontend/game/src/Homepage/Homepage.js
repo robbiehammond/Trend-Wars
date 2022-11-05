@@ -64,26 +64,6 @@ function Homepage() {
             Create Lobby
           </Button>
         </Box>
-        <TextField value= {lobbyID} onChange={(e) => { setLobbyID(e.target.value)}}></TextField>
-        <Box m={1}>
-          <Button
-            className="Button"
-            variant="contained"
-            onClick={sendJoinLobbyMessage}
-          >
-            Join Lobby
-          </Button>
-        </Box>
-        <Box m={1}>
-          <Button
-            className="Button"
-            variant="contained"
-            onClick={() => navigate(`/lobby/`, { replace: true })}
-          >
-            go to lobby
-          </Button>
-        </Box>
-        <TextField value= {username} onChange={(e) => { setUsername(e.target.value)}}></TextField>
         <Box m={1}>
           <Button
             className="Button"
@@ -93,6 +73,7 @@ function Homepage() {
             Set Username
           </Button>
         </Box>
+        <TextField value= {username} onChange={(e) => { setUsername(e.target.value)}}></TextField>
       </header>
     </div>
   );
