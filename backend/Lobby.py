@@ -28,8 +28,10 @@ class Lobby:
 
             case "START_GAME":
                 if self.gameCanStart():
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}))
                     self.startGame()
+                    first_word = self.game.curWord
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}))
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.STARTING_WORD, {'word': first_word}))
                 else:
                     self.CM.send_to_player(player, Message(MessageType.GAME_CANNOT_START, {}))
 
@@ -57,6 +59,13 @@ class Lobby:
                     return
                 self.game.processReadyForNextRound(player)
                 self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}), self.id)
+                if self.game.allReadyForNextTurn():
+                    self.game.startNewTurn()
+                    new_word = self.game.curWord
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.NEW_TURN, {'turn_number': self.game.turn}))
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.STARTING_WORD, {'word': new_word}))
+                    self.CM.send_message_to_all(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState())) #probably doesn't needed to be sent, but rather have too many than too little messages sent
+
 
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
             # Basically, it means we don't need to do anything with the message, so just drop it.
