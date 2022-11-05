@@ -5,6 +5,7 @@ import Game from "../Game/Game.js";
 import Landing from "../Landing/Landing.js";
 import ws from "../socketConfig.js";
 import Message from "../Message/Message";
+import MessageType from "../Message/MessageType";
 
 class Lobby extends React.Component {
   constructor(props) {
@@ -12,6 +13,12 @@ class Lobby extends React.Component {
     this.state = {
       hasGameStarted: false,
     };
+  }
+
+  componentDidMount() {
+    const msg = new Message(MessageType.URL, { data: window.location.href });
+    ws.emit("message", msg.toJSON());
+
   }
 
   render() {

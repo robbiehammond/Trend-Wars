@@ -77,6 +77,22 @@ def onMessage(msg):
                 handleCreateLobbyMsg(decodedMessage, sendingPlayer, CM.get_sid_to_player(), sid, lobbies, lobbyIDGenerator.generateNewID(), CM)
             else:
                 warnings.warn(colored("Warning: Player in a lobby tried to create another lobby. That shouldn't happen", "yellow"))
+        case "URL":
+            if sendingPlayer.lobbyID is not None:
+                warnings.warn(colored("Player already in a lobby somehow, even though they joined via URL?. Not handling request.", "yellow"))
+            else:
+                raw_data = decodedMessage.msgData['data']
+                lobbyID = raw_data.rsplit('/', 1)[1]
+                for lobby in lobbies:
+                    if lobby.id == lobbyID:
+                        lobby.addPlayer(sendingPlayer)
+                        sendingPlayer.lobbyID = lobby.id
+                        CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id}))
+                        CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
+                        return
+                CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_DOESNT_EXIST, {'data': 'bruh moment'}))
+                warnings.warn(f"No lobby with ID {lobbyID} exists. Not handling request.")
+
         case _:
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
             

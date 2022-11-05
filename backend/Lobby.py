@@ -6,6 +6,7 @@ from Handlers import *
 from ConnectionManager import ConnectionManager
 from Message import Message, MessageType
 from termcolor import colored
+import warnings
 
 class Lobby:
     def __init__(self, id, CM: ConnectionManager):
@@ -56,8 +57,11 @@ class Lobby:
                     return
                 self.game.processReadyForNextRound(player)
                 self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}), self.id)
-            # insert cases for this lobby to handle certain types of messages
 
+            #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
+            # Basically, it means we don't need to do anything with the message, so just drop it.
+            case "URL": 
+                pass
             case _:
                 raise Exception(f'Invalid message type. A type of {msgType} was received by lobby {self.id}, but no corresponding function exists')
 

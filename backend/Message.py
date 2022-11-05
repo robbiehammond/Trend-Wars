@@ -23,6 +23,7 @@ class MessageType(Enum):
     SCORE = auto() # used to notify players about a certain player's score
     GAME_CANNOT_START = auto() # used to notify the client if they try starting the game before there are enough players readied up
     LOBBY_DOESNT_EXIST = auto() # send server to client to inform the client that the lobby they tried to join doesn't exist
+    URL = auto()
 
 
     # returns string value of json 
