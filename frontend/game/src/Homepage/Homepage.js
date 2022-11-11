@@ -37,6 +37,7 @@ function Homepage() {
 
   ws.on("message", (json) => {
     let message = Message.fromJSON(json);
+    console.log(message);
     switch (message.msgType) {
       case "LOBBY_CREATED":
         rerouteToLobby(message.msgData);
@@ -64,6 +65,7 @@ function Homepage() {
             Create Lobby
           </Button>
         </Box>
+        <TextField value= {username} onChange={(e) => { setUsername(e.target.value)}}></TextField>
         <Box m={1}>
           <Button
             className="Button"
@@ -73,7 +75,16 @@ function Homepage() {
             Set Username
           </Button>
         </Box>
-        <TextField value= {username} onChange={(e) => { setUsername(e.target.value)}}></TextField>
+        <TextField value= {lobbyID} onChange={(e) => { setLobbyID(e.target.value)}}></TextField>
+        <Box m={1}>
+          <Button
+            className="Button"
+            variant="contained"
+            onClick={sendJoinLobbyMessage}
+          >
+            Join Lobby
+          </Button>
+        </Box>
       </header>
     </div>
   );

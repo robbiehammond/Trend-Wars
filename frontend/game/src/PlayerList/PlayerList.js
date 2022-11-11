@@ -23,7 +23,7 @@ class PlayerList extends React.Component {
       "message",
       function (json) {
         let message = Message.fromJSON(json);
-
+        console.log(message);
         switch (message.msgType) {
           case "LOBBY_STATE":
             console.log("on lobby state");
