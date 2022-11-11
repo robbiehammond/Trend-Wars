@@ -14,7 +14,7 @@ class PlayerList extends React.Component {
     super(props);
     // todo: make this what the server says the players are
     this.state = {
-      players: [{ id: "" }],
+      players: [{ id: "" , username: "N/A"}],
     };
   }
 
@@ -53,7 +53,7 @@ class PlayerList extends React.Component {
                   </ListItemAvatar>
                   <ListItemText
                     id={labelId}
-                    primary={`${player.id} ${
+                    primary={`${player.username} ${
                       player.word ? "wrote " + player.word : ""
                     }`}
                   />
