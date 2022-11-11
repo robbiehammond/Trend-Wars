@@ -8,6 +8,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ws from "../socketConfig.js";
+import Message from "../Message/Message";
 class PlayerList extends React.Component {
   constructor(props) {
     super(props);
@@ -18,11 +19,10 @@ class PlayerList extends React.Component {
   }
 
   render() {
-    let component = this;
     ws.on(
       "message",
-      function (message) {
-        console.log(message);
+      function (json) {
+        let message = Message.fromJSON(json);
 
         switch (message.msgType) {
           case "LOBBY_STATE":

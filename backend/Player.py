@@ -5,6 +5,7 @@ class Player:
         self.username = username
         self.ready = ready
         self.guessedWord = "N/A" # will be overrided with their guessed word during the game 
+        self.score = 0
 
     # encode a player (in json) to be sent to frontend
     # also not sure if we'll ever need this 
@@ -12,7 +13,8 @@ class Player:
         return {
             "id": self.id,
             "username": self.username,
-            "ready": self.ready
+            "ready": self.ready,
+            "score": int(self.score)
         }
 
     def __str__(self):

@@ -5,7 +5,8 @@ from Player import Player
 from Handlers import *
 from ConnectionManager import ConnectionManager
 from Message import Message, MessageType
-
+from termcolor import colored
+import warnings
 
 class Lobby:
     def __init__(self, id, CM: ConnectionManager):
@@ -27,10 +28,12 @@ class Lobby:
 
             case "START_GAME":
                 if self.gameCanStart():
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}))
                     self.startGame()
+                    first_word = self.game.curWord
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}))
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.STARTING_WORD, {'word': first_word}))
                 else:
-                    self.CM.send_to_player(player.id, Message(MessageType.GAME_CANNOT_START, {}))
+                    self.CM.send_to_player(player, Message(MessageType.GAME_CANNOT_START, {}))
 
             case "SUBMIT_WORD":
                 if self.game is not None:
@@ -41,19 +44,48 @@ class Lobby:
                         submittedWords = self.game.getSubmittedWords()
                         respectivePoints = self.game.getPointsForTheirWord()
                         for player in self.players: # send to everyone in the lobby the username, word, point value, and updated score for each player
-                            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.SCORE, {"username": player.username, "added_points": respectivePoints[player], "word": submittedWords[player], "new_score": self.game.getPlayerScore(player)}))
+                            added_points = int(respectivePoints[player])
+                            word = submittedWords[player]
+                            new_score = int(self.game.getPlayerScore(player))
+                            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.SCORE, {"username": player.username, "added_points": added_points, "word": word, "new_score": new_score}))
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                 else: # if there is no game and a word was submitted somehow
-                    warnings.warn(f"Game has not started for lobby {self.id}. Not handling request.")
+                    warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
 
 
             case "READY_FOR_NEXT_ROUND":
+                if not self.game.everyoneHasSubmitted():
+                    warnings.warn(colored("Someone readied up for the next round, even though not everyone has submitted. Something wrong is happening here that needs to be fixed."), 'yellow')
+                    return
                 self.game.processReadyForNextRound(player)
                 self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}), self.id)
-            # insert cases for this lobby to handle certain types of messages
+                if self.game.allReadyForNextTurn():
+                    if self.game.gameShouldEnd():
+                        self.endGame()
+                    else:
+                        self.game.startNewTurn()
+                        new_word = self.game.curWord
+                        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.NEW_TURN, {'turn_number': self.game.turn}))
+                        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.STARTING_WORD, {'word': new_word}))
+                        self.CM.send_message_to_all(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState())) #probably doesn't needed to be sent, but rather have too many than too little messages sent
 
+
+            #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
+            # Basically, it means we don't need to do anything with the message, so just drop it.
+            case "URL": 
+                pass
             case _:
                 raise Exception(f'Invalid message type. A type of {msgType} was received by lobby {self.id}, but no corresponding function exists')
+    
+    def endGame(self):
+        self.game = None
+        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_ENDED, {}))
+        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.RESULTS, {"scores": self.game.scores}))
+        # Maybe start 30 to 60 sec timer for people to view scores, and then everyone gets kicked out afterwards?
+
+    # should be called after the timer expires so players get kicked out of the lobby and it can be closed 
+    def kickOutPlayers(self):
+        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_CLOSING, {}))
 
 
     def addPlayer(self, player):
@@ -69,10 +101,7 @@ class Lobby:
 
     # If there are 2 or more players and they're all ready, game can start
     def gameCanStart(self):
-        return True # this is just how things are for the sake of testing!
-
-        # Uncomment this line and delete the 'return True' for real behavior
-        #return len(self.players) >= 2 and all([player.ready for player in self.players])
+        return len(self.players) >= 2 and all([player.ready for player in self.players])
 
 
     def startGame(self):
@@ -81,12 +110,12 @@ class Lobby:
     def getLobbyState(self) -> dict:
         return {
             "lobbyID": self.id,
-            "players": [player.id for player in self.players],
+            "players": [player.toJSON() for player in self.players],
             "gameStarted": self.game is not None
 
         }
 
-
+    # for debugging purposes 
     def printLobbyState(self):
         print("=====================================")
         print("Lobby " + self.id + " state:")

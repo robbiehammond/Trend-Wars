@@ -9,6 +9,7 @@ from Handlers import *
 from Player import Player 
 from Lobby import LobbyIDGenerator
 from ConnectionManager import ConnectionManager
+from termcolor import colored
 
 # connection setup stuff
 app = Flask(__name__)
@@ -48,7 +49,7 @@ def onMessage(msg):
     if CM.is_connected(request.sid):
         sendingPlayer = CM.get_player(request.sid)
     else:
-        warnings.warn("Warning: Socket not associated with a player. \'none\' will be used as the sending player. Bad things will probably happen")
+        warnings.warn(colored("Warning: Socket not associated with a player. \'none\' will be used as the sending player. Bad things will probably happen", "yellow"))
 
     #if the player who sent this message has been registered and is in a lobby/game, handle the message there
     if sendingPlayer is not None and sendingPlayer.lobbyID is not None:
@@ -67,15 +68,31 @@ def onMessage(msg):
     # for each new message type we make, add a new case here for how to handle it + associated handler function
     match msgType:
         case "USERNAME":
-            handleUsernameMsg(decodedMessage)
+            handleUsernameMsg(sendingPlayer, decodedMessage.msgData['data'], CM)
         case "PLAYER_JOIN":
-            handlePlayerJoinMsg(sendingPlayer, CM, lobbies, "placeholder text")
+            handlePlayerJoinMsg(sendingPlayer, CM, lobbies, decodedMessage.msgData['data']['lobbyID'])
         case "CREATE_LOBBY":
             sid = request.sid
             if sendingPlayer.lobbyID is None:
                 handleCreateLobbyMsg(decodedMessage, sendingPlayer, CM.get_sid_to_player(), sid, lobbies, lobbyIDGenerator.generateNewID(), CM)
             else:
-                warnings.warn("Warning: Player in a lobby tried to create another lobby. That shouldn't happen")
+                warnings.warn(colored("Warning: Player in a lobby tried to create another lobby. That shouldn't happen", "yellow"))
+        case "URL":
+            if sendingPlayer.lobbyID is not None:
+                warnings.warn(colored("Player already in a lobby somehow, even though they joined via URL?. Not handling request.", "yellow"))
+            else:
+                raw_data = decodedMessage.msgData['data']
+                lobbyID = raw_data.rsplit('/', 1)[1]
+                for lobby in lobbies:
+                    if lobby.id == lobbyID:
+                        lobby.addPlayer(sendingPlayer)
+                        sendingPlayer.lobbyID = lobby.id
+                        CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id}))
+                        CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
+                        return
+                CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_DOESNT_EXIST, {'data': 'bruh moment'}))
+                warnings.warn(colored(f"No lobby with ID {lobbyID} exists. Sending a LOBBY_DOESNT_EXIST message to client.", "yellow"))
+
         case _:
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
             
@@ -110,7 +127,7 @@ def testLobbyAndGame():
     idToPlayer[0] = test_player1
     idToPlayer[1] = test_player2
 
-    # create a tes tlobby
+    # create a test tlobby
     test_lobby = Lobby("AAAAAA", CM)
     lobbies.append(test_lobby)
 
@@ -164,9 +181,7 @@ def testLobbyAndGame():
 
 
 def main():
-    #msg = Message(MessageType.USERNAME, "Hello World")
-    #print(msg.toJSON())
-    testLobbyAndGame()
+    #testLobbyAndGame()
     socketio.run(app, host='0.0.0.0', port='8080')
     
 
