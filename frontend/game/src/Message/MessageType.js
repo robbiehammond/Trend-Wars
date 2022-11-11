@@ -7,7 +7,8 @@ let MessageType = {
   GAME_STATE: "GAME_STATE",
   GAME_OVER: "GAME_OVER",
   USERNAME: "USERNAME",
-  URL: "URL"
+  URL: "URL",
+  LOBBY_DOESNT_EXIST: "LOBBY_DOESNT_EXIST"
   //insert more types as needed, make sure one exists on backend too
 };
 

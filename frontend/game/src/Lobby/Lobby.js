@@ -6,16 +6,21 @@ import Landing from "../Landing/Landing.js";
 import ws from "../socketConfig.js";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
+import ErrorPage from "../ErrorPage/Error"
 
 class Lobby extends React.Component {
   constructor(props) {
     super();
     this.state = {
       hasGameStarted: false,
+      lobbyDoesntExist: false,
+      playerListShouldShow: true
     };
   }
 
+
   componentDidMount() {
+    console.log("Component is mounting whtout an id")
     const msg = new Message(MessageType.URL, { data: window.location.href });
     ws.emit("message", msg.toJSON());
 
@@ -34,23 +39,34 @@ class Lobby extends React.Component {
               hasGameStarted: true,
             });
             break;
+          case "LOBBY_DOESNT_EXIST":
+            this.setState({
+              lobbyDoesntExist: true
+            })
+            break;
           default:
             break;
         }
       }.bind(this)
     );
 
-    let gameOrLanding;
+    let gameLandingOrError;
+    let playerList;
     console.log(this.state);
-    if (this.state.hasGameStarted) {
-      gameOrLanding = <Game></Game>;
+    if (this.state.lobbyDoesntExist) {
+      gameLandingOrError = <ErrorPage></ErrorPage>
+    }
+    else if (this.state.hasGameStarted) {
+      gameLandingOrError = <Game></Game>;
+      playerList = <PlayerList></PlayerList>
     } else {
-      gameOrLanding = <Landing></Landing>;
+      gameLandingOrError = <Landing></Landing>;
+      playerList = <PlayerList></PlayerList>
     }
     return (
       <div className="Lobby">
-        <div className="Lobby-div">{gameOrLanding}</div>
-        <PlayerList></PlayerList>
+        <div className="Lobby-div">{gameLandingOrError}</div>
+        <div className="PlayerList-div">{playerList}</div>
       </div>
     );
   }

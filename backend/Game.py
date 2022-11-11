@@ -20,6 +20,11 @@ class Game:
         self.timer = 10
         #dictionary to hold the ranks of each player
         self.playerRank = {}
+        # interesting game statistics that can be displayed at the end of the game
+        self.stats = {
+            'best-word': 'N/A',
+            'worst-word': 'N/A',
+        }
 
         #self.countdown = countdown
         #values hardcoded in, can implement so that users can configure values here.

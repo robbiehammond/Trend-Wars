@@ -91,7 +91,7 @@ def onMessage(msg):
                         CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
                         return
                 CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_DOESNT_EXIST, {'data': 'bruh moment'}))
-                warnings.warn(f"No lobby with ID {lobbyID} exists. Not handling request.")
+                warnings.warn(colored(f"No lobby with ID {lobbyID} exists. Sending a LOBBY_DOESNT_EXIST message to client.", "yellow"))
 
         case _:
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
