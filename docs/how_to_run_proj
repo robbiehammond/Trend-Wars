@@ -1,12 +1,12 @@
 # how to run the darn thing
 
-- u gotta start frontend and backend
+- u gotta start frontend and backend 
 - cd to frontend, then game, and then run `npm install` (only have to install once)
 - after that's done, to start front end use `npm start`
 - open another terminal
 - (only done once) set up ur venv if on windows unless you're robbie and don't care (`python -m venv venv`)
 - if windows run Set-ExecuionPolicy unrestricted 
-- start your venv with `venv\Scripts\activate` if you're on windows and use virtual environments
+- start your venv with `venv\Scripts\activate` from .../TrendWars if you're on windows and use virtual environments
 - run `pip install flask`, `pip install flask_cors`, `pip install socketio`, and anything else u need to (only do this once)
 - cd to backend
 - run `python main.py` to start backend server
