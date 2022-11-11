@@ -60,11 +60,14 @@ class Lobby:
                 self.game.processReadyForNextRound(player)
                 self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}), self.id)
                 if self.game.allReadyForNextTurn():
-                    self.game.startNewTurn()
-                    new_word = self.game.curWord
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.NEW_TURN, {'turn_number': self.game.turn}))
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.STARTING_WORD, {'word': new_word}))
-                    self.CM.send_message_to_all(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState())) #probably doesn't needed to be sent, but rather have too many than too little messages sent
+                    if self.game.gameShouldEnd():
+                        self.endGame()
+                    else:
+                        self.game.startNewTurn()
+                        new_word = self.game.curWord
+                        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.NEW_TURN, {'turn_number': self.game.turn}))
+                        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.STARTING_WORD, {'word': new_word}))
+                        self.CM.send_message_to_all(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState())) #probably doesn't needed to be sent, but rather have too many than too little messages sent
 
 
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
@@ -73,6 +76,16 @@ class Lobby:
                 pass
             case _:
                 raise Exception(f'Invalid message type. A type of {msgType} was received by lobby {self.id}, but no corresponding function exists')
+    
+    def endGame(self):
+        self.game = None
+        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_ENDED, {}))
+        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.RESULTS, {"scores": self.game.scores}))
+        # Maybe start 30 to 60 sec timer for people to view scores, and then everyone gets kicked out afterwards?
+
+    # should be called after the timer expires so players get kicked out of the lobby and it can be closed 
+    def kickOutPlayers(self):
+        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_CLOSING, {}))
 
 
     def addPlayer(self, player):
@@ -102,7 +115,7 @@ class Lobby:
 
         }
 
-
+    # for debugging purposes 
     def printLobbyState(self):
         print("=====================================")
         print("Lobby " + self.id + " state:")

@@ -26,6 +26,9 @@ class MessageType(Enum):
     STARTING_WORD = auto()
     NEW_TURN = auto()
     URL = auto()
+    GAME_ENDED = auto()
+    RESULTS = auto()
+    LOBBY_CLOSING = auto()
 
 
     # returns string value of json 

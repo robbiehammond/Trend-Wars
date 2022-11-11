@@ -5,10 +5,11 @@ let MessageType = {
   START_GAME: "START_GAME",
   SUBMIT_WORD: "SUBMIT_WORD",
   GAME_STATE: "GAME_STATE",
-  GAME_OVER: "GAME_OVER",
+  GAME_ENDED: "GAME_ENDED",
   USERNAME: "USERNAME",
   URL: "URL",
-  LOBBY_DOESNT_EXIST: "LOBBY_DOESNT_EXIST"
+  LOBBY_DOESNT_EXIST: "LOBBY_DOESNT_EXIST",
+  LOBBY_CLOSING: "LOBBY_CLOSING"
   //insert more types as needed, make sure one exists on backend too
 };
 

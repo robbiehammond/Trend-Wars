@@ -44,6 +44,12 @@ class Lobby extends React.Component {
               lobbyDoesntExist: true
             })
             break;
+          case "LOBBY_CLOSING":
+            // insert some logic to kick myself back to homepage.
+            break;
+          case "GAME_ENDED":
+            // insert some logic to display scores and whatnot, which should be a part of the msgData part of this message.
+            break;
           default:
             break;
         }

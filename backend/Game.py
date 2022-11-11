@@ -101,12 +101,12 @@ class Game:
             if (self == 0):
                 print("Time's up")
 
+    def gameShouldEnd(self):
+        return self.turn == self.maxTurns
 
     def endTurn(self):
         for player in self.players:
             self.readyForNextTurn[player.id] = False
-        if self.turn == self.maxTurns:
-            self.endGame()
 
 
     def processReadyForNextRound(self, player: Player):
@@ -123,17 +123,8 @@ class Game:
                 return False
         return True
 
-    # show everyone player's scores at the end of the game 
-    def showScores(self):
-        for player, score in self.scores.items():
-            print(f'player {player.id} scored {score} points')
-        pass
-
-
-    # do whatever we need to properly end the game: show scores, close the lobby + kick players out of the lobby, etc
-    def endGame(self):
-        self.gameEnded = True
-        self.showScores()
+    def setGameOver(self):
+        self.gameEnded = True 
 
 
     def __str__(self):
