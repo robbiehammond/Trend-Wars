@@ -24,7 +24,7 @@ class Lobby:
         match msgType:
             case "READY":
                 player.ready = not player.ready
-                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.READY, {"username": player.username, "playerID": player.id, "ready": player.ready}))
+                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
 
             case "START_GAME":
                 if self.gameCanStart():
