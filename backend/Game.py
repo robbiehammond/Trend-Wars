@@ -5,6 +5,7 @@ import time
 from Player import Player
 from google_connector import google_connector
 from termcolor import colored
+import os
 
 class Game:
     def __init__(self, players, maxTurns):
@@ -29,6 +30,9 @@ class Game:
         #self.countdown = countdown
         #values hardcoded in, can implement so that users can configure values here.
         self.connector = google_connector(connect_region = 'en-US', search_region = 'US', timeframe = 'today 12-m', gprop = '')
+
+        #this creates an object that allows interface with the list of words:
+        self.wordlibrary = wordlibrary(os.getcwd() + "/gamedata/most-common-nouns-english.csv")
 
         # initialize all player scores to 0 and set all players as not ready for next turn
         #intializes player ranks to 0
@@ -57,7 +61,7 @@ class Game:
 
     # choose a word for players to complete
     def generateStartingWord(self) -> str:
-        return "testword"
+        return wordlibrary.get_word()
 
 
     # when a player submits a word in a given turn, remember it 
