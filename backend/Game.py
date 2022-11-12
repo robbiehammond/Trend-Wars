@@ -51,7 +51,7 @@ class Game:
 
     # choose a word for players to complete
     def generateStartingWord(self) -> str:
-        return "balls"
+        return "testword"
 
 
     # when a player submits a word in a given turn, remember it 
