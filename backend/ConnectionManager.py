@@ -2,6 +2,7 @@ from flask_socketio import SocketIO, emit
 from Player import Player
 from Message import Message, MessageType
 from warnings import warn
+from termcolor import colored
 
 # abstraction around socketio library
 # unless you're messing with connection stuff, you probably don't need to worry about this 
@@ -52,6 +53,10 @@ class ConnectionManager:
         self.activeSids.remove(sid)
         for sock in self.connections:
             if sock.getSocketID() == sid:
+                player = self.socketToPlayer[sock]
+                #if player was in lobby, alert people in lobby that this player has left
+                if player.lobbyID is not None: 
+                    self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.PLAYER_LEAVE, { 'playerID': player.id, 'username': player.username }))
                 self.connections.remove(sock)
                 del self.socketToPlayer[sock]
                 break
@@ -94,8 +99,4 @@ class ConnectionManager:
         if sock is not None:
             sock.emit('message', message.toJSON())
         else:
-            warn("Tried to send message to player with no socket")
-
-
-
-
+            warn(colored("Tried to send message to player with no socket", "yellow"))

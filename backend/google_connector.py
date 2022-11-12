@@ -6,7 +6,7 @@ class google_connector:
     def __init__(self, connect_region, category = 0, search_region = "", timeframe = 'today 5-y', gprop = ''):
 
         #use 'en-US' for english us in connect region
-        self.pytrends = TrendReq(hl=connect_region, tz=360)
+        self.pytrends = TrendReq(hl=connect_region)
         #two character country code denoting which country to search in, defaults to world
         self.search_region = search_region
         #category we want to search in--see codes in documentation, but will default.  can use pytrends.category() to get the possible categories

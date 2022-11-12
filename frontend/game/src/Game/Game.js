@@ -2,22 +2,25 @@ import "./Game.css";
 import React from "react";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
+import Message from "../Message/Message";
+import MessageType from "../Message/MessageType";
+import ws from "../socketConfig.js";
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
     this.submitWordMsg = this.submitWordMsg.bind(this);
     this.state = {
-      wordThisTurn: "balls", // todo: change this to be what the server gives us
+      wordThisTurn: "word", // todo: change this to be what the server gives us
       userWord: "",
     };
   }
 
   submitWordMsg() {
-    userWord = document.getElementById("word-input").get;
+    let userWord = this.state.userWord;
     const msg = new Message(MessageType.SUBMIT_WORD, {
       data: "meme",
-      word: userWord,
+      word: userWord
     });
     ws.emit("message", msg.toJSON());
   }

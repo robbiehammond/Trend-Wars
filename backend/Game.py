@@ -1,8 +1,10 @@
 import warnings
+
 import ConnectionManager
 import time
 from Player import Player
 from google_connector import google_connector
+from termcolor import colored
 
 class Game:
     def __init__(self, players, maxTurns):
@@ -15,11 +17,14 @@ class Game:
         self.maxTurns = maxTurns
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
-
-        
-
+        self.timer = 10
         #dictionary to hold the ranks of each player
         self.playerRank = {}
+        # interesting game statistics that can be displayed at the end of the game
+        self.stats = {
+            'best-word': 'N/A',
+            'worst-word': 'N/A',
+        }
 
         #self.countdown = countdown
         #values hardcoded in, can implement so that users can configure values here.
@@ -46,6 +51,7 @@ class Game:
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
         self.wordSubmissions = {}
+        # self.turnTimer(10)
         # certainly will need more logic here
 
 
@@ -57,7 +63,7 @@ class Game:
     # when a player submits a word in a given turn, remember it 
     def processPlayerSubmission(self, player: Player, submission: str):
         if self.wordSubmissions.get(player) is not None:
-            warnings.warn(f'Player {player.id} has already submitted a word for this turn. Their previous submission was {self.wordSubmissions[player]} and their new submission is {submission}. The new submission will be ignored.')
+            warnings.warn(colored(f'Player {player.id} has already submitted a word for this turn. Their previous submission was {self.wordSubmissions[player]} and their new submission is {submission}. The new submission will be ignored.', 'yellow'))
             return
         self.wordSubmissions[player] = submission
         
@@ -68,8 +74,8 @@ class Game:
         results = self.connector.get_word_results(self.wordSubmissions.values()).max()
         for player, submission in self.wordSubmissions.items():
             self.scores[player] += results[submission]
+            player.score = self.scores[player] # redundant, eventually we should switch over to exclusively using the score field rather than the map
             self.pointsForTheirWord[player] = results[submission]
-            # rank players accordingly, update score
 
         #found this on StackOverflow, we will see if this works later 
         self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
@@ -83,6 +89,7 @@ class Game:
     # send messsage to everyone connected to this lobby that this player has submitted a word
     def everyoneHasSubmitted(self):
         return len(self.wordSubmissions) == len(self.players)
+
     
     def turnTimer(self):
         while self:
@@ -91,35 +98,33 @@ class Game:
             print(timeformat, end='\r')
             time.sleep(1)
             self -= 1
+            if (self == 0):
+                print("Time's up")
 
+    def gameShouldEnd(self):
+        return self.turn == self.maxTurns
 
     def endTurn(self):
         for player in self.players:
             self.readyForNextTurn[player.id] = False
-        if self.turn == self.maxTurns:
-            self.endGame()
 
 
     def processReadyForNextRound(self, player: Player):
         if self.wordSubmissions.get(player) is None:
-            warnings.warn(f'Player {player.id} has readied up for the next round, but has not submitted a word for the current round. This request will be ignored.')
+            warnings.warn(colored(f'Player {player.id} has read ied up for the next round, but has not submitted a word for the current round. This request will be ignored.', 'yellow'))
             return
         self.readyForNextTurn[player.id] = True
-        if all(self.readyForNextTurn):
+        if (self.allReadyForNextTurn()):
             self.startNewTurn()
 
+    def allReadyForNextTurn(self):
+        for player, status in self.readyForNextTurn.items():
+            if not status:
+                return False
+        return True
 
-    # show everyone player's scores at the end of the game 
-    def showScores(self):
-        for player, score in self.scores.items():
-            print(f'player {player.id} scored {score} points')
-        pass
-
-
-    # do whatever we need to properly end the game: show scores, close the lobby + kick players out of the lobby, etc
-    def endGame(self):
-        self.gameEnded = True
-        self.showScores()
+    def setGameOver(self):
+        self.gameEnded = True 
 
 
     def __str__(self):

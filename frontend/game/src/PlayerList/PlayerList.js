@@ -8,22 +8,22 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ws from "../socketConfig.js";
+import Message from "../Message/Message";
 class PlayerList extends React.Component {
   constructor(props) {
     super(props);
     // todo: make this what the server says the players are
     this.state = {
-      players: [{ id: "" }],
+      players: [{ id: "" , username: "N/A"}],
     };
   }
 
   render() {
-    let component = this;
     ws.on(
       "message",
-      function (message) {
+      function (json) {
+        let message = Message.fromJSON(json);
         console.log(message);
-
         switch (message.msgType) {
           case "LOBBY_STATE":
             console.log("on lobby state");
@@ -53,7 +53,7 @@ class PlayerList extends React.Component {
                   </ListItemAvatar>
                   <ListItemText
                     id={labelId}
-                    primary={`${player.id} ${
+                    primary={`${player.username} ${
                       player.word ? "wrote " + player.word : ""
                     }`}
                   />
