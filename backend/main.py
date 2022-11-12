@@ -19,7 +19,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 lobbyIDGenerator = LobbyIDGenerator() # struct to easily generate unique, 6-uppercase-letter lobby IDs 
 lobbies = [] # List of all active lobbies
 idToPlayer = {} #map player id to player object for quick access
-CM = ConnectionManager(app, socketio) # Manages all the connections and messages so you don't need to worry too much about it's details
+CM = ConnectionManager(app, lobbies, socketio) # Manages all the connections and messages so you don't need to worry too much about it's details
 
 
 # This function is called whenever a new player connects to the server

@@ -19,7 +19,7 @@ class Socket:
         return self.sid
 
 class ConnectionManager:
-    def __init__(self, app, socketio):
+    def __init__(self, app, lobbies, socketio):
         self.connections = []
         self.nextValidId = 0
         self.socketToPlayer = {}
@@ -28,6 +28,7 @@ class ConnectionManager:
         self.app = app
         self.socketio = socketio
         self.activeSids = []
+        self.lobbies = lobbies
     
     # register a player and their corresponding socket
     def add_connection(self, req):
@@ -54,9 +55,16 @@ class ConnectionManager:
         for sock in self.connections:
             if sock.getSocketID() == sid:
                 player = self.socketToPlayer[sock]
+
                 #if player was in lobby, alert people in lobby that this player has left
                 if player.lobbyID is not None: 
-                    self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.PLAYER_LEAVE, { 'playerID': player.id, 'username': player.username }))
+                    l = None
+                    for lobby in self.lobbies:
+                        if lobby.id == player.lobbyID:
+                            l = lobby
+                    l.removePlayer(player)
+                    self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.PLAYER_LEAVE, { 'playerID': player.id, 'username': player.username}))
+                    self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
                 self.connections.remove(sock)
                 del self.socketToPlayer[sock]
                 break
