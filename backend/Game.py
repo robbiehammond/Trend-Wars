@@ -3,6 +3,8 @@ import warnings
 import ConnectionManager
 import time
 from Player import Player
+from wordlibrary import wordlibrary
+#from backend.wordlibrary import wordlibrary
 from google_connector import google_connector
 from termcolor import colored
 import os
@@ -51,6 +53,8 @@ class Game:
 
     # clear previous submissions and generate new starting word at the beginning of each turn
     def startNewTurn(self):
+        for player in self.players:
+            player.guessedWord = None
         self.turn += 1
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
@@ -61,7 +65,7 @@ class Game:
 
     # choose a word for players to complete
     def generateStartingWord(self) -> str:
-        return wordlibrary.get_word()
+        return self.wordlibrary.get_word()
 
 
     # when a player submits a word in a given turn, remember it 
@@ -70,6 +74,7 @@ class Game:
             warnings.warn(colored(f'Player {player.id} has already submitted a word for this turn. Their previous submission was {self.wordSubmissions[player]} and their new submission is {submission}. The new submission will be ignored.', 'yellow'))
             return
         self.wordSubmissions[player] = submission
+        player.guessedWord = submission
         
 
     # Once all players have submitted a word, submit to the Trends API and update scores accordingly 

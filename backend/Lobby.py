@@ -47,7 +47,7 @@ class Lobby:
                             added_points = int(respectivePoints[player])
                             word = submittedWords[player]
                             new_score = int(self.game.getPlayerScore(player))
-                            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.SCORE, {"username": player.username, "added_points": added_points, "word": word, "new_score": new_score}))
+                            # self.CM.send_to_all_in_lobby(self.id, Message(MessageType.SCORE, {"username": player.username, "added_points": added_points, "word": word, "new_score": new_score}))
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                 else: # if there is no game and a word was submitted somehow
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
@@ -111,8 +111,8 @@ class Lobby:
         return {
             "lobbyID": self.id,
             "players": [player.toJSON() for player in self.players],
-            "gameStarted": self.game is not None
-
+            "gameStarted": self.game is not None,
+            "turnNumber": self.game.turn if self.game is not None else "N/A"
         }
 
     # for debugging purposes 

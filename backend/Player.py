@@ -4,7 +4,7 @@ class Player:
         self.lobbyID = None
         self.username = username
         self.ready = ready
-        self.guessedWord = "N/A" # will be overrided with their guessed word during the game 
+        self.guessedWord = None # will be overrided with their guessed word during the game 
         self.score = 0
 
     # encode a player (in json) to be sent to frontend
@@ -14,7 +14,8 @@ class Player:
             "id": self.id,
             "username": self.username,
             "ready": self.ready,
-            "score": int(self.score)
+            "score": int(self.score),
+            "wordSubmittedThisTurn": False if self.guessedWord == None else True
         }
 
     def __str__(self):
