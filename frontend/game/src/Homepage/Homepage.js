@@ -15,7 +15,13 @@ function Homepage() {
   const navigate = useNavigate();
 
   function rerouteToLobby(data) {
-    navigate(`/lobby/${data.lobbyID}`, { replace: true });
+    navigate(`/lobby/${data.lobbyID}`, 
+    { 
+      replace: true,
+      state: {
+        players: data.players
+      } 
+    });
   }
 
   function sendCreateLobbyMessage() {

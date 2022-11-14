@@ -14,7 +14,7 @@ class PlayerList extends React.Component {
     super(props);
     // todo: make this what the server says the players are
     this.state = {
-      players: [{ id: "" , username: "N/A"}],
+      players: this.props.players,
     };
   }
 

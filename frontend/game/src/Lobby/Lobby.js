@@ -12,6 +12,7 @@ class Lobby extends React.Component {
   constructor(props) {
     super();
     this.state = {
+      players: this.props.players,
       hasGameStarted: false,
       lobbyDoesntExist: false,
       playerListShouldShow: true
@@ -64,10 +65,10 @@ class Lobby extends React.Component {
     }
     else if (this.state.hasGameStarted) {
       gameLandingOrError = <Game></Game>;
-      playerList = <PlayerList></PlayerList>
+      playerList = <PlayerList players={this.state.players}></PlayerList>
     } else {
       gameLandingOrError = <Landing></Landing>;
-      playerList = <PlayerList></PlayerList>
+      playerList = <PlayerList players={this.state.players}></PlayerList>
     }
     return (
       <div className="Lobby">
