@@ -12,7 +12,7 @@ class Lobby extends React.Component {
   constructor(props) {
     super();
     this.state = {
-      players: this.props.players,
+      players: (this.props && this.props.players) ? this.props.players : [],
       hasGameStarted: false,
       lobbyDoesntExist: false,
       playerListShouldShow: true
