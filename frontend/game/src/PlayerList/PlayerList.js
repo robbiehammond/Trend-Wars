@@ -58,7 +58,7 @@ class PlayerList extends React.Component {
                     }`}
                   />
                   <>
-                    {player.submitted ? (
+                    {player.ready ? (
                       <CheckCircleIcon></CheckCircleIcon>
                     ) : (
                       ""
