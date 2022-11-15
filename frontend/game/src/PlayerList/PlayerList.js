@@ -53,6 +53,10 @@ function PlayerList() {
                   </ListItemAvatar>
                   <ListItemText
                     id={labelId}
+                    sx={{ 
+                      fontSize: '40', 
+                      fontWeight: 'medium',
+                    }}
                     primary={`${player.username} ${
                       player.word ? "wrote " + player.word : ""
                     }`}
