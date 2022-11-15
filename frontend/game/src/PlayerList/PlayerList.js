@@ -15,6 +15,7 @@ class PlayerList extends React.Component {
     // todo: make this what the server says the players are
     this.state = {
       players: (this.props && this.props.players) ? this.props.players : [],
+      hasGameStarted: false
     };
   }
 
@@ -29,6 +30,12 @@ class PlayerList extends React.Component {
             console.log("on lobby state");
             this.setState({
               players: message.msgData.players,
+              hasGameStarted: message.msgData.gameStarted
+            });
+            break;
+            case "GAME_STARTED":
+            this.setState({
+              hasGameStarted: true
             });
             break;
           default:
@@ -58,11 +65,17 @@ class PlayerList extends React.Component {
                     }`}
                   />
                   <>
-                    {player.ready ? (
+                    { !this.state.hasGameStarted ? 
+                    player.ready ? (
                       <CheckCircleIcon></CheckCircleIcon>
                     ) : (
                       ""
-                    )}
+                    ) 
+                    : (player.submitted ? (
+                      <CheckCircleIcon></CheckCircleIcon>
+                    ) : (
+                      ""
+                    ))}
                   </>
                 </ListItemButton>
               </ListItem>
