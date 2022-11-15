@@ -1,5 +1,5 @@
 import "./PlayerList.css";
-import React from "react";
+import React, { useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -9,17 +9,14 @@ import Avatar from "@mui/material/Avatar";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ws from "../socketConfig.js";
 import Message from "../Message/Message";
-class PlayerList extends React.Component {
-  constructor(props) {
-    super(props);
-    // todo: make this what the server says the players are
-    this.state = {
-      players: (this.props && this.props.players) ? this.props.players : [],
-      hasGameStarted: false
-    };
-  }
+import { useLocation } from "react-router-dom";
 
-  render() {
+function PlayerList() {
+
+  const location = useLocation();
+  const [players, setPlayers] = useState(location.state.players);
+  const [hasGameStarted, setGameStarted] = useState(false);
+
     ws.on(
       "message",
       function (json) {
@@ -28,26 +25,22 @@ class PlayerList extends React.Component {
         switch (message.msgType) {
           case "LOBBY_STATE":
             console.log("on lobby state");
-            this.setState({
-              players: message.msgData.players,
-              hasGameStarted: message.msgData.gameStarted
-            });
+            setPlayers(message.msgData.players);
             break;
             case "GAME_STARTED":
-            this.setState({
-              hasGameStarted: true
-            });
+              setGameStarted(true);
             break;
           default:
             break;
         }
-      }.bind(this)
+      }
     );
+  
     return (
       <div className="playerList">
         <h2>Player List</h2>
         <List dense>
-          {this.state.players.map((player) => {
+          {players.map((player) => {
             const labelId = `checkbox-list-secondary-label-${player}`;
             return (
               <ListItem key={player.id} disablePadding>
@@ -65,7 +58,7 @@ class PlayerList extends React.Component {
                     }`}
                   />
                   <>
-                    { !this.state.hasGameStarted ? 
+                    { !hasGameStarted ? 
                     player.ready ? (
                       <CheckCircleIcon></CheckCircleIcon>
                     ) : (
@@ -84,7 +77,7 @@ class PlayerList extends React.Component {
         </List>
       </div>
     );
-  }
+  
 }
 
 export default PlayerList;

@@ -19,7 +19,7 @@ function Homepage() {
     { 
       replace: true,
       state: {
-        players: data.players
+        players: data.lobby_state.players
       } 
     });
   }
