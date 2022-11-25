@@ -49,24 +49,6 @@ class Lobby:
                 else: # if there is no game and a word was submitted somehow
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
 
-
-            case "READY_FOR_NEXT_ROUND":
-                if not self.game.everyoneHasSubmitted():
-                    warnings.warn(colored("Someone readied up for the next round, even though not everyone has submitted. Something wrong is happening here that needs to be fixed."), 'yellow')
-                    return
-                self.game.processReadyForNextRound(player)
-                self.CM.send_to_all_in_lobby(Message(MessageType.READY_FOR_NEXT_ROUND, {"playerID": player.id}), self.id)
-                if self.game.allReadyForNextTurn():
-                    if self.game.gameShouldEnd():
-                        self.endGame()
-                    else:
-                        self.game.startNewTurn()
-                        new_word = self.game.curWord
-                        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.NEW_TURN, {'turn_number': self.game.turn}))
-                        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.STARTING_WORD, {'word': new_word}))
-                        self.CM.send_message_to_all(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState())) #probably doesn't needed to be sent, but rather have too many than too little messages sent
-
-
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
             # Basically, it means we don't need to do anything with the message, so just drop it.
             case "URL": 

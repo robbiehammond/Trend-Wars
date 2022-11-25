@@ -93,6 +93,8 @@ class Game:
         results = self.connector.get_word_results(self.wordSubmissions.values()).max()
         for player, submission in self.wordSubmissions.items():
             self.scores[player] += results[submission]
+            if (int(self.scores[player]) > player.mostPointsFromWord):
+                player.bestWord = submission
             player.score = self.scores[player] # redundant, eventually we should switch over to exclusively using the score field rather than the map
             self.pointsForTheirWord[player] = results[submission]
 
@@ -135,11 +137,14 @@ class Game:
             self.endGame()
         else:
             self.startNewTurn()
-            self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.LOBBY_STATE, self.lobby.getLobbyState())) #probably doesn't needed to be sent, but rather have too many than too little messages sent
+            self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.LOBBY_STATE, self.lobby.getLobbyState()))
 
     def endGame(self):
         self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.GAME_ENDED, {}))
-        self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.RESULTS, {"scores": self.scores}))
+        results = {}
+        for player, rank in self.playerRank.items():
+            results[rank] = player.toJSON()
+        self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.RESULTS, {"scores": results}))
 
 
     def processReadyForNextRound(self, player: Player):
