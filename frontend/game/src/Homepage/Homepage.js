@@ -11,6 +11,7 @@ import { TextField } from "@mui/material";
 
 function Homepage() {
   const [username, setUsername] = useState('');
+  const [yourId, setYourId] = useState(-37);
   const [lobbyID, setLobbyID] = useState('');
   const navigate = useNavigate();
 
@@ -19,7 +20,8 @@ function Homepage() {
     { 
       replace: true,
       state: {
-        players: data.lobby_state.players
+        players: data.lobby_state.players,
+        yourId: yourId
       } 
     });
   }
@@ -45,6 +47,9 @@ function Homepage() {
     let message = Message.fromJSON(json);
     console.log(message);
     switch (message.msgType) {
+      case "PLAYER_ID":
+        setYourId(message.msgData.your_id);
+        break;
       case "LOBBY_CREATED":
         rerouteToLobby(message.msgData);
         break;

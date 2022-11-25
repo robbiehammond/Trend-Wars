@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 function PlayerList() {
 
   const location = useLocation();
+  const [yourId] = useState(location.state.yourId);
   const [players, setPlayers] = useState(location.state.players);
   const [hasGameStarted, setGameStarted] = useState(false);
 
@@ -57,7 +58,7 @@ function PlayerList() {
                       fontSize: '40', 
                       fontWeight: 'medium',
                     }}
-                    primary={`${player.username} ${
+                    primary={`${player.id === yourId ? (player.username + ' (You)') : player.username} ${
                       player.word ? "wrote " + player.word : ""
                     }`}
                   />
