@@ -15,13 +15,13 @@ class Lobby extends React.Component {
       players: (this.props && this.props.players) ? this.props.players : [],
       hasGameStarted: false,
       lobbyDoesntExist: false,
-      playerListShouldShow: true
+      playerListShouldShow: true,
+      firstStartingWord: "N/A"
     };
   }
 
 
   componentDidMount() {
-    console.log("Component is mounting whtout an id")
     const msg = new Message(MessageType.URL, { data: window.location.href });
     ws.emit("message", msg.toJSON());
 
@@ -36,8 +36,10 @@ class Lobby extends React.Component {
 
         switch (message.msgType) {
           case "GAME_STARTED":
+            console.log(message.msgData["firstStartingWord"])
             this.setState({
               hasGameStarted: true,
+              firstStartingWord: message.msgData["firstStartingWord"]
             });
             break;
           case "LOBBY_DOESNT_EXIST":
@@ -59,12 +61,11 @@ class Lobby extends React.Component {
 
     let gameLandingOrError;
     let playerList;
-    console.log(this.state);
     if (this.state.lobbyDoesntExist) {
       gameLandingOrError = <ErrorPage></ErrorPage>
     }
     else if (this.state.hasGameStarted) {
-      gameLandingOrError = <Game></Game>;
+      gameLandingOrError = <Game startingWord={this.state.firstStartingWord}></Game>;
       playerList = <PlayerList players={this.state.players}></PlayerList>
     } else {
       gameLandingOrError = <Landing></Landing>;

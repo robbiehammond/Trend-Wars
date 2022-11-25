@@ -11,7 +11,7 @@ class Game extends React.Component {
     super(props);
     this.submitWordMsg = this.submitWordMsg.bind(this);
     this.state = {
-      wordThisTurn: "word", // todo: change this to be what the server gives us
+      wordThisTurn: this.props.startingWord, // todo: change this to be what the server gives us
       userWord: "",
     };
   }
@@ -31,6 +31,20 @@ class Game extends React.Component {
     });
 
   render() {
+    ws.on("message", function(json) {
+        let message = Message.fromJSON(json);
+        switch (message.msgType) {
+          case "LOBBY_STATE":
+            this.setState({
+              wordThisTurn: message.msgData.startingWord
+            });
+            console.log("Setging word this turn")
+            break;
+          default:
+            break;
+        }
+      }.bind(this)
+    )
     return (
       <div className="Game">
         <div className="word-container">

@@ -30,8 +30,8 @@ class Lobby:
                 if self.gameCanStart():
                     self.startGame()
                     first_word = self.game.curWord
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {}))
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.STARTING_WORD, {'word': first_word}))
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {"firstStartingWord": first_word}))
+                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                 else:
                     self.CM.send_to_player(player, Message(MessageType.GAME_CANNOT_START, {}))
 
@@ -40,7 +40,6 @@ class Lobby:
                     retCode = self.game.processPlayerSubmission(player, message.msgData['word'])
                     if retCode == -1:
                         self.CM.send_to_player(player, Message(MessageType.INVALID_SUBMISSION, {}))
-                        print("invalid confirmation is sending")
                     # otherwise, retCode is is 1, which means the player submission was properly processed
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
                     if self.game.everyoneHasSubmitted():
@@ -114,6 +113,7 @@ class Lobby:
     def getLobbyState(self) -> dict:
         return {
             "lobbyID": self.id,
+            "startingWord": self.game.curWord if self.game is not None else "N/A",
             "players": [player.toJSON() for player in self.players],
             "gameStarted": self.game is not None,
             "turnNumber": self.game.turn if self.game is not None else "N/A"
