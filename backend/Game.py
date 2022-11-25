@@ -69,12 +69,18 @@ class Game:
 
 
     # when a player submits a word in a given turn, remember it 
-    def processPlayerSubmission(self, player: Player, submission: str):
+    def processPlayerSubmission(self, player: Player, submission: str) -> int:
         if self.wordSubmissions.get(player) is not None:
             warnings.warn(colored(f'Player {player.id} has already submitted a word for this turn. Their previous submission was {self.wordSubmissions[player]} and their new submission is {submission}. The new submission will be ignored.', 'yellow'))
-            return
+            return -1
+        for _, word in self.wordSubmissions.items():
+            print(word, submission)
+            if word == submission:
+                warnings.warn(colored(f'Player submitted word someone else already submitted', 'yellow'))
+                return -1
         self.wordSubmissions[player] = submission
         player.guessedWord = submission
+        return 1
         
 
     # Once all players have submitted a word, submit to the Trends API and update scores accordingly 

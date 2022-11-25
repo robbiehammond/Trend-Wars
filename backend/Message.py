@@ -29,6 +29,7 @@ class MessageType(Enum):
     GAME_ENDED = auto()
     RESULTS = auto()
     LOBBY_CLOSING = auto()
+    INVALID_SUBMISSION = auto()
 
 
     # returns string value of json 

@@ -37,7 +37,11 @@ class Lobby:
 
             case "SUBMIT_WORD":
                 if self.game is not None:
-                    self.game.processPlayerSubmission(player, message.msgData['word'])
+                    retCode = self.game.processPlayerSubmission(player, message.msgData['word'])
+                    if retCode == -1:
+                        self.CM.send_to_player(player, Message(MessageType.INVALID_SUBMISSION, {}))
+                        print("invalid confirmation is sending")
+                    # otherwise, retCode is is 1, which means the player submission was properly processed
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
                     if self.game.everyoneHasSubmitted():
                         self.game.evaluateSubmissions()
