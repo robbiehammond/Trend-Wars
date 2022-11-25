@@ -7,6 +7,7 @@ import ws from "../socketConfig.js";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import ErrorPage from "../ErrorPage/Error"
+import Results from "../Results/Results"
 
 class Lobby extends React.Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class Lobby extends React.Component {
       hasGameStarted: false,
       lobbyDoesntExist: false,
       playerListShouldShow: true,
-      firstStartingWord: "N/A"
+      firstStartingWord: "N/A",
+      results: ""
     };
   }
 
@@ -24,7 +26,6 @@ class Lobby extends React.Component {
   componentDidMount() {
     const msg = new Message(MessageType.URL, { data: window.location.href });
     ws.emit("message", msg.toJSON());
-
   }
 
   render() {
@@ -36,7 +37,6 @@ class Lobby extends React.Component {
 
         switch (message.msgType) {
           case "GAME_STARTED":
-            console.log(message.msgData["firstStartingWord"])
             this.setState({
               hasGameStarted: true,
               firstStartingWord: message.msgData["firstStartingWord"]
@@ -50,8 +50,11 @@ class Lobby extends React.Component {
           case "LOBBY_CLOSING":
             // insert some logic to kick myself back to homepage.
             break;
-          case "GAME_ENDED":
-            // insert some logic to display scores and whatnot, which should be a part of the msgData part of this message.
+          case "RESULTS":
+            this.setState({
+              results: message.msgData.scores
+            });
+            console.log(message.msgData.scores);
             break;
           default:
             break;
@@ -61,6 +64,7 @@ class Lobby extends React.Component {
 
     let gameLandingOrError;
     let playerList;
+      
     if (this.state.lobbyDoesntExist) {
       gameLandingOrError = <ErrorPage></ErrorPage>
     }
@@ -71,12 +75,20 @@ class Lobby extends React.Component {
       gameLandingOrError = <Landing></Landing>;
       playerList = <PlayerList players={this.state.players}></PlayerList>
     }
-    return (
-      <div className="Lobby">
-        <div className="Lobby-div">{gameLandingOrError}</div>
-        <div className="PlayerList-div">{playerList}</div>
-      </div>
-    );
+    if (this.state.results !== "") {
+      console.log(this.state.results)
+      return (
+        <Results res={this.state.results}/>
+      )
+    }
+    else {
+      return (
+        <div className="Lobby">
+          <div className="Lobby-div">{gameLandingOrError}</div>
+          <div className="PlayerList-div">{playerList}</div>
+        </div>
+      );
+    }
   }
 }
 

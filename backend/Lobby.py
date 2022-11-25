@@ -87,7 +87,7 @@ class Lobby:
 
 
     def startGame(self):
-        self.game = Game(self.players, 5, self.CM, self)
+        self.game = Game(self.players, 1, self.CM, self)
 
     def getLobbyState(self) -> dict:
         return {

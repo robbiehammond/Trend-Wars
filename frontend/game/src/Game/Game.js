@@ -11,8 +11,8 @@ class Game extends React.Component {
     super(props);
     this.submitWordMsg = this.submitWordMsg.bind(this);
     this.state = {
-      wordThisTurn: this.props.startingWord, // todo: change this to be what the server gives us
-      userWord: "",
+      wordThisTurn: this.props.startingWord,
+      userWord: ""
     };
   }
 
