@@ -38,19 +38,13 @@ class Lobby:
             case "SUBMIT_WORD":
                 if self.game is not None:
                     retCode = self.game.processPlayerSubmission(player, message.msgData['word'])
+                    # retCode == -1 means error occurred (word couldn't be processed bc someone else already submitted that word, or they already submitted a word this turn)
+                    # retcode == 1 means the submission was processed just fine 
                     if retCode == -1:
                         self.CM.send_to_player(player, Message(MessageType.INVALID_SUBMISSION, {}))
-                    # otherwise, retCode is is 1, which means the player submission was properly processed
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
                     if self.game.everyoneHasSubmitted():
                         self.game.evaluateSubmissions()
-                        submittedWords = self.game.getSubmittedWords()
-                        respectivePoints = self.game.getPointsForTheirWord()
-                        for player in self.players: # send to everyone in the lobby the username, word, point value, and updated score for each player
-                            added_points = int(respectivePoints[player])
-                            word = submittedWords[player]
-                            new_score = int(self.game.getPlayerScore(player))
-                            # self.CM.send_to_all_in_lobby(self.id, Message(MessageType.SCORE, {"username": player.username, "added_points": added_points, "word": word, "new_score": new_score}))
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                 else: # if there is no game and a word was submitted somehow
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
@@ -101,6 +95,9 @@ class Lobby:
         self.players.remove(player)
         self.playerIDs.remove(id)
 
+    def isEmpty(self) -> bool:
+        return len(self.players) == 0
+
 
     # If there are 2 or more players and they're all ready, game can start
     def gameCanStart(self):
@@ -108,7 +105,7 @@ class Lobby:
 
 
     def startGame(self):
-        self.game = Game(self.players, 5)
+        self.game = Game(self.players, 5, self.CM, self)
 
     def getLobbyState(self) -> dict:
         return {

@@ -62,9 +62,14 @@ class ConnectionManager:
                     for lobby in self.lobbies:
                         if lobby.id == player.lobbyID:
                             l = lobby
+
                     l.removePlayer(player)
-                    self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.PLAYER_LEAVE, { 'playerID': player.id, 'username': player.username}))
-                    self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
+                    if l.isEmpty():
+                        self.lobbies.remove(l)
+                    else:
+                        self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.PLAYER_LEAVE, { 'playerID': player.id, 'username': player.username}))
+                        self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
+
                 self.connections.remove(sock)
                 del self.socketToPlayer[sock]
                 break

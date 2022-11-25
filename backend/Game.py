@@ -1,6 +1,7 @@
 import warnings
 
 import ConnectionManager
+from Message import Message, MessageType
 import time
 from Player import Player
 from wordlibrary import wordlibrary
@@ -8,9 +9,10 @@ from wordlibrary import wordlibrary
 from google_connector import google_connector
 from termcolor import colored
 import os
+import Lobby
 
 class Game:
-    def __init__(self, players, maxTurns):
+    def __init__(self, players, maxTurns, CM: ConnectionManager, lobby: Lobby):
         # also need to implement a turn timer at some point so turns don't just end when everyone submits
         self.players = players
         self.turn = 0
@@ -28,6 +30,8 @@ class Game:
             'best-word': 'N/A',
             'worst-word': 'N/A',
         }
+        self.CM = CM
+        self.lobby = lobby
 
         #self.countdown = countdown
         #values hardcoded in, can implement so that users can configure values here.
@@ -83,6 +87,7 @@ class Game:
         
 
     # Once all players have submitted a word, submit to the Trends API and update scores accordingly 
+    #TODO: If a player puts a word that is like 0 on PyTrends, results[word] gives a keyerror. Need to error handle that.
     def evaluateSubmissions(self):
         #right now, the command returns the "max" search value of the input words
         results = self.connector.get_word_results(self.wordSubmissions.values()).max()
@@ -91,7 +96,6 @@ class Game:
             player.score = self.scores[player] # redundant, eventually we should switch over to exclusively using the score field rather than the map
             self.pointsForTheirWord[player] = results[submission]
 
-        #found this on StackOverflow, we will see if this works later 
         self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
         self.endTurn()
 
@@ -121,6 +125,21 @@ class Game:
     def endTurn(self):
         for player in self.players:
             self.readyForNextTurn[player.id] = False
+
+        #TODO: set 10 sec countdown before next turn starts. Since we don't have a timer yet, just go to next turn immediately
+        #if 10 sec timer is done
+        self.prepareNextRound()
+
+    def prepareNextRound(self):
+        if (self.gameShouldEnd()):
+            self.endGame()
+        else:
+            self.startNewTurn()
+            self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.LOBBY_STATE, self.lobby.getLobbyState())) #probably doesn't needed to be sent, but rather have too many than too little messages sent
+
+    def endGame(self):
+        self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.GAME_ENDED, {}))
+        self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.RESULTS, {"scores": self.scores}))
 
 
     def processReadyForNextRound(self, player: Player):
