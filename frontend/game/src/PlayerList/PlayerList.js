@@ -68,7 +68,7 @@ function PlayerList() {
                     ) : (
                       ""
                     ) 
-                    : (player.submitted ? (
+                    : (player.wordSubmittedThisTurn ? (
                       <CheckCircleIcon></CheckCircleIcon>
                     ) : (
                       ""

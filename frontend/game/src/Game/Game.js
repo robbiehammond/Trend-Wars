@@ -38,7 +38,6 @@ class Game extends React.Component {
             this.setState({
               wordThisTurn: message.msgData.startingWord
             });
-            console.log("Setging word this turn")
             break;
           default:
             break;
