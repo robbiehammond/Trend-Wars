@@ -14,6 +14,18 @@ class Results extends React.Component {
 
 
   render() {
+    let sortable = [];
+    for (var r in this.state.results) {
+      sortable.push(this.state.results[r]);
+    }
+    console.log(sortable);
+    let resultsArray = [];
+    sortable.sort((a,b) => b.score - a.score).forEach((a, index)=> {
+      resultsArray.push(`${a.username} was number ${index+1} with a score of ${a.score}. Their best word was "${a.bestWord}".`);
+    });
+ 
+    console.log(resultsArray);
+
     ws.on(
       "message",
       function (json) {
@@ -25,8 +37,14 @@ class Results extends React.Component {
         }
       }
     );
+
     return (
       <div className="GameResults-div">
+        { resultsArray.map(string => {
+          return (
+            <p>{string}</p>
+          )
+        }) }
       </div>
     );
   }
