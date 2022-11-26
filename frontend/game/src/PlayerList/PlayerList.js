@@ -6,6 +6,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
+import { BigHead } from '@bigheads/core';
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ws from "../socketConfig.js";
 import Message from "../Message/Message";
@@ -47,9 +48,7 @@ function PlayerList() {
               <ListItem key={player.id} disablePadding>
                 <ListItemButton>
                   <ListItemAvatar>
-                    <Avatar
-                      alt={`Avatar n°${player + 1}`}
-                      src={`/static/images/avatar/${player + 1}.jpg`}
+                    <BigHead
                     />
                   </ListItemAvatar>
                   <ListItemText
