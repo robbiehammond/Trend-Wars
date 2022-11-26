@@ -80,7 +80,7 @@ class Game:
         for _, word in self.wordSubmissions.items():
             if word == submission:
                 warnings.warn(colored(f'Player submitted word someone else already submitted', 'yellow'))
-                return -1
+                return -2
         self.wordSubmissions[player] = submission
         player.guessedWord = submission
         return 1
