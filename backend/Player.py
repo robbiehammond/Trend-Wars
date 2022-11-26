@@ -8,6 +8,7 @@ class Player:
         self.score = 0
         self.bestWord = ""
         self.mostPointsFromWord = -1
+        self.rank = -1 #overriden at the end of the game
 
     # encode a player (in json) to be sent to frontend
     # also not sure if we'll ever need this 
@@ -18,7 +19,8 @@ class Player:
             "ready": self.ready,
             "score": int(self.score),
             "wordSubmittedThisTurn": False if self.guessedWord == None else True,
-            "bestWord": self.bestWord
+            "bestWord": self.bestWord,
+            "rank": self.rank
         }
 
     def __str__(self):
