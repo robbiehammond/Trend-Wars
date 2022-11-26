@@ -141,9 +141,10 @@ class Game:
 
     def endGame(self):
         self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.GAME_ENDED, {}))
-        results = {}
+        results = []
         for player, rank in self.playerRank.items():
-            results[rank] = player.toJSON()
+            player.rank = self.playerRank[player]
+            results.append(player.toJSON()) #appended in order of rank
         self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.RESULTS, {"scores": results}))
 
 

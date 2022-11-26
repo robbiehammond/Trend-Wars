@@ -1,7 +1,9 @@
 import React from "react";
 import ws from "../socketConfig.js";
 import Message from "../Message/Message";
-import { List } from "@mui/material";
+import { Button, List, ListItem } from "@mui/material";
+import { Box, Container } from "@mui/system";
+import { Navigate } from "react-router-dom";
 
 class Results extends React.Component {
   constructor(props) {
@@ -9,6 +11,10 @@ class Results extends React.Component {
     this.state = {
         results: this.props.res
     };
+  }
+
+  handleClick() {
+    window.location = 'http://localhost:3000'
   }
 
 
@@ -45,6 +51,31 @@ class Results extends React.Component {
             <p>{string}</p>
           )
         }) }
+        {/* <List dense>
+          {(this.state.results).map((player) => {
+            // This needs to be made to look better
+            return (
+              <Container key={player.id}>
+                <Container>
+                  {player.username}
+                </Container>
+                <Container>
+                  {player.score}
+                </Container>
+                <Container>
+                  {player.bestWord}
+                </Container>
+                <Container>
+                  {player.rank}
+                </Container>
+                <Box sx={{padding: 10}}></Box>
+              </Container>
+            )
+          })}
+        </List> */}
+        <Button onClick={this.handleClick}>
+          Back to Menu
+        </Button>
       </div>
     );
   }
