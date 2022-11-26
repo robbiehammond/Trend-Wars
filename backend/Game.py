@@ -150,7 +150,7 @@ class Game:
 
     def processReadyForNextRound(self, player: Player):
         if self.wordSubmissions.get(player) is None:
-            warnings.warn(colored(f'Player {player.id} has read ied up for the next round, but has not submitted a word for the current round. This request will be ignored.', 'yellow'))
+            warnings.warn(colored(f'Player {player.id} has readied up for the next round, but has not submitted a word for the current round. This request will be ignored.', 'yellow'))
             return
         self.readyForNextTurn[player.id] = True
         if (self.allReadyForNextTurn()):
