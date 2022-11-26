@@ -58,7 +58,7 @@ function PlayerList() {
                       fontWeight: 'medium',
                     }}
                     primary={`${player.id === yourId ? (player.username + ' (You)') : player.username} ${
-                      player.word ? "wrote " + player.word : ""
+                      hasGameStarted ? ': ' + player.score + ' pts' : ""
                     }`}
                   />
                   <>
