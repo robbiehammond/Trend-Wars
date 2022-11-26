@@ -5,6 +5,7 @@ import Input from "@mui/material/Input";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import ws from "../socketConfig.js";
+import { Alert } from "@mui/material";
 
 class Game extends React.Component {
   constructor(props) {
@@ -12,7 +13,8 @@ class Game extends React.Component {
     this.submitWordMsg = this.submitWordMsg.bind(this);
     this.state = {
       wordThisTurn: this.props.startingWord,
-      userWord: ""
+      userWord: "",
+      duplicateWordSubmitted: false
     };
   }
 
@@ -39,13 +41,24 @@ class Game extends React.Component {
               wordThisTurn: message.msgData.startingWord
             });
             break;
+          case "DUPLICATE_WORD":
+            this.setState({
+              duplicateWordSubmitted: true
+            })
+            break;
           default:
             break;
         }
       }.bind(this)
     )
+    let warning = null;
+    if (this.state.duplicateWordSubmitted) {
+      warning = <Alert severity="error">This word has already been submitted by someone else!</Alert>
+      this.state.duplicateWordSubmitted = false;
+    }
     return (
       <div className="Game">
+        {warning}
         <div className="word-container">
           <span className="word">{this.state.wordThisTurn}</span>{" "}
           <span className="word"> +</span>

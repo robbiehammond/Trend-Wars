@@ -38,14 +38,21 @@ class Lobby:
             case "SUBMIT_WORD":
                 if self.game is not None:
                     retCode = self.game.processPlayerSubmission(player, message.msgData['word'])
-                    # retCode == -1 means error occurred (word couldn't be processed bc someone else already submitted that word, or they already submitted a word this turn)
-                    # retcode == 1 means the submission was processed just fine 
+
+                    # retCode == -1 means error occurred (they already submitted a word this turn)
                     if retCode == -1:
                         self.CM.send_to_player(player, Message(MessageType.INVALID_SUBMISSION, {}))
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
-                    if self.game.everyoneHasSubmitted():
-                        self.game.evaluateSubmissions()
-                    self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
+
+                    # retCode == -2 means error occurred (they submitted a word someone else had already submitted)
+                    elif retCode == -2:
+                        self.CM.send_to_player(player, Message(MessageType.DUPLICATE_WORD, {}))
+
+                    # retcode == 1 means the submission was processed just fine 
+                    else:
+                        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
+                        if self.game.everyoneHasSubmitted():
+                            self.game.evaluateSubmissions()
+                        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                 else: # if there is no game and a word was submitted somehow
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
 
@@ -97,19 +104,6 @@ class Lobby:
             "gameStarted": self.game is not None,
             "turnNumber": self.game.turn if self.game is not None else "N/A"
         }
-
-    # for debugging purposes 
-    def printLobbyState(self):
-        print("=====================================")
-        print("Lobby " + self.id + " state:")
-        for player in self.players:
-            print(player)
-        gameStarted = self.game is not None
-        print(f"Game started?: {gameStarted}")
-        if gameStarted:
-            print('{' + str(self.game) + '}')
-        print("=====================================")
-        print()
 
 
 class LobbyIDGenerator:

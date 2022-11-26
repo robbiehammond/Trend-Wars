@@ -30,6 +30,7 @@ class MessageType(Enum):
     RESULTS = auto()
     LOBBY_CLOSING = auto()
     INVALID_SUBMISSION = auto()
+    DUPLICATE_WORD = auto()
 
 
     # returns string value of json 
