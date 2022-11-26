@@ -14,7 +14,7 @@ class Results extends React.Component {
   }
 
   handleClick() {
-    window.location = 'http://3.143.255.96:8080'
+    window.location = 'http://localhost:8080'
   }
 
 
