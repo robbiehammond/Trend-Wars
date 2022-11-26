@@ -1,8 +1,9 @@
 import React from "react";
 import ws from "../socketConfig.js";
 import Message from "../Message/Message";
-import { List, ListItem } from "@mui/material";
+import { Button, List, ListItem } from "@mui/material";
 import { Box, Container } from "@mui/system";
+import { Navigate } from "react-router-dom";
 
 class Results extends React.Component {
   constructor(props) {
@@ -10,6 +11,10 @@ class Results extends React.Component {
     this.state = {
         results: this.props.res
     };
+  }
+
+  handleClick() {
+    window.location = 'http://localhost:3000'
   }
 
 
@@ -50,6 +55,9 @@ class Results extends React.Component {
             )
           })}
         </List>
+        <Button onClick={this.handleClick}>
+          Back to Menu
+        </Button>
       </div>
     );
   }
