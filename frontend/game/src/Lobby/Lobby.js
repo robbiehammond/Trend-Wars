@@ -54,7 +54,6 @@ class Lobby extends React.Component {
             this.setState({
               results: message.msgData.scores
             });
-            console.log(message.msgData.scores);
             break;
           default:
             break;
