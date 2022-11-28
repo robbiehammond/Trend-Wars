@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
-import ws from "../socketConfig.js";
+import {ws} from "../socketConfig.js";
 import { Alert } from "@mui/material";
 
 class Game extends React.Component {

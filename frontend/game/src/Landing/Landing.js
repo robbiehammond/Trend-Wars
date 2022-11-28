@@ -1,6 +1,6 @@
 import "./Landing.css";
 import React from "react";
-import ws from "../socketConfig.js";
+import {ws} from "../socketConfig.js";
 import Button from "@mui/material/Button";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";

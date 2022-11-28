@@ -8,7 +8,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import { BigHead } from '@bigheads/core';
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ws from "../socketConfig.js";
+import {ws} from "../socketConfig.js";
 import Message from "../Message/Message";
 import { useLocation } from "react-router-dom";
 

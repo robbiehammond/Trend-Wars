@@ -2,7 +2,7 @@ import "./Homepage.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import ws from "../socketConfig.js";
+import {ws} from "../socketConfig.js";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Message from "../Message/Message";

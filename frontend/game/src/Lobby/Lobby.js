@@ -3,7 +3,7 @@ import React from "react";
 import PlayerList from "../PlayerList/PlayerList.js";
 import Game from "../Game/Game.js";
 import Landing from "../Landing/Landing.js";
-import ws from "../socketConfig.js";
+import {ws} from "../socketConfig.js";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import ErrorPage from "../ErrorPage/Error"

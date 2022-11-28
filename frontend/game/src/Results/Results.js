@@ -1,5 +1,5 @@
 import React from "react";
-import ws from "../socketConfig.js";
+import {ws, server_location} from "../socketConfig.js";
 import Message from "../Message/Message";
 import { Button, List, ListItem } from "@mui/material";
 import { Box, Container } from "@mui/system";
@@ -14,7 +14,7 @@ class Results extends React.Component {
   }
 
   handleClick() {
-    window.location = 'http://localhost:8080'
+    window.location = server_location;
   }
 
 
