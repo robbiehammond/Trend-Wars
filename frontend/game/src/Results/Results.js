@@ -14,7 +14,12 @@ class Results extends React.Component {
   }
 
   handleClick() {
-    window.location = server_location;
+    if (server_location !== undefined) {
+      window.location = "http://3.143.255.96/"
+    }
+    else {
+      window.location = "http://localhost:3000/"
+    }
   }
 
 
