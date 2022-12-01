@@ -14,11 +14,11 @@ class Results extends React.Component {
   }
 
   handleClick() {
-    if (server_location !== undefined) {
-      window.location = "http://3.143.255.96/"
+    if (server_location == "http://localhost:8080") {
+      window.location = "http://localhost:3000/"
     }
     else {
-      window.location = "http://localhost:3000/"
+      window.location = "http://3.143.255.96/"
     }
   }
 

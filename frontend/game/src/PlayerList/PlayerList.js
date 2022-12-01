@@ -49,6 +49,25 @@ function PlayerList() {
                 <ListItemButton>
                   <ListItemAvatar>
                     <BigHead
+                      accessory={player.bigHead.accessory}
+                      body={player.bigHead.body}
+                      circleColor={player.bigHead.circleColor}
+                      clothing={player.bigHead.clothing}
+                      clothingColor={player.bigHead.clothingColor}
+                      eyebrows={player.bigHead.eyebrows}
+                      eyes={player.bigHead.eyes}
+                      facialHair={player.bigHead.facialHair}
+                      graphic={player.bigHead.graphic}
+                      hair={player.bigHead.hair}
+                      hairColor={player.bigHead.hairColor}
+                      hat={player.bigHead.hat}
+                      hatColor={player.bigHead.hatColor}
+                      lashes={player.bigHead.lashes}
+                      lipColor={player.bigHead.lipColor}
+                      mask={false}
+                      faceMask={false}
+                      mouth={player.bigHead.mouth}
+                      skinTone={player.bigHead.skinTone}
                     />
                   </ListItemAvatar>
                   <ListItemText

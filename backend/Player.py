@@ -18,6 +18,8 @@ class BigHead:
         self.hatColor = random.choice(hatColor)
         self.lashes = random.choice(lashes)
         self.lipColor = random.choice(lipColor)
+        self.mask = random.choice([True, False]),
+        self.faceMask = random.choice([True, False]),
         self.mouth = random.choice(mouth)
         self.skinTone = random.choice(skinTone)
 
@@ -38,6 +40,8 @@ class BigHead:
             "hatColor": self.hatColor,
             "lashes": self.lashes,
             "lipColor": self.lipColor,
+            "mask": self.mask,
+            "faceMask": self.faceMask,
             "mouth": self.mouth,
             "skinTone": self.skinTone
         }
