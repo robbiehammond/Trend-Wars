@@ -10,10 +10,17 @@ from google_connector import google_connector
 from termcolor import colored
 import os
 import Lobby
+import threading
+
+c = threading.Condition()
+timer = 10
+turnActive = True
+
 
 class Game:
     def __init__(self, players, maxTurns, CM: ConnectionManager, lobby: Lobby):
         # also need to implement a turn timer at some point so turns don't just end when everyone submits
+        threading.Thread.__init__(self)
         self.players = players
         self.turn = 0
         self.curWord = ""
@@ -22,7 +29,7 @@ class Game:
         self.maxTurns = maxTurns
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
-        self.timer = 10
+
         #dictionary to hold the ranks of each player
         self.playerRank = {}
         # interesting game statistics that can be displayed at the end of the game
@@ -63,6 +70,7 @@ class Game:
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
         self.wordSubmissions = {}
+        self.turnActive = True
         # self.turnTimer(10)
         # certainly will need more logic here
 
@@ -168,3 +176,37 @@ class Game:
 
     def __str__(self):
         return f'Game: Current Turn: {self.turn}, current starting word: {self.curWord}, current scores: {self.scores}'
+
+    def run(self):
+        global timer
+        global turnActive
+        while True:
+            c.acquire
+            if turnActive == True:
+                timer = 0
+                print("run timer here")
+                c.notify_all()
+            else:
+                c.wait()
+            c.release()
+
+
+class Timer_Thread(threading.Thread):
+
+    def __init__(self, name):
+        threading.Thread.__init__(self)
+        self.name = name
+    def run(self):
+        global timer
+        global turnActive
+        while True:
+            c.acquire
+            if turnActive == True:
+                timer = 10
+                print("run timer here")
+                c.notify_all()
+            else:
+                c.wait()
+            c.release()
+
+            
