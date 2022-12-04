@@ -18,7 +18,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "REACT_APP_LOCAL=true react-scripts start",
+    "start-unix": "REACT_APP_LOCAL=true react-scripts start",
+    "start-windows": "set REACT_APP_LOCAL=true&& react-scripts start",
     "start-server": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
