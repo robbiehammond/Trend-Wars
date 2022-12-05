@@ -87,6 +87,9 @@ class Lobby:
     def isEmpty(self) -> bool:
         return len(self.players) == 0
 
+    def size(self) -> int:
+        return len(self.players)
+
 
     # If there are 2 or more players and they're all ready, game can start
     def gameCanStart(self):
@@ -113,7 +116,6 @@ class LobbyIDGenerator:
 
     def reset(self):
         self.IDsInUse = []
-
     
     def removeID(self, id):
         self.IDsInUse.remove(id)

@@ -97,9 +97,7 @@ def onMessage(msg):
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
             
 def main():
-    #testLobbyAndGame()
     socketio.run(app, host='0.0.0.0', port='8080', allow_unsafe_werkzeug=True)
-    
 
 if __name__ == '__main__':
     main()
