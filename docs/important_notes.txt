@@ -1,4 +1,0 @@
-- When using React, if <React.StrictMode> surrounds <App /> in 
-index.js, UseEffect (and thus connections) can happen twice for each 
-client. That'll totally mess up backend stuff, so delete the surrounding 
-<React.StrictMode> stuff when frontend development starts.
