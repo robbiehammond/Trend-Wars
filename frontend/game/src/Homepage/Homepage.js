@@ -11,6 +11,7 @@ import { TextField } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import PlayerList from "../PlayerList/PlayerList";
 import CircularProgress from '@mui/material/CircularProgress';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -132,7 +133,9 @@ wordSubmittedThisTurn: false
     <div className="Homepage">
       { loaded ? 
       <header className="Homepage-header">
-        <PlayerList players={[player]} yourId={player.id} isOnHomepage={true}></PlayerList>       
+        <p>This is You <ArrowDownwardIcon></ArrowDownwardIcon></p>
+        <PlayerList players={[player]} yourId={player.id} isOnHomepage={true}></PlayerList>     
+        <p>Instructions here</p>  
         <Box m={1} sx={{width: '45%'}}>
         <CssTextField value= {username} onChange={(e) => { setUsername(e.target.value)}} label="Username" InputLabelProps={{
   style: { color: '#8FBB90', borderColor: '#8FBB90'},
