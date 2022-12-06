@@ -41,6 +41,7 @@ class ConnectionManager:
         self.sidToPlayer[sid] = player
         self.nextValidId += 1
         self.send_to_player(player, Message(MessageType.PLAYER_ID, {"your_id": player.id})) # client side should remember this number
+        self.send_to_player(player, Message(MessageType.PLAYER_STATE, player.toJSON()))
         print("New connection added. Total connections: ", len(self.connections))
 
     # This function is called whenever a player disconnects from the server 
