@@ -54,7 +54,7 @@ class Game extends React.Component {
     let warning = null;
     if (this.state.duplicateWordSubmitted) {
       warning = <Alert severity="error">This word has already been submitted by someone else!</Alert>
-      this.state.duplicateWordSubmitted = false;
+      this.setState({duplicateWordSubmitted: false});
     }
     return (
       <div className="Game">
