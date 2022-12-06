@@ -11,7 +11,8 @@ def handleUsernameMsg(player: Player, username: str, CM: ConnectionManager):
         warnings.warn(colored("Player already in a lobby. Usernames should only be edited when on homepage. Not handling request.", 'yellow'))
     else:
         player.username = username
-        CM.send_to_player(player, Message(MessageType.USERNAME_CHANGED, {"username": player.username}))
+        CM.send_to_player(player, Message(MessageType.PLAYER_STATE, player.toJSON()))
+        CM.send_to_player(player, Message(MessageType.USERNAME_CHANGED, {"username": player.username})) 
 
 
 def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
