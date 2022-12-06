@@ -8,7 +8,8 @@ import Box from "@mui/material/Box";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import { TextField } from "@mui/material";
-import { alpha, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import PlayerList from "../PlayerList/PlayerList";
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -32,6 +33,41 @@ const CssTextField = styled(TextField)({
 
 
 function Homepage() {
+  const [player, setPlayer] = useState({
+    bestWord: "",
+  bigHead: {
+    "accessory": "shades",
+    "body": "chest",
+    "circleColor": "blue",
+    "clothing": "naked",
+    "clothingColor": "white",
+    "eyebrows": "concerned",
+    "eyes": "content",
+    "facialHair": "none",
+    "graphic": "none",
+    "hair": "afro",
+    "hairColor": "pink",
+    "hat": "turban",
+    "hatColor": "white",
+    "lashes": "false",
+    "lipColor": "purple",
+    "mask": [
+        true
+    ],
+    "faceMask": [
+        true
+    ],
+    "mouth": "serious",
+    "skinTone": "dark"
+},
+id: 0,
+rank: -1,
+ready: false,
+score: 0,
+username: "__NOT_ASSIGNED__",
+wordSubmittedThisTurn: false
+  });
+
   const [username, setUsername] = useState('');
   const [yourId, setYourId] = useState(-37);
   const [lobbyID, setLobbyID] = useState('');
@@ -78,6 +114,9 @@ function Homepage() {
       case "USERNAME_CHANGED":
         break;
         //if you wanna visually show that the username has been changed or somethin, do that here
+      case "PLAYER_STATE":
+        setPlayer(message.msgData);
+        break;
       case "LOBBY_JOINED":
         rerouteToLobby(message.msgData);
         break;
@@ -89,17 +128,8 @@ function Homepage() {
   return (
     <div className="Homepage">
       <header className="Homepage-header">
-        <Box m={1}>
-          <Button
-            className="Button"
-            variant="contained"
-            onClick={sendCreateLobbyMessage}
-          >
-            Create Lobby
-          </Button>
-        </Box>
-        
-        <Box m={1}>
+        <PlayerList players={[player]} yourId={player.id} isOnHomepage={true}></PlayerList>        
+        <Box m={1} sx={{width: '45%'}}>
         <CssTextField value= {username} onChange={(e) => { setUsername(e.target.value)}} label="Username" InputLabelProps={{
   style: { color: '#8FBB90', borderColor: '#8FBB90'},
 }} sx={{ marginRight: 2, width: '45%'}}></CssTextField>
@@ -112,7 +142,7 @@ function Homepage() {
             Set Username
           </Button>
         </Box>
-        <Box m={1}>
+        <Box m={1} sx={{width: '45%'}}>
         <CssTextField sx={{ marginRight: 2, width: '45%'}} value= {lobbyID} onChange={(e) => { setLobbyID(e.target.value)}} label="Lobby Code" color="secondary"
         InputLabelProps={{
           style: { color: '#8FBB90', borderColor: '#8FBB90'}}}></CssTextField>
@@ -123,6 +153,16 @@ function Homepage() {
             onClick={sendJoinLobbyMessage}
           >
             Join Lobby
+          </Button>
+        </Box>
+        <Box m={1} sx={{width: '45%'}}>
+          <Button
+            className="Button"
+            variant="contained"
+            onClick={sendCreateLobbyMessage}
+            sx={{ width: '50%'}}
+          >
+            Create Lobby
           </Button>
         </Box>
       </header>

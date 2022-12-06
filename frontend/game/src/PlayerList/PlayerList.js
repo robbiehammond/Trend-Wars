@@ -11,11 +11,11 @@ import {ws} from "../socketConfig.js";
 import Message from "../Message/Message";
 import { useLocation } from "react-router-dom";
 
-function PlayerList() {
-
+function PlayerList(props) {
   const location = useLocation();
-  const [yourId] = useState(location.state.yourId);
-  const [players, setPlayers] = useState(location.state.players);
+  const [yourId] = useState(location.state? location.state.yourId : props.yourId);
+  const [isOnHomepage] = useState(props.isOnHomepage);
+  const [players, setPlayers] = useState(location.state? location.state.players : props.players);
   const [hasGameStarted, setGameStarted] = useState(false);
 
     ws.on(
@@ -31,6 +31,9 @@ function PlayerList() {
             case "GAME_STARTED":
               setGameStarted(true);
             break;
+            case "PLAYER_STATE":
+              setPlayers([message.msgData]);
+              break;
           default:
             break;
         }
@@ -38,8 +41,13 @@ function PlayerList() {
     );
   
     return (
-      <div className="playerList">
-        <h2>Player List</h2>
+      <div className="playerList" style={ isOnHomepage ? { marginBottom: '25px'} : {
+        float: 'right',
+        marginRight: '75px',
+        padding: '15px 10px 20px 10px',
+        marginTop: '15%'
+      }}>
+        { isOnHomepage ? '' : <h2>Player List</h2> }
         <List dense>
           {players.sort((a,b)=> (b.score - a.score)).map((player) => {
             const labelId = `checkbox-list-secondary-label-${player}`;
