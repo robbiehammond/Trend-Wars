@@ -10,6 +10,7 @@ import MessageType from "../Message/MessageType";
 import { TextField } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import PlayerList from "../PlayerList/PlayerList";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -71,6 +72,7 @@ wordSubmittedThisTurn: false
   const [username, setUsername] = useState('');
   const [yourId, setYourId] = useState(-37);
   const [lobbyID, setLobbyID] = useState('');
+  const [loaded, setLoaded] = useState(false);
   const navigate = useNavigate();
 
   function rerouteToLobby(data) {
@@ -115,6 +117,7 @@ wordSubmittedThisTurn: false
         break;
         //if you wanna visually show that the username has been changed or somethin, do that here
       case "PLAYER_STATE":
+        setLoaded(true);
         setPlayer(message.msgData);
         break;
       case "LOBBY_JOINED":
@@ -127,8 +130,9 @@ wordSubmittedThisTurn: false
 
   return (
     <div className="Homepage">
+      { loaded ? 
       <header className="Homepage-header">
-        <PlayerList players={[player]} yourId={player.id} isOnHomepage={true}></PlayerList>        
+        <PlayerList players={[player]} yourId={player.id} isOnHomepage={true}></PlayerList>       
         <Box m={1} sx={{width: '45%'}}>
         <CssTextField value= {username} onChange={(e) => { setUsername(e.target.value)}} label="Username" InputLabelProps={{
   style: { color: '#8FBB90', borderColor: '#8FBB90'},
@@ -166,6 +170,7 @@ wordSubmittedThisTurn: false
           </Button>
         </Box>
       </header>
+       : <CircularProgress /> } 
     </div>
   );
 }
