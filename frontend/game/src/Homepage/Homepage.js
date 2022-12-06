@@ -8,6 +8,28 @@ import Box from "@mui/material/Box";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import { TextField } from "@mui/material";
+import { alpha, styled } from '@mui/material/styles';
+
+const CssTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: '#8FBB90',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#8FBB90',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#8FBB90',
+    },
+    '&:hover fieldset': {
+      borderColor: '#8FBB90',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#8FBB90',
+    },
+  },
+});
+
 
 function Homepage() {
   const [username, setUsername] = useState('');
@@ -76,9 +98,13 @@ function Homepage() {
             Create Lobby
           </Button>
         </Box>
-        <TextField value= {username} onChange={(e) => { setUsername(e.target.value)}}></TextField>
+        
         <Box m={1}>
+        <CssTextField value= {username} onChange={(e) => { setUsername(e.target.value)}} label="Username" InputLabelProps={{
+  style: { color: '#8FBB90', borderColor: '#8FBB90'},
+}} sx={{ marginRight: 2, width: '45%'}}></CssTextField>
           <Button
+            sx={{ width: '50%'}}
             className="Button"
             variant="contained"
             onClick={sendUsernameMessage}
@@ -86,9 +112,12 @@ function Homepage() {
             Set Username
           </Button>
         </Box>
-        <TextField value= {lobbyID} onChange={(e) => { setLobbyID(e.target.value)}}></TextField>
         <Box m={1}>
+        <CssTextField sx={{ marginRight: 2, width: '45%'}} value= {lobbyID} onChange={(e) => { setLobbyID(e.target.value)}} label="Lobby Code" color="secondary"
+        InputLabelProps={{
+          style: { color: '#8FBB90', borderColor: '#8FBB90'}}}></CssTextField>
           <Button
+            sx={{ width: '50%'}}
             className="Button"
             variant="contained"
             onClick={sendJoinLobbyMessage}
@@ -102,3 +131,9 @@ function Homepage() {
 }
 
 export default Homepage;
+
+
+// sx={{
+//   color: "#30303E",
+//   borderColor: '#30303E !important'
+// }} 

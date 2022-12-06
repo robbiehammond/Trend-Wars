@@ -5,7 +5,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
 import { BigHead } from '@bigheads/core';
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {ws} from "../socketConfig.js";
@@ -42,7 +41,7 @@ function PlayerList() {
       <div className="playerList">
         <h2>Player List</h2>
         <List dense>
-          {players.map((player) => {
+          {players.sort((a,b)=> (b.score - a.score)).map((player) => {
             const labelId = `checkbox-list-secondary-label-${player}`;
             return (
               <ListItem key={player.id} disablePadding>
