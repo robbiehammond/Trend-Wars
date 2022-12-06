@@ -20,7 +20,7 @@
   "scripts": {
     "start-unix": "REACT_APP_LOCAL=true react-scripts start",
     "start-windows": "set REACT_APP_LOCAL=true&& react-scripts start",
-    "start-server": "react-scripts start",
+    "start-client-only": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
