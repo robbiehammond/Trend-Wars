@@ -11,10 +11,11 @@ from termcolor import colored
 import os
 import Lobby
 import threading
+from threading import Thread
+import time
+
 
 c = threading.Condition()
-timer = 10
-turnActive = True
 
 
 class Game:
@@ -29,6 +30,7 @@ class Game:
         self.maxTurns = maxTurns
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
+        self.turnActive = False
 
         #dictionary to hold the ranks of each player
         self.playerRank = {}
@@ -53,7 +55,9 @@ class Game:
             self.scores[player] = 0
             self.readyForNextTurn[player.id] = False
             self.playerRank[player] = 0
+        #self.t1 = Thread(target = timer)
 
+        
         self.startNewTurn()
 
     def getPointsForTheirWord(self):
@@ -64,14 +68,13 @@ class Game:
 
     # clear previous submissions and generate new starting word at the beginning of each turn
     def startNewTurn(self):
+
         for player in self.players:
             player.guessedWord = None
         self.turn += 1
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
         self.wordSubmissions = {}
-        self.turnActive = True
-        # self.turnTimer(10)
         # certainly will need more logic here
 
 
@@ -119,18 +122,8 @@ class Game:
     # if all players have submitted, evaluate the submissions 
     # send messsage to everyone connected to this lobby that this player has submitted a word
     def everyoneHasSubmitted(self):
-        return len(self.wordSubmissions) == len(self.players)
 
-    
-    def turnTimer(self):
-        while self:
-            mins, secs = divmod(self, 60)
-            timeformat = '{:02d}:{:02d}'.format(mins, secs)
-            print(timeformat, end='\r')
-            time.sleep(1)
-            self -= 1
-            if (self == 0):
-                print("Time's up")
+        return len(self.wordSubmissions) == len(self.players)
 
     def gameShouldEnd(self):
         return self.turn == self.maxTurns
@@ -138,17 +131,20 @@ class Game:
     def endTurn(self):
         for player in self.players:
             self.readyForNextTurn[player.id] = False
+        
 
         #TODO: set 10 sec countdown before next turn starts. Since we don't have a timer yet, just go to next turn immediately
         #if 10 sec timer is done
         self.prepareNextRound()
 
     def prepareNextRound(self):
+
         if (self.gameShouldEnd()):
             self.endGame()
         else:
             self.startNewTurn()
             self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.LOBBY_STATE, self.lobby.getLobbyState()))
+            self.turnTimer()
 
     def endGame(self):
         self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.GAME_ENDED, {}))
@@ -160,11 +156,12 @@ class Game:
 
 
     def processReadyForNextRound(self, player: Player):
+        self.turnTimer()
         if self.wordSubmissions.get(player) is None:
             warnings.warn(colored(f'Player {player.id} has readied up for the next round, but has not submitted a word for the current round. This request will be ignored.', 'yellow'))
             return
         self.readyForNextTurn[player.id] = True
-        if (self.allReadyForNextTurn()):
+        if (self.allReadyForNextTurn() or self.turnActive == False):
             self.startNewTurn()
 
     def allReadyForNextTurn(self):
@@ -180,25 +177,14 @@ class Game:
     def __str__(self):
         return f'Game: Current Turn: {self.turn}, current starting word: {self.curWord}, current scores: {self.scores}'
 
-    def run(self):
-        global timer
-        global turnActive
-        while True:
-            c.acquire
-            if turnActive == True:
-                timer = 0
-                print("run timer here")
-                c.notify_all()
-            else:
-                c.wait()
-            c.release()
-
 
 class Timer_Thread(threading.Thread):
 
     def __init__(self, name):
         threading.Thread.__init__(self)
         self.name = name
+        self.turnOngoing = False
+
     def run(self):
         global timer
         global turnActive
@@ -206,10 +192,32 @@ class Timer_Thread(threading.Thread):
             c.acquire
             if turnActive == True:
                 timer = 10
-                print("run timer here")
+                self.turnTimer()
                 c.notify_all()
             else:
                 c.wait()
             c.release()
+    
+    def turnTimer(self):
+        c = 0
+        while c < 10:
+            time.sleep(1)
+            c += 1
+            if c == 10:
+                print(c)
+        self.turnOngoing = True
 
-            
+    def newTurn(self):
+        if self.turnOngoing == True:
+            return True
+
+def timer():
+        c = 0
+        while c < 10:
+            time.sleep(1)
+            c += 1
+            if c == 10:
+                print(c)
+   
+
+        
