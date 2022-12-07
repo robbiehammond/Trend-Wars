@@ -11,7 +11,8 @@ def handleUsernameMsg(player: Player, username: str, CM: ConnectionManager):
         warnings.warn(colored("Player already in a lobby. Usernames should only be edited when on homepage. Not handling request.", 'yellow'))
     else:
         player.username = username
-        CM.send_to_player(player, Message(MessageType.USERNAME_CHANGED, {"username": player.username}))
+        CM.send_to_player(player, Message(MessageType.PLAYER_STATE, player.toJSON()))
+        CM.send_to_player(player, Message(MessageType.USERNAME_CHANGED, {"username": player.username})) 
 
 
 def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
@@ -22,7 +23,7 @@ def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
             if lobby.id == lobbyID:
                 lobby.addPlayer(player)
                 player.lobbyID = lobby.id
-                if player.username == '__NOT_ASSIGNED__':
+                if player.username == '?':
                     player.username = 'Player ' + str(lobby.size())
                 CM.send_to_player(player, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id, "lobby_state": lobby.getLobbyState()}))
                 CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
@@ -40,7 +41,7 @@ def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM
     player = sidToPlayer[sid]
     lobby.addPlayer(player)
     player.lobbyID = lobby.id
-    if player.username == '__NOT_ASSIGNED__':
+    if player.username == '?':
         print("here")
         player.username = 'Player ' + str(lobby.size())
     CM.send_to_player(player, Message(MessageType.LOBBY_CREATED, {"lobbyID": lobby.id, "lobby_state": lobby.getLobbyState()})) # Seems like frontend isn't set up such that the page changes if this isn't sent

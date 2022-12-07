@@ -8,11 +8,72 @@ import Box from "@mui/material/Box";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import { TextField } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import PlayerList from "../PlayerList/PlayerList";
+import CircularProgress from '@mui/material/CircularProgress';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
+export const CssTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: '#8FBB90',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#8FBB90',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#8FBB90',
+    },
+    '&:hover fieldset': {
+      borderColor: '#8FBB90',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#8FBB90',
+    },
+  },
+});
+
 
 function Homepage() {
+  const [player, setPlayer] = useState({
+    bestWord: "",
+  bigHead: {
+    "accessory": "shades",
+    "body": "chest",
+    "circleColor": "blue",
+    "clothing": "naked",
+    "clothingColor": "white",
+    "eyebrows": "concerned",
+    "eyes": "content",
+    "facialHair": "none",
+    "graphic": "none",
+    "hair": "afro",
+    "hairColor": "pink",
+    "hat": "turban",
+    "hatColor": "white",
+    "lashes": "false",
+    "lipColor": "purple",
+    "mask": [
+        true
+    ],
+    "faceMask": [
+        true
+    ],
+    "mouth": "serious",
+    "skinTone": "dark"
+},
+id: 0,
+rank: -1,
+ready: false,
+score: 0,
+username: "?",
+wordSubmittedThisTurn: false
+  });
+
   const [username, setUsername] = useState('');
   const [yourId, setYourId] = useState(-37);
   const [lobbyID, setLobbyID] = useState('');
+  const [loaded, setLoaded] = useState(false);
   const navigate = useNavigate();
 
   function rerouteToLobby(data) {
@@ -21,7 +82,8 @@ function Homepage() {
       replace: true,
       state: {
         players: data.lobby_state.players,
-        yourId: yourId
+        yourId: yourId,
+        lobbyID: data.lobbyID
       } 
     });
   }
@@ -56,6 +118,10 @@ function Homepage() {
       case "USERNAME_CHANGED":
         break;
         //if you wanna visually show that the username has been changed or somethin, do that here
+      case "PLAYER_STATE":
+        setLoaded(true);
+        setPlayer(message.msgData);
+        break;
       case "LOBBY_JOINED":
         rerouteToLobby(message.msgData);
         break;
@@ -66,19 +132,25 @@ function Homepage() {
 
   return (
     <div className="Homepage">
+      { loaded ? 
       <header className="Homepage-header">
-        <Box m={1}>
+        <p>This is You <ArrowDownwardIcon></ArrowDownwardIcon></p>
+        <PlayerList players={[player]} yourId={player.id} isOnHomepage={true}></PlayerList>     
+          <Box m={1} sx={{width: '80%'}}>
+            <p style={{fontSize: '1rem'}}>
+              Trend Wars is a multiplayer game with 2 to 5 players.
+              You will be given a word each round. Come up with a trendy phrase to pair with it. 
+              <br></br>Based on Google Trends, your phrase will be scored from 0 to 100. The player with the most points after 5 round wins.<br></br>
+              <br></br>
+              You can set your username, join a lobby, or create a lobby below. Good luck Soldier.
+            </p>  
+          </Box>
+        <Box m={1} sx={{width: '45%'}}>
+        <CssTextField value= {username} onChange={(e) => { setUsername(e.target.value)}} label="Username" InputLabelProps={{
+  style: { color: '#8FBB90', borderColor: '#8FBB90'},
+}} sx={{ marginRight: 2, width: '45%'}}></CssTextField>
           <Button
-            className="Button"
-            variant="contained"
-            onClick={sendCreateLobbyMessage}
-          >
-            Create Lobby
-          </Button>
-        </Box>
-        <TextField value= {username} onChange={(e) => { setUsername(e.target.value)}}></TextField>
-        <Box m={1}>
-          <Button
+            sx={{ width: '50%'}}
             className="Button"
             variant="contained"
             onClick={sendUsernameMessage}
@@ -86,9 +158,12 @@ function Homepage() {
             Set Username
           </Button>
         </Box>
-        <TextField value= {lobbyID} onChange={(e) => { setLobbyID(e.target.value)}}></TextField>
-        <Box m={1}>
+        <Box m={1} sx={{width: '45%'}}>
+        <CssTextField sx={{ marginRight: 2, width: '45%'}} value= {lobbyID} onChange={(e) => { setLobbyID(e.target.value)}} label="Lobby Code" color="secondary"
+        InputLabelProps={{
+          style: { color: '#8FBB90', borderColor: '#8FBB90'}}}></CssTextField>
           <Button
+            sx={{ width: '50%'}}
             className="Button"
             variant="contained"
             onClick={sendJoinLobbyMessage}
@@ -96,9 +171,25 @@ function Homepage() {
             Join Lobby
           </Button>
         </Box>
+        <Box m={1} sx={{width: '45%'}}>
+          <Button
+            className="Button"
+            variant="contained"
+            onClick={sendCreateLobbyMessage}
+            sx={{ width: '50%'}}
+          >
+            Create Lobby
+          </Button>
+        </Box>
       </header>
+       : <CircularProgress /> } 
     </div>
   );
 }
 
 export default Homepage;
+
+// sx={{
+//   color: "#30303E",
+//   borderColor: '#30303E !important'
+// }} 

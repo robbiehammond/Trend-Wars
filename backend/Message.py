@@ -31,6 +31,7 @@ class MessageType(Enum):
     LOBBY_CLOSING = auto()
     INVALID_SUBMISSION = auto()
     DUPLICATE_WORD = auto()
+    PLAYER_STATE = auto()
 
 
     # returns string value of json 

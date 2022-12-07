@@ -6,6 +6,8 @@ import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import {ws} from "../socketConfig.js";
 import { Alert } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 class Game extends React.Component {
   constructor(props) {
@@ -14,7 +16,8 @@ class Game extends React.Component {
     this.state = {
       wordThisTurn: this.props.startingWord,
       userWord: "",
-      duplicateWordSubmitted: false
+      duplicateWordSubmitted: false,
+      lastWord: ''
     };
   }
 
@@ -37,8 +40,13 @@ class Game extends React.Component {
         let message = Message.fromJSON(json);
         switch (message.msgType) {
           case "LOBBY_STATE":
+            let wordInput = document.getElementById('word-input');
+            if(message.msgData.startingWord !== this.state.wordThisTurn){
+              wordInput.value='';
+            }
             this.setState({
-              wordThisTurn: message.msgData.startingWord
+              wordThisTurn: message.msgData.startingWord,
+              duplicateWordSubmitted: false
             });
             break;
           case "DUPLICATE_WORD":
@@ -52,13 +60,8 @@ class Game extends React.Component {
       }.bind(this)
     )
     let warning = null;
-    if (this.state.duplicateWordSubmitted) {
-      warning = <Alert severity="error">This word has already been submitted by someone else!</Alert>
-      this.state.duplicateWordSubmitted = false;
-    }
     return (
       <div className="Game">
-        {warning}
         <div className="word-container">
           <span className="word">{this.state.wordThisTurn}</span>{" "}
           <span className="word"> +</span>
@@ -84,6 +87,23 @@ class Game extends React.Component {
         >
           Submit Word
         </Button>
+        {this.state.duplicateWordSubmitted ? (<Alert
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                this.setState({duplicateWordSubmitted: false });
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2, width: '200px' }}
+        >
+         This word has already been submitted by someone else!
+        </Alert>) : ''}
       </div>
     );
   }
