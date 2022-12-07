@@ -13,7 +13,7 @@ import PlayerList from "../PlayerList/PlayerList";
 import CircularProgress from '@mui/material/CircularProgress';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-const CssTextField = styled(TextField)({
+export const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
     color: '#8FBB90',
   },
@@ -190,7 +190,6 @@ wordSubmittedThisTurn: false
 }
 
 export default Homepage;
-
 
 // sx={{
 //   color: "#30303E",

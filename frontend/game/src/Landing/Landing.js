@@ -5,32 +5,61 @@ import Button from "@mui/material/Button";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import { Box } from "@mui/system";
+import { useState } from "react";
+import { CssTextField } from "../Homepage/Homepage";
 
-class Landing extends React.Component {
-  constructor(props) {
-    super(props);
-    this.sendReadyMsg = this.sendReadyMsg.bind(this);
-    this.sendStartGameMsg = this.sendStartGameMsg.bind(this);
-  }
+function Landing() {
+  const [username, setUsername] = useState('');
 
-  sendReadyMsg() {
+  function sendReadyMsg() {
     const msg = new Message(MessageType.READY, { data: "meme" });
     ws.emit("message", msg.toJSON());
   }
 
-  sendStartGameMsg() {
+  function sendStartGameMsg() {
     const msg = new Message(MessageType.START_GAME, { data: "meme" });
     ws.emit("message", msg.toJSON());
   }
 
-  render() {
+  function sendUsernameMessage() {
+    const msg = new Message(MessageType.USERNAME, { data: username });
+    ws.emit("message", msg.toJSON());
+  }
+
+  function sendRandomizeMessage() {
+    const msg = new Message(MessageType.RANDOMIZE_BIGHEAD, { data: "meme" });
+    ws.emit("message", msg.toJSON());
+  }
+
     return (
       <div className="Landing">
+            <Box m={1} sx={{width: '45%'}}>
+            <CssTextField value= {username} onChange={(e) => { setUsername(e.target.value)}} label="Username" InputLabelProps={{
+      style: { color: '#8FBB90', borderColor: '#8FBB90'},
+    }} sx={{ marginRight: 2, width: '45%'}}></CssTextField>
+              <Button
+                sx={{ width: '50%'}}
+                className="Button"
+                variant="contained"
+                onClick={sendUsernameMessage}
+              >
+                Set Username
+              </Button>
+            </Box>
         <Box m={1}>
           <Button
             className="Button"
             variant="contained"
-            onClick={this.sendReadyMsg}
+            onClick={sendRandomizeMessage}
+          >
+            Randomize Avatar
+          </Button>
+        </Box>
+        <Box m={1}>
+          <Button
+            className="Button"
+            variant="contained"
+            onClick={sendReadyMsg}
           >
             Ready Up
           </Button>
@@ -39,14 +68,13 @@ class Landing extends React.Component {
           <Button
             className="Button"
             variant="contained"
-            onClick={this.sendStartGameMsg}
+            onClick={sendStartGameMsg}
           >
             Start Game
           </Button>
         </Box>
       </div>
     );
-  }
 }
 
 export default Landing;
