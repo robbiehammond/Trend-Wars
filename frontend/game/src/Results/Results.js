@@ -29,7 +29,7 @@ class Results extends React.Component {
       window.location = "http://localhost:3000/"
     }
     else {
-      window.location = "http://3.143.255.96/"
+      window.location = "http://trendwars.net/"
     }
   }
 

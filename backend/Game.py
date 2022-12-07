@@ -111,8 +111,10 @@ class Game:
                 player.score = self.scores[player] # redundant, eventually we should switch over to exclusively using the score field rather than the map
                 self.pointsForTheirWord[player] = results[submission]
         except: #if 429 error, everyone gets nothing
-            warnings.warn(colored('429 error, turn effectively being skipped', 'yellow'))
-
+            warnings.warn(colored('429 error, turn effectively being skipped. Everyone gets 0 points.', 'yellow'))
+            for player in self.players:
+                player.pointInc = 0
+                self.pointsForTheirWord[player] = 0
         self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
         self.endTurn()
 
