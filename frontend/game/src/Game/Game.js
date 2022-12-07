@@ -25,7 +25,7 @@ class Game extends React.Component {
     let userWord = this.state.userWord;
     const msg = new Message(MessageType.SUBMIT_WORD, {
       data: "meme",
-      word: userWord
+      word: userWord.trim()
     });
     ws.emit("message", msg.toJSON());
   }

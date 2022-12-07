@@ -36,7 +36,7 @@ function Landing() {
 
     return (
       <div className="Landing">
-            <p>{lobbyID}</p>
+            <p> Your Lobby ID is {lobbyID}</p>
             <Box m={1} sx={{width: '45%'}}>
             <CssTextField value= {username} onChange={(e) => { setUsername(e.target.value)}} label="Username" InputLabelProps={{
       style: { color: '#8FBB90', borderColor: '#8FBB90'},
