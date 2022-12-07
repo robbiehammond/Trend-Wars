@@ -60,6 +60,9 @@ class Lobby:
             # Basically, it means we don't need to do anything with the message, so just drop it.
             case "URL": 
                 pass
+            case "USERNAME":
+                player.username = message.msgData['data']
+                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
             case "RANDOMIZE_BIGHEAD":
                 player.randomizeBigHead()
                 self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
