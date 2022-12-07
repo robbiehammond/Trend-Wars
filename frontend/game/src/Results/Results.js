@@ -1,9 +1,20 @@
 import React from "react";
+import "./Results.css";
 import {ws, server_location} from "../socketConfig.js";
 import Message from "../Message/Message";
-import { Button, List, ListItem } from "@mui/material";
+import { Button } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import { Navigate } from "react-router-dom";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import { BigHead } from '@bigheads/core';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import LooksTwoRoundedIcon from '@mui/icons-material/LooksTwoRounded';
+import Looks3RoundedIcon from '@mui/icons-material/Looks3Rounded';
 
 class Results extends React.Component {
   constructor(props) {
@@ -51,36 +62,67 @@ class Results extends React.Component {
 
     return (
       <div className="GameResults-div">
-        { resultsArray.map(string => {
-          return (
-            <p>{string}</p>
-          )
-        }) }
-        {/* <List dense>
-          {(this.state.results).map((player) => {
-            // This needs to be made to look better
+        <div className="results">
+        <h2>Results</h2>
+        <List dense>
+          {sortable.sort((a,b)=> (b.score - a.score)).map((player, index) => {
+            const labelId = `checkbox-list-secondary-label-${player}`;
             return (
-              <Container key={player.id}>
-                <Container>
-                  {player.username}
-                </Container>
-                <Container>
-                  {player.score}
-                </Container>
-                <Container>
-                  {player.bestWord}
-                </Container>
-                <Container>
-                  {player.rank}
-                </Container>
-                <Box sx={{padding: 10}}></Box>
-              </Container>
-            )
+              <ListItem key={player.id} disablePadding>
+                { index > 2 ? '' 
+                : (index === 2 ? <Looks3RoundedIcon></Looks3RoundedIcon> 
+                : (index === 1 ? <LooksTwoRoundedIcon></LooksTwoRoundedIcon> 
+                : <EmojiEventsIcon></EmojiEventsIcon>))
+                }
+                <ListItemButton>
+                  <ListItemAvatar>
+                    <BigHead
+                      accessory={player.bigHead.accessory}
+                      body={player.bigHead.body}
+                      circleColor={player.bigHead.circleColor}
+                      clothing={player.bigHead.clothing}
+                      clothingColor={player.bigHead.clothingColor}
+                      eyebrows={player.bigHead.eyebrows}
+                      eyes={player.bigHead.eyes}
+                      facialHair={player.bigHead.facialHair}
+                      graphic={player.bigHead.graphic}
+                      hair={player.bigHead.hair}
+                      hairColor={player.bigHead.hairColor}
+                      hat={player.bigHead.hat}
+                      hatColor={player.bigHead.hatColor}
+                      lashes={player.bigHead.lashes}
+                      lipColor={player.bigHead.lipColor}
+                      mask={false}
+                      faceMask={false}
+                      mouth={player.bigHead.mouth}
+                      skinTone={player.bigHead.skinTone}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText
+                    id={labelId}
+                    sx={{ 
+                      fontSize: '3rem', 
+                      fontWeight: 'medium',
+                    }}
+                    primary={`${player.username} had a score of ${player.score}. Their best word was "${player.bestWord}".`}
+                  />
+                  <>
+                  </>
+                </ListItemButton>
+              </ListItem>
+            );
           })}
-        </List> */}
-        <Button onClick={this.handleClick}>
+        </List>
+      </div>
+<div className="break"></div>
+        <Box m={3} sx={{ width: 'fit-content'}}>
+        <Button onClick={this.handleClick}
+        variant="contained"
+        sx={{ width: '100%', fontSize: '1.5rem'}}>
           Back to Menu
         </Button>
+        </Box>
+
       </div>
     );
   }

@@ -17,6 +17,7 @@ import Looks3RoundedIcon from '@mui/icons-material/Looks3Rounded';
 function PlayerList(props) {
   const location = useLocation();
   const [yourId] = useState(location.state? location.state.yourId : props.yourId);
+  const [isOnResults] = useState(props.isOnResults);
   const [isOnHomepage] = useState(props.isOnHomepage);
   const [players, setPlayers] = useState(location.state? location.state.players : props.players);
   const [hasGameStarted, setGameStarted] = useState(false);
