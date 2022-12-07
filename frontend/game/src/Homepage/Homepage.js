@@ -82,7 +82,8 @@ wordSubmittedThisTurn: false
       replace: true,
       state: {
         players: data.lobby_state.players,
-        yourId: yourId
+        yourId: yourId,
+        lobbyID: data.lobbyID
       } 
     });
   }

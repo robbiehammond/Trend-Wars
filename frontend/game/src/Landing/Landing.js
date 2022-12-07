@@ -7,8 +7,11 @@ import MessageType from "../Message/MessageType";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import { CssTextField } from "../Homepage/Homepage";
+import { useLocation } from "react-router-dom";
 
 function Landing() {
+  const location = useLocation();
+  const [lobbyID] = useState(location.state.lobbyID)
   const [username, setUsername] = useState('');
 
   function sendReadyMsg() {
@@ -33,6 +36,7 @@ function Landing() {
 
     return (
       <div className="Landing">
+            <p>{lobbyID}</p>
             <Box m={1} sx={{width: '45%'}}>
             <CssTextField value= {username} onChange={(e) => { setUsername(e.target.value)}} label="Username" InputLabelProps={{
       style: { color: '#8FBB90', borderColor: '#8FBB90'},
