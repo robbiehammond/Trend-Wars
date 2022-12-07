@@ -36,7 +36,7 @@ class ConnectionManager:
         self.activeSids.append(sid)
         sock = Socket(self.socketio, sid)
         self.connections.append(sock)
-        player = Player(self.nextValidId, "__NOT_ASSIGNED__", False)
+        player = Player(self.nextValidId, "?", False)
         self.socketToPlayer[sock] = player
         self.sidToPlayer[sid] = player
         self.nextValidId += 1

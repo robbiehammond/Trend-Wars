@@ -66,7 +66,7 @@ id: 0,
 rank: -1,
 ready: false,
 score: 0,
-username: "__NOT_ASSIGNED__",
+username: "?",
 wordSubmittedThisTurn: false
   });
 
