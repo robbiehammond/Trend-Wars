@@ -41,7 +41,6 @@ class Game extends React.Component {
 
   finishTurnTimer() {
     const msg = new Message(MessageType.TIME_OVER, {
-      data: "",
     });
     ws.emit("message", msg.toJSON());
   }
@@ -59,7 +58,7 @@ class Game extends React.Component {
           case "LOBBY_STATE":
             let wordInput = document.getElementById('word-input');
             if(message.msgData.startingWord !== this.state.wordThisTurn){
-              wordInput.value='';
+              wordInput.value=''; 
               setTimeout(this.finishTurnTimer, 10000)
             }
             this.setState({

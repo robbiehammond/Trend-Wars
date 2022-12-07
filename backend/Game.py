@@ -75,6 +75,7 @@ class Game:
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
         self.wordSubmissions = {}
+        self.lobby.newRound = False
         # certainly will need more logic here
 
 
