@@ -60,7 +60,7 @@ class Game extends React.Component {
             let wordInput = document.getElementById('word-input');
             if(message.msgData.startingWord !== this.state.wordThisTurn){
               wordInput.value='';
-              setTimeout(finishTurnTimer, 10000)
+              setTimeout(this.finishTurnTimer, 10000)
             }
             this.setState({
               wordThisTurn: message.msgData.startingWord,
