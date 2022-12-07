@@ -60,6 +60,9 @@ class Lobby:
             # Basically, it means we don't need to do anything with the message, so just drop it.
             case "URL": 
                 pass
+            case "RANDOMIZE_BIGHEAD":
+                player.randomizeBigHead()
+                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
             case _:
                 raise Exception(f'Invalid message type. A type of {msgType} was received by lobby {self.id}, but no corresponding function exists')
     

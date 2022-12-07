@@ -73,6 +73,9 @@ class Player:
             "bigHead": self.BigHead.toJSON()
         }
 
+    def randomizeBigHead(self):
+        self.BigHead = BigHead()
+
     def __str__(self):
         return f'Player: {self.id}, {self.username}, {self.ready}'
 
