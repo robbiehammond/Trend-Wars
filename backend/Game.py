@@ -144,7 +144,6 @@ class Game:
         else:
             self.startNewTurn()
             self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.LOBBY_STATE, self.lobby.getLobbyState()))
-            self.turnTimer()
 
     def endGame(self):
         self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.GAME_ENDED, {}))
@@ -156,7 +155,6 @@ class Game:
 
 
     def processReadyForNextRound(self, player: Player):
-        self.turnTimer()
         if self.wordSubmissions.get(player) is None:
             warnings.warn(colored(f'Player {player.id} has readied up for the next round, but has not submitted a word for the current round. This request will be ignored.', 'yellow'))
             return
