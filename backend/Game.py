@@ -13,6 +13,7 @@ import Lobby
 import threading
 from threading import Thread
 import time
+import random
 
 
 c = threading.Condition()
@@ -111,10 +112,15 @@ class Game:
                 player.score = self.scores[player] # redundant, eventually we should switch over to exclusively using the score field rather than the map
                 self.pointsForTheirWord[player] = results[submission]
         except: #if 429 error, everyone gets nothing
-            warnings.warn(colored('429 error, turn effectively being skipped. Everyone gets 0 points.', 'yellow'))
-            for player in self.players:
-                player.pointInc = 0
-                self.pointsForTheirWord[player] = 0
+            warnings.warn(colored('429 error, turn effectively being skipped. Everyone gets random amount.', 'yellow'))
+            for player, submission in self.wordSubmissions.items():
+                randomAmount = random.randint(0, 100)
+                self.scores[player]  += randomAmount
+                player.pointInc = randomAmount
+                self.pointsForTheirWord[player] = randomAmount
+                if (int(self.scores[player]) > player.mostPointsFromWord):
+                    player.bestWord = submission
+                player.score = self.scores[player]
         self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
         self.endTurn()
 
