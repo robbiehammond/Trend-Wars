@@ -95,7 +95,7 @@ wordSubmittedThisTurn: false
 
   function sendJoinLobbyMessage() {
     const msg = new Message(MessageType.PLAYER_JOIN, {
-      data: { lobbyID: lobbyID },
+      data: { lobbyID: lobbyID.toUpperCase() },
     });
     ws.emit("message", msg.toJSON());
   }
