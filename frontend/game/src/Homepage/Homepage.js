@@ -135,7 +135,18 @@ wordSubmittedThisTurn: false
       <header className="Homepage-header">
         <p>This is You <ArrowDownwardIcon></ArrowDownwardIcon></p>
         <PlayerList players={[player]} yourId={player.id} isOnHomepage={true}></PlayerList>     
-        <p>Instructions here</p>  
+          <p>Instructions: 
+            Combine your starting word with a compliment word.
+            You will receive points based on the search 
+            popularity of your answer.
+            The player with the most points after 5 rounds, wins.
+            Set your username below. 
+            Then either create a new lobby or join a already
+            created one using a friend's Lobby Code.
+            Once you are ready hit the READY UP button, once 
+            all players are readied up the creator of the lobby
+            can START GAME.
+          </p>  
         <Box m={1} sx={{width: '45%'}}>
         <CssTextField value= {username} onChange={(e) => { setUsername(e.target.value)}} label="Username" InputLabelProps={{
   style: { color: '#8FBB90', borderColor: '#8FBB90'},
