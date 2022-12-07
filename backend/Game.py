@@ -105,14 +105,15 @@ class Game:
             results = self.connector.get_word_results(self.wordSubmissions.values()).max()
             for player, submission in self.wordSubmissions.items():
                 self.scores[player] += results[submission]
+                player.pointInc = int(results[submission])
                 if (int(self.scores[player]) > player.mostPointsFromWord):
                     player.bestWord = submission
                 player.score = self.scores[player] # redundant, eventually we should switch over to exclusively using the score field rather than the map
                 self.pointsForTheirWord[player] = results[submission]
-            self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
         except: #if 429 error, everyone gets nothing
             warnings.warn('429 error, turn effectively being skipped', 'yellow')
 
+        self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
         self.endTurn()
 
     # After all players have submitted their words and they've been submitted to the Trends API, alert those in the lobby on how everyone did

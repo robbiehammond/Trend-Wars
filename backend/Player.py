@@ -58,6 +58,7 @@ class Player:
         self.mostPointsFromWord = -1
         self.rank = -1 #overriden at the end of the game
         self.BigHead = BigHead()
+        self.pointInc = 0
 
     # encode a player (in json) to be sent to frontend
     # also not sure if we'll ever need this 
@@ -70,7 +71,9 @@ class Player:
             "wordSubmittedThisTurn": False if self.guessedWord == None else True,
             "bestWord": self.bestWord,
             "rank": self.rank,
-            "bigHead": self.BigHead.toJSON()
+            "bigHead": self.BigHead.toJSON(),
+            "pointInc": self.pointInc
+
         }
 
     def randomizeBigHead(self):
