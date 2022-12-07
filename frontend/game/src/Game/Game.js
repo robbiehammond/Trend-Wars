@@ -13,6 +13,7 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.submitWordMsg = this.submitWordMsg.bind(this);
+    this.finishTurnTimer = this.finishTurnTimer.bind(this);
     this.state = {
       wordThisTurn: this.props.startingWord,
       userWord: "",
@@ -30,6 +31,22 @@ class Game extends React.Component {
     ws.emit("message", msg.toJSON());
   }
 
+  startTurnTimer() {
+    const msg = new Message(MessageType.TIME_OVER, {
+      data: "",
+    });
+    ws.emit("message", msg.toJSON());
+
+  }
+
+  finishTurnTimer() {
+    const msg = new Message(MessageType.TIME_OVER, {
+      data: "",
+    });
+    ws.emit("message", msg.toJSON());
+  }
+
+
   handleChange = (e) =>
     this.setState({
       userWord: e.target.value,
@@ -43,6 +60,7 @@ class Game extends React.Component {
             let wordInput = document.getElementById('word-input');
             if(message.msgData.startingWord !== this.state.wordThisTurn){
               wordInput.value='';
+              setTimeout(finishTurnTimer, 10000)
             }
             this.setState({
               wordThisTurn: message.msgData.startingWord,

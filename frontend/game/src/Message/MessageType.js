@@ -9,7 +9,8 @@ let MessageType = {
   USERNAME: "USERNAME",
   URL: "URL",
   LOBBY_DOESNT_EXIST: "LOBBY_DOESNT_EXIST",
-  LOBBY_CLOSING: "LOBBY_CLOSING"
+  LOBBY_CLOSING: "LOBBY_CLOSING",
+  TIME_OVER: "TIME_OVER"
   //insert more types as needed, make sure one exists on backend too
 };
 
