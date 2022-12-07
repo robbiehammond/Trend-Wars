@@ -57,7 +57,7 @@ function PlayerList(props) {
             const labelId = `checkbox-list-secondary-label-${player}`;
             return (
               <ListItem key={player.id} disablePadding>
-                { !hasGameStarted ? '' : index > 2 ? '' 
+                { !hasGameStarted ? '' : index > 2 ? <LooksOneRoundedIcon sx={{visibility: "hidden"}}></LooksOneRoundedIcon> 
                 : (index === 2 ? <Looks3RoundedIcon></Looks3RoundedIcon> 
                 : (index === 1 ? <LooksTwoRoundedIcon></LooksTwoRoundedIcon> 
                 : <LooksOneRoundedIcon></LooksOneRoundedIcon>))
