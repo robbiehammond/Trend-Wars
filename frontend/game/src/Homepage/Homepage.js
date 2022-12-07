@@ -137,18 +137,12 @@ wordSubmittedThisTurn: false
         <p>This is You <ArrowDownwardIcon></ArrowDownwardIcon></p>
         <PlayerList players={[player]} yourId={player.id} isOnHomepage={true}></PlayerList>     
           <Box m={1} sx={{width: '80%'}}>
-            <p>Instructions: <br></br>
-              Combine the starting word with a compliment word.
-              You receive points based on the search
-              popularity of your answer. <br></br>
-              The player with the most points after 5 rounds, wins.<br></br>
+            <p style={{fontSize: '1rem'}}>
+              Trend Wars is a multiplayer game with 2 to 5 players.
+              You will be given a word each round. Come up with a trendy phrase to pair with it. 
+              <br></br>Based on Google Trends, your phrase will be scored from 0 to 100. The player with the most points after 5 round wins.<br></br>
               <br></br>
-              Set your username below. <br></br>
-              Then either create a new lobby or join a already
-              created one using a friend's Lobby Code. <br></br>
-              Once you are ready hit the READY UP button, once
-              all players are readied up the creator of the lobby
-              can START GAME.
+              You can set your username, join a lobby, or create a lobby below. Good luck Soldier.
             </p>  
           </Box>
         <Box m={1} sx={{width: '45%'}}>
