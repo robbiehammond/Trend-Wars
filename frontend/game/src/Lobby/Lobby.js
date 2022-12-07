@@ -61,17 +61,17 @@ class Lobby extends React.Component {
       }.bind(this)
     );
 
-    let gameLandingOrError;
+    let lobbyContent;
     let playerList;
       
     if (this.state.lobbyDoesntExist) {
-      gameLandingOrError = <ErrorPage></ErrorPage>
+      lobbyContent = <ErrorPage></ErrorPage>
     }
     else if (this.state.hasGameStarted) {
-      gameLandingOrError = <Game startingWord={this.state.firstStartingWord}></Game>;
+      lobbyContent = <Game startingWord={this.state.firstStartingWord}></Game>;
       playerList = <PlayerList players={this.state.players}></PlayerList>
     } else {
-      gameLandingOrError = <Landing></Landing>;
+      lobbyContent = <Landing></Landing>;
       playerList = <PlayerList players={this.state.players}></PlayerList>
     }
     if (this.state.results !== "") {
@@ -83,7 +83,7 @@ class Lobby extends React.Component {
     else {
       return (
         <div className="Lobby">
-          <div className="Lobby-div">{gameLandingOrError}</div>
+          <div className="Lobby-div">{lobbyContent}</div>
           <div className="PlayerList-div">{playerList}</div>
         </div>
       );
