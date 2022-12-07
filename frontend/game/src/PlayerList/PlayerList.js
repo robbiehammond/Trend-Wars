@@ -10,6 +10,9 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {ws} from "../socketConfig.js";
 import Message from "../Message/Message";
 import { useLocation } from "react-router-dom";
+import LooksOneRoundedIcon from '@mui/icons-material/LooksOneRounded';
+import LooksTwoRoundedIcon from '@mui/icons-material/LooksTwoRounded';
+import Looks3RoundedIcon from '@mui/icons-material/Looks3Rounded';
 
 function PlayerList(props) {
   const location = useLocation();
@@ -49,10 +52,15 @@ function PlayerList(props) {
       }}>
         { isOnHomepage ? '' : <h2>Player List</h2> }
         <List dense>
-          {players.sort((a,b)=> (b.score - a.score)).map((player) => {
+          {players.sort((a,b)=> (b.score - a.score)).map((player, index) => {
             const labelId = `checkbox-list-secondary-label-${player}`;
             return (
               <ListItem key={player.id} disablePadding>
+                { !hasGameStarted ? '' : index > 2 ? '' 
+                : (index === 2 ? <Looks3RoundedIcon></Looks3RoundedIcon> 
+                : (index === 1 ? <LooksTwoRoundedIcon></LooksTwoRoundedIcon> 
+                : <LooksOneRoundedIcon></LooksOneRoundedIcon>))
+                }
                 <ListItemButton>
                   <ListItemAvatar>
                     <BigHead
@@ -106,8 +114,7 @@ function PlayerList(props) {
           })}
         </List>
       </div>
-    );
-  
+    ); 
 }
 
 export default PlayerList;
