@@ -17,6 +17,8 @@ import random
 
 
 c = threading.Condition()
+numberOfTrendsAPICalls = 0
+numberOfTrendsAPISuccesses = 0
 
 
 class Game:
@@ -101,7 +103,10 @@ class Game:
     # Once all players have submitted a word, submit to the Trends API and update scores accordingly 
     #TODO: If a player puts a word that is like 0 on PyTrends, results[word] gives a keyerror. Need to error handle that.
     def evaluateSubmissions(self):
+        global numberOfTrendsAPICalls
+        global numberOfTrendsAPISuccesses
         #right now, the command returns the "max" search value of the input words
+        numberOfTrendsAPICalls += 1
         try:
             results = self.connector.get_word_results(self.wordSubmissions.values()).max()
             for player, submission in self.wordSubmissions.items():
@@ -111,6 +116,7 @@ class Game:
                     player.bestWord = submission
                 player.score = self.scores[player] # redundant, eventually we should switch over to exclusively using the score field rather than the map
                 self.pointsForTheirWord[player] = results[submission]
+            numberOfTrendsAPISuccesses += 1
         except: #if 429 error, everyone gets nothing
             warnings.warn(colored('429 error, turn effectively being skipped. Everyone gets random amount.', 'yellow'))
             for player, submission in self.wordSubmissions.items():
@@ -145,6 +151,7 @@ class Game:
         #TODO: set 10 sec countdown before next turn starts. Since we don't have a timer yet, just go to next turn immediately
         #if 10 sec timer is done
         self.prepareNextRound()
+        warnings.warn(colored(f'Current API Success Rate: {numberOfTrendsAPISuccesses / numberOfTrendsAPICalls}', 'green'))
 
     def prepareNextRound(self):
 
