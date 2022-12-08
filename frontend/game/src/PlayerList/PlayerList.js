@@ -29,7 +29,6 @@ function PlayerList(props) {
         console.log(message);
         switch (message.msgType) {
           case "LOBBY_STATE":
-            console.log("on lobby state");
             setPlayers(message.msgData.players);
             break;
             case "GAME_STARTED":

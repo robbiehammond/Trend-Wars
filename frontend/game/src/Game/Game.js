@@ -21,7 +21,7 @@ function Game(props) {
   const [pointIncrease, setPointIncrease] = useState(0);
   const [yourId] = useState(location.state.yourId);
   const [showPointInc, setShowPointInc] = useState(false);
-  const [checked, setChecked] = React.useState(false);
+  const [lastTurnNum, setLastTurnNum] = React.useState(1);
   const containerRef = React.useRef(null);
 
   function submitWordMsg() {
@@ -37,14 +37,18 @@ function Game(props) {
         switch (message.msgType) {
           case "LOBBY_STATE":
             let wordInput = document.getElementById('word-input');
-            if(message.msgData.startingWord !== wordThisTurn){
+            let passedTurnNum = message.msgData.turnNumber;
+            if(passedTurnNum > lastTurnNum){
               setLastPhrase(wordThisTurn + ' + ' + userWord);
               wordInput.value='';
               let players = message.msgData.players;
               let you = players.filter((p)=> p.id === yourId)[0];
               setPointIncrease(you.pointInc);
               setShowPointInc(true);
-              setChecked(true);
+              setLastTurnNum(passedTurnNum);
+            }
+            else{
+              setShowPointInc(false);
             }
             setWordThisTurn(message.msgData.startingWord);
             setDuplicateWordSubmitted(false);
@@ -61,10 +65,12 @@ function Game(props) {
   
     return (
       <div className="Game">
-          <Fade in={showPointInc} container={containerRef.current}>
-            {<div className="pointInc" style={{color:"#8FBB90"}}>{`+${pointIncrease} pts for ${lastPhrase}`}</div>}
-          </Fade>
-        <div className="word-container" ref={containerRef}>
+        <div className="pointIncrease" ref={containerRef} style={{ overflow: 'hidden' }}>
+          <Slide in={showPointInc} direction="up" container={containerRef.current}>
+              {<div className="pointInc" style={{color:"#8FBB90"}}>{`+${pointIncrease} pts for ${lastPhrase}`}</div>}
+            </Slide>
+        </div>
+        <div className="word-container">
           <span className="word">{wordThisTurn}</span>{" "}
           <span className="word"> +</span>
           <Input
