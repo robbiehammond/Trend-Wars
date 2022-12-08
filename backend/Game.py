@@ -68,13 +68,14 @@ class Game:
 
     # clear previous submissions and generate new starting word at the beginning of each turn
     def startNewTurn(self):
-
         for player in self.players:
             player.guessedWord = None
         self.turn += 1
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
         self.wordSubmissions = {}
+        #self.lobby.newRound = False
+
         # certainly will need more logic here
 
 
@@ -94,6 +95,7 @@ class Game:
                 return -2
         self.wordSubmissions[player] = submission
         player.guessedWord = submission
+
         return 1
         
 
@@ -112,7 +114,6 @@ class Game:
             self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
         except: #if 429 error, everyone gets nothing
             warnings.warn('429 error, turn effectively being skipped', 'yellow')
-        self.lobby.newRound = False
         self.endTurn()
 
     # After all players have submitted their words and they've been submitted to the Trends API, alert those in the lobby on how everyone did
@@ -132,7 +133,6 @@ class Game:
         for player in self.players:
             self.readyForNextTurn[player.id] = False
         
-
         #TODO: set 10 sec countdown before next turn starts. Since we don't have a timer yet, just go to next turn immediately
         #if 10 sec timer is done
         self.prepareNextRound()

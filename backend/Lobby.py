@@ -60,14 +60,14 @@ class Lobby:
             case "TIME_OVER":
                 if self.newRound == False:
                     self.game.endTurn()
-                    self.newRound = True
+                self.newRound == True
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
             # Basically, it means we don't need to do anything with the message, so just drop it.
             case "URL": 
                 pass
             case _:
                 raise Exception(f'Invalid message type. A type of {msgType} was received by lobby {self.id}, but no corresponding function exists')
-    
+
     def endGame(self):
         self.game = None
         self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_ENDED, {}))
