@@ -74,7 +74,7 @@ class Game:
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
         self.wordSubmissions = {}
-        #self.lobby.newRound = False
+        
 
         # certainly will need more logic here
 
@@ -133,6 +133,7 @@ class Game:
         for player in self.players:
             self.readyForNextTurn[player.id] = False
         
+        self.lobby.newRound = True
         #TODO: set 10 sec countdown before next turn starts. Since we don't have a timer yet, just go to next turn immediately
         #if 10 sec timer is done
         self.prepareNextRound()
@@ -142,6 +143,7 @@ class Game:
         if (self.gameShouldEnd()):
             self.endGame()
         else:
+            self.lobby.newRound = False
             self.startNewTurn()
             self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.LOBBY_STATE, self.lobby.getLobbyState()))
 
@@ -163,6 +165,7 @@ class Game:
             self.startNewTurn()
 
     def allReadyForNextTurn(self):
+        self.lobby.newTurn = False
         for player, status in self.readyForNextTurn.items():
             if not status:
                 return False

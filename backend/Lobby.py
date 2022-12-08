@@ -17,6 +17,7 @@ class Lobby:
         self.sockets = {} # retrieve a socket from a player id 
         self.CM = CM
         self.newRound = False
+        self.count = 0
 
     # Works the same way as the socketio.on('message') function in main.py
     # Takes a message from a player and handles it accordingly
@@ -58,9 +59,10 @@ class Lobby:
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
             
             case "TIME_OVER":
-                if self.newRound == False:
+                self.count = self.count + 1
+                if self.count >= 14:
                     self.game.endTurn()
-                self.newRound == True
+                    self.count = 0
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
             # Basically, it means we don't need to do anything with the message, so just drop it.
             case "URL": 
