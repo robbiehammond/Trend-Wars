@@ -10,10 +10,14 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {ws} from "../socketConfig.js";
 import Message from "../Message/Message";
 import { useLocation } from "react-router-dom";
+import LooksOneRoundedIcon from '@mui/icons-material/LooksOneRounded';
+import LooksTwoRoundedIcon from '@mui/icons-material/LooksTwoRounded';
+import Looks3RoundedIcon from '@mui/icons-material/Looks3Rounded';
 
 function PlayerList(props) {
   const location = useLocation();
   const [yourId] = useState(location.state? location.state.yourId : props.yourId);
+  const [isOnResults] = useState(props.isOnResults);
   const [isOnHomepage] = useState(props.isOnHomepage);
   const [players, setPlayers] = useState(location.state? location.state.players : props.players);
   const [hasGameStarted, setGameStarted] = useState(false);
@@ -25,7 +29,6 @@ function PlayerList(props) {
         console.log(message);
         switch (message.msgType) {
           case "LOBBY_STATE":
-            console.log("on lobby state");
             setPlayers(message.msgData.players);
             break;
             case "GAME_STARTED":
@@ -49,10 +52,15 @@ function PlayerList(props) {
       }}>
         { isOnHomepage ? '' : <h2>Player List</h2> }
         <List dense>
-          {players.sort((a,b)=> (b.score - a.score)).map((player) => {
+          {players.sort((a,b)=> (b.score - a.score)).map((player, index) => {
             const labelId = `checkbox-list-secondary-label-${player}`;
             return (
               <ListItem key={player.id} disablePadding>
+                { !hasGameStarted ? '' : index > 2 ? <LooksOneRoundedIcon sx={{visibility: "hidden"}}></LooksOneRoundedIcon> 
+                : (index === 2 ? <Looks3RoundedIcon></Looks3RoundedIcon> 
+                : (index === 1 ? <LooksTwoRoundedIcon></LooksTwoRoundedIcon> 
+                : <LooksOneRoundedIcon></LooksOneRoundedIcon>))
+                }
                 <ListItemButton>
                   <ListItemAvatar>
                     <BigHead
@@ -106,8 +114,7 @@ function PlayerList(props) {
           })}
         </List>
       </div>
-    );
-  
+    ); 
 }
 
 export default PlayerList;

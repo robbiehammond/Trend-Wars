@@ -1,5 +1,5 @@
 import "./Game.css";
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import Message from "../Message/Message";
@@ -8,30 +8,31 @@ import {ws} from "../socketConfig.js";
 import { Alert } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
+import Fade from '@mui/material/Fade';
+import { useLocation } from "react-router-dom";
 
-class Game extends React.Component {
-  constructor(props) {
-    super(props);
-    this.submitWordMsg = this.submitWordMsg.bind(this);
-    this.finishTurnTimer = this.finishTurnTimer.bind(this);
-    this.state = {
-      wordThisTurn: this.props.startingWord,
-      userWord: "",
-      duplicateWordSubmitted: false,
-      lastWord: ''
-    };
-  }
+function Game(props) {
+  const location = useLocation();
+  const [wordThisTurn, setWordThisTurn] = useState(props.startingWord);
+  const [userWord, setUserWord] = useState('');
+  const [duplicateWordSubmitted, setDuplicateWordSubmitted] = useState(false);
+  const [lastPhrase, setLastPhrase] = useState('');
+  const [pointIncrease, setPointIncrease] = useState(0);
+  const [yourId] = useState(location.state.yourId);
+  const [showPointInc, setShowPointInc] = useState(false);
+  const [lastTurnNum, setLastTurnNum] = React.useState(1);
+  const containerRef = React.useRef(null);
 
-  submitWordMsg() {
-    let userWord = this.state.userWord;
+  function submitWordMsg() {
     const msg = new Message(MessageType.SUBMIT_WORD, {
       data: "meme",
-      word: userWord
+      word: userWord.trim()
     });
     ws.emit("message", msg.toJSON());
   }
 
-  startTurnTimer() {
+  function startTurnTimer() {
     const msg = new Message(MessageType.TIME_OVER, {
       data: "",
     });
@@ -39,52 +40,57 @@ class Game extends React.Component {
 
   }
 
-  finishTurnTimer() {
+  function finishTurnTimer() {
     const msg = new Message(MessageType.TIME_OVER, {
     });
     ws.emit("message", msg.toJSON());
   }
 
-
-  handleChange = (e) =>
-    this.setState({
-      userWord: e.target.value,
-    });
-
-  render() {
+ 
     ws.on("message", function(json) {
         let message = Message.fromJSON(json);
         switch (message.msgType) {
           case "LOBBY_STATE":
             let wordInput = document.getElementById('word-input');
-            if(message.msgData.startingWord !== this.state.wordThisTurn){
-              wordInput.value=''; 
+            let passedTurnNum = message.msgData.turnNumber;
+            if(passedTurnNum > lastTurnNum){
+              setLastPhrase(wordThisTurn + ' + ' + userWord);
+              wordInput.value='';
+              let players = message.msgData.players;
+              let you = players.filter((p)=> p.id === yourId)[0];
+              setPointIncrease(you.pointInc);
+              setShowPointInc(true);
+              setLastTurnNum(passedTurnNum);
               setTimeout(this.finishTurnTimer, 10000);
-              //this.finishTurnTimer()
             }
-            this.setState({
-              wordThisTurn: message.msgData.startingWord,
-              duplicateWordSubmitted: false
-            });
+            else{
+              setShowPointInc(false);
+            }
+            setWordThisTurn(message.msgData.startingWord);
+            setDuplicateWordSubmitted(false);
             break;
           case "DUPLICATE_WORD":
-            this.setState({
-              duplicateWordSubmitted: true
-            })
+            setDuplicateWordSubmitted(true);
             break;
           default:
             break;
         }
-      }.bind(this)
+      }
     )
-    let warning = null;
+    //let warning = null;
+  
     return (
       <div className="Game">
+        <div className="pointIncrease" ref={containerRef} style={{ overflow: 'hidden' }}>
+          <Slide in={showPointInc} direction="up" container={containerRef.current}>
+              {<div className="pointInc" style={{color:"#8FBB90"}}>{`+${pointIncrease} pts for ${lastPhrase}`}</div>}
+            </Slide>
+        </div>
         <div className="word-container">
-          <span className="word">{this.state.wordThisTurn}</span>{" "}
+          <span className="word">{wordThisTurn}</span>{" "}
           <span className="word"> +</span>
           <Input
-            onChange={this.handleChange}
+            onChange={(e) => {setUserWord(e.target.value)}}
             autoFocus
             sx={{
               color: "white",
@@ -101,19 +107,17 @@ class Game extends React.Component {
           className="Button"
           variant="contained"
           sx={{ backgroundColor: "#8FBB90", border: "none" }}
-          onClick={this.submitWordMsg}
+          onClick={submitWordMsg}
         >
           Submit Word
         </Button>
-        {this.state.duplicateWordSubmitted ? (<Alert
+        {duplicateWordSubmitted ? (<Alert
           action={
             <IconButton
               aria-label="close"
               color="inherit"
               size="small"
-              onClick={() => {
-                this.setState({duplicateWordSubmitted: false });
-              }}
+              onClick={setDuplicateWordSubmitted(false)}
             >
               <CloseIcon fontSize="inherit" />
             </IconButton>
@@ -124,7 +128,6 @@ class Game extends React.Component {
         </Alert>) : ''}
       </div>
     );
-  }
 }
 
 export default Game;

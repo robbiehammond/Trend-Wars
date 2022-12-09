@@ -12,6 +12,10 @@
   width: 100vw;
 }
 
+.pointInc {
+  font-size: 3rem !important;
+}
+
 .word {
   font-size: 5rem !important;
   font-weight: bold !important;
@@ -23,6 +27,6 @@
 }
 
 .word-container {
-  margin-top: 10%;
+  margin-top: 5%;
   margin-bottom: 15px;
 }

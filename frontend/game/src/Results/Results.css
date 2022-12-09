@@ -1,0 +1,28 @@
+.results {
+    padding: 25px 25px 25px 25px;
+    background-color: #908fbb;
+    border-radius: 8px;
+    height: fit-content;
+    width: fit-content;
+    text-align: center;
+  }
+  
+  .results h2 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .GameResults-div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .MuiListItemText-primary {
+    font-size: 1.5rem;
+  }
+
+  .break {
+    width: 100%;
+  }
