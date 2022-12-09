@@ -25,6 +25,7 @@ function Game(props) {
   const containerRef = React.useRef(null);
 
   function submitWordMsg() {
+    setShowPointInc(false);
     const msg = new Message(MessageType.SUBMIT_WORD, {
       data: "meme",
       word: userWord.trim()
@@ -46,9 +47,6 @@ function Game(props) {
               setPointIncrease(you.pointInc);
               setShowPointInc(true);
               setLastTurnNum(passedTurnNum);
-            }
-            else{
-              setShowPointInc(false);
             }
             setWordThisTurn(message.msgData.startingWord);
             setDuplicateWordSubmitted(false);
@@ -95,21 +93,9 @@ function Game(props) {
         >
           Submit Word
         </Button>
-        {duplicateWordSubmitted ? (<Alert
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={setDuplicateWordSubmitted(false)}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-          sx={{ mb: 2, width: '200px' }}
-        >
+        {duplicateWordSubmitted ? <p>
          This word has already been submitted by someone else!
-        </Alert>) : ''}
+        </p> : ''}
       </div>
     );
 }
