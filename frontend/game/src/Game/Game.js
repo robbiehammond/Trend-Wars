@@ -32,14 +32,6 @@ function Game(props) {
     ws.emit("message", msg.toJSON());
   }
 
-  function startTurnTimer() {
-    const msg = new Message(MessageType.TIME_OVER, {
-      data: "",
-    });
-    ws.emit("message", msg.toJSON());
-
-  }
-
   function finishTurnTimer() {
     const msg = new Message(MessageType.TIME_OVER, {
     });
@@ -61,7 +53,7 @@ function Game(props) {
               setPointIncrease(you.pointInc);
               setShowPointInc(true);
               setLastTurnNum(passedTurnNum);
-              setTimeout(this.finishTurnTimer, 10000);
+              setTimeout(finishTurnTimer(), 10000);
             }
             else{
               setShowPointInc(false);

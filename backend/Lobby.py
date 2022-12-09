@@ -59,10 +59,12 @@ class Lobby:
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
             
             case "TIME_OVER":
+                if self.count == 0:
+                    self.game.endTurn()
                 self.count = self.count + 1
                 if self.count >= 14:
                     self.game.endTurn()
-                    self.count = 0
+                    self.count = 1
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
             # Basically, it means we don't need to do anything with the message, so just drop it.
             case "URL": 
