@@ -80,6 +80,7 @@ class Game:
         self.wordSubmissions = {}
         self.lobby.count = 0
 
+
         # certainly will need more logic here
 
 
@@ -131,6 +132,7 @@ class Game:
                     player.bestWord = submission
                 player.score = self.scores[player]
         self.playerRank = {key: rank for rank, key in enumerate(sorted(self.scores, key=self.scores.get, reverse=True), 1)}
+        self.turnActive = True
         self.endTurn()
 
     # After all players have submitted their words and they've been submitted to the Trends API, alert those in the lobby on how everyone did

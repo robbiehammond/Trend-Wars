@@ -38,10 +38,10 @@ class Lobby:
                     first_word = self.game.curWord
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {"firstStartingWord": first_word}))
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
-                    if self.count < 1:
-                        self.count = self.count + 1
-                        time.sleep(11)
-                        self.game.endTurn()
+                    
+                    time.sleep(11)
+                    self.game.evaluateSubmissions()
+                    
                 else:
                     self.CM.send_to_player(player, Message(MessageType.GAME_CANNOT_START, {}))
 
@@ -71,7 +71,6 @@ class Lobby:
                     self.count = self.count + 1
                     time.sleep(11)
                     self.game.endTurn()
-
 
 
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
