@@ -32,13 +32,24 @@ function Game(props) {
     });
     ws.emit("message", msg.toJSON());
   }
-  
+
+  function finishTurnTimer() {
+    const msg = new Message(MessageType.TIME_OVER, {
+    });
+    ws.emit("message", msg.toJSON());
+  }
+
+ 
     ws.on("message", function(json) {
         let message = Message.fromJSON(json);
         switch (message.msgType) {
           case "LOBBY_STATE":
             let wordInput = document.getElementById('word-input');
             let passedTurnNum = message.msgData.turnNumber;
+            console.log(message.msgData);
+            if(wordThisTurn !== message.msgData.startingWord) {
+              finishTurnTimer();
+            }
             if(passedTurnNum > lastTurnNum){
               setLastPhrase(wordThisTurn + ' + ' + userWord);
               wordInput.value='';

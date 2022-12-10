@@ -27,7 +27,7 @@ class Lobby extends React.Component {
     const msg = new Message(MessageType.URL, { data: window.location.href });
     ws.emit("message", msg.toJSON());
   }
-
+  
   render() {
     ws.on(
       "message",

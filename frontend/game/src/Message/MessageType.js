@@ -10,6 +10,7 @@ let MessageType = {
   URL: "URL",
   LOBBY_DOESNT_EXIST: "LOBBY_DOESNT_EXIST",
   LOBBY_CLOSING: "LOBBY_CLOSING",
+  TIME_OVER: "TIME_OVER",
   RANDOMIZE_BIGHEAD: "RANDOMIZE_BIGHEAD"
   //insert more types as needed, make sure one exists on backend too
 };
