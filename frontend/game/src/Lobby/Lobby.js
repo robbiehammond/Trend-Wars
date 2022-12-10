@@ -28,14 +28,6 @@ class Lobby extends React.Component {
     ws.emit("message", msg.toJSON());
   }
   
-  finishTurnTimer() {
-    const msg = new Message(MessageType.TIME_OVER, {
-    });
-    console.log("here");
-    ws.emit("message", msg.toJSON());
-  }
-
-
   render() {
     ws.on(
       "message",
@@ -49,7 +41,6 @@ class Lobby extends React.Component {
               hasGameStarted: true,
               firstStartingWord: message.msgData["firstStartingWord"]
             });
-            setTimeout(this.finishTurnTimer(), 10000);
             break;
           case "LOBBY_DOESNT_EXIST":
             this.setState({

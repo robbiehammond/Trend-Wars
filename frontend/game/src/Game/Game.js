@@ -45,6 +45,11 @@ function Game(props) {
           case "LOBBY_STATE":
             let wordInput = document.getElementById('word-input');
             let passedTurnNum = message.msgData.turnNumber;
+            console.log(message.msgData);
+            if(wordThisTurn !== message.msgData.startingWord) {
+              //setTimeout(finishTurnTimer(), 10000);
+              finishTurnTimer();
+            }
             if(passedTurnNum > lastTurnNum){
               setLastPhrase(wordThisTurn + ' + ' + userWord);
               wordInput.value='';
@@ -53,7 +58,7 @@ function Game(props) {
               setPointIncrease(you.pointInc);
               setShowPointInc(true);
               setLastTurnNum(passedTurnNum);
-              setTimeout(finishTurnTimer(), 10000);
+              //setTimeout(finishTurnTimer(), 10000);
             }
             else{
               setShowPointInc(false);

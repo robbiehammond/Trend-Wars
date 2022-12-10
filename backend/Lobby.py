@@ -1,23 +1,27 @@
 import random
 import string
-from Game import Game 
+from Game import Game
 from Player import Player
 from Handlers import *
 from ConnectionManager import ConnectionManager
 from Message import Message, MessageType
 from termcolor import colored
 import warnings
+import schedule
+import time
+
 
 class Lobby:
     def __init__(self, id, CM: ConnectionManager):
         self.game = None
         self.id = id
         self.playerIDs = set() # set of player IDs in this lobby (so we don't need to loop over players list to see who's here)
-        self.players = [] 
-        self.sockets = {} # retrieve a socket from a player id 
+        self.players = []
+        self.sockets = {} # retrieve a socket from a player id
         self.CM = CM
         self.newRound = False
         self.count = 0
+        self.duplicate = 0
 
     # Works the same way as the socketio.on('message') function in main.py
     # Takes a message from a player and handles it accordingly
@@ -34,6 +38,10 @@ class Lobby:
                     first_word = self.game.curWord
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {"firstStartingWord": first_word}))
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
+                    if self.count < 1:
+                        self.count = self.count + 1
+                        time.sleep(11)
+                        self.game.endTurn()
                 else:
                     self.CM.send_to_player(player, Message(MessageType.GAME_CANNOT_START, {}))
 
@@ -49,7 +57,7 @@ class Lobby:
                     elif retCode == -2:
                         self.CM.send_to_player(player, Message(MessageType.DUPLICATE_WORD, {}))
 
-                    # retcode == 1 means the submission was processed just fine 
+                    # retcode == 1 means the submission was processed just fine
                     else:
                         self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
                         if self.game.everyoneHasSubmitted():
@@ -57,17 +65,18 @@ class Lobby:
                         self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                 else: # if there is no game and a word was submitted somehow
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
-            
+
             case "TIME_OVER":
-                if self.count == 0:
+                if self.count < 1:
+                    self.count = self.count + 1
+                    time.sleep(11)
                     self.game.endTurn()
-                self.count = self.count + 1
-                if self.count >= 14:
-                    self.game.endTurn()
-                    self.count = 1
+
+
+
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
             # Basically, it means we don't need to do anything with the message, so just drop it.
-            case "URL": 
+            case "URL":
                 pass
             case "USERNAME":
                 player.username = message.msgData['data']
@@ -84,7 +93,7 @@ class Lobby:
         self.CM.send_to_all_in_lobby(self.id, Message(MessageType.RESULTS, {"scores": self.game.scores}))
         # Maybe start 30 to 60 sec timer for people to view scores, and then everyone gets kicked out afterwards?
 
-    # should be called after the timer expires so players get kicked out of the lobby and it can be closed 
+    # should be called after the timer expires so players get kicked out of the lobby and it can be closed
     def kickOutPlayers(self):
         self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_CLOSING, {}))
 
@@ -131,13 +140,13 @@ class LobbyIDGenerator:
 
     def reset(self):
         self.IDsInUse = []
-    
+
     def removeID(self, id):
         self.IDsInUse.remove(id)
 
     def generateNewID(self):
         # looks ugly, but it just generates a random string of 6 uppercase letters: that'll be the lobby's ID
-        newID = ''.join(random.choice(string.ascii_uppercase) for _ in range(6)) 
+        newID = ''.join(random.choice(string.ascii_uppercase) for _ in range(6))
 
         # recursively try again if generated ID is already in use
         # if we ever need more than 26^6 lobbies, we'll certainly have to change this

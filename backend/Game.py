@@ -34,6 +34,7 @@ class Game:
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
         self.turnActive = False
+        self.turnStart = False
 
         #dictionary to hold the ranks of each player
         self.playerRank = {}
@@ -77,7 +78,7 @@ class Game:
         self.curWord = self.generateStartingWord()
         self.pointsForTheirWord = {}
         self.wordSubmissions = {}
-        
+        self.lobby.count = 0
 
         # certainly will need more logic here
 
@@ -148,19 +149,16 @@ class Game:
     def endTurn(self):
         for player in self.players:
             self.readyForNextTurn[player.id] = False
-        
-        self.lobby.newRound = True
+            
         #TODO: set 10 sec countdown before next turn starts. Since we don't have a timer yet, just go to next turn immediately
         #if 10 sec timer is done
         self.prepareNextRound()
         warnings.warn(colored(f'Current API Success Rate: {numberOfTrendsAPISuccesses / numberOfTrendsAPICalls}', 'green'))
 
     def prepareNextRound(self):
-
         if (self.gameShouldEnd()):
             self.endGame()
         else:
-            self.lobby.newRound = False
             self.startNewTurn()
             self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.LOBBY_STATE, self.lobby.getLobbyState()))
 
@@ -205,7 +203,7 @@ class Timer_Thread(threading.Thread):
 
     def run(self):
         global timer
-        global turnActive
+        turnActive = False
         while True:
             c.acquire
             if turnActive == True:
