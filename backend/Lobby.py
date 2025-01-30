@@ -7,7 +7,6 @@ from ConnectionManager import ConnectionManager
 from Message import Message, MessageType
 from termcolor import colored
 import warnings
-import schedule
 import time
 
 
