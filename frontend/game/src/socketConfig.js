@@ -2,10 +2,10 @@ import openSocket from 'socket.io-client';
 export let server_location = null;
 if (process.env.REACT_APP_LOCAL !== undefined) {
     console.log("Will be connecting to local server.")
-    server_location = "http://localhost:8080"
+    server_location = "http://localhost:8000"
 }
 else {
-    console.log("Will be connecting to AWS server.")
-    server_location = "http://3.143.255.96:8080"
+    console.log("Will be connecting to AWS Fargate Backend.")
+    server_location = "http://trendw-trend-bjmoko6honyb-310907839.us-west-2.elb.amazonaws.com/"
 }
 export const ws = openSocket(server_location);
