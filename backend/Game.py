@@ -109,6 +109,7 @@ class Game:
     def evaluateSubmissions(self):
         global numberOfTrendsAPICalls
         global numberOfTrendsAPISuccesses
+        self.connector = google_connector(connect_region = 'en-US', search_region = 'US', timeframe = 'today 12-m', gprop = '')
         #right now, the command returns the "max" search value of the input words
         numberOfTrendsAPICalls += 1
         try:
@@ -121,7 +122,8 @@ class Game:
                 player.score = self.scores[player] # redundant, eventually we should switch over to exclusively using the score field rather than the map
                 self.pointsForTheirWord[player] = results[submission]
             numberOfTrendsAPISuccesses += 1
-        except: #if 429 error, everyone gets nothing
+        except Exception as e: #if 429 error, everyone gets nothing
+            print(e)
             warnings.warn(colored('429 error, turn effectively being skipped. Everyone gets random amount.', 'yellow'))
             for player, submission in self.wordSubmissions.items():
                 randomAmount = random.randint(0, 100)
@@ -194,48 +196,3 @@ class Game:
 
     def __str__(self):
         return f'Game: Current Turn: {self.turn}, current starting word: {self.curWord}, current scores: {self.scores}'
-
-
-class Timer_Thread(threading.Thread):
-
-    def __init__(self, name):
-        threading.Thread.__init__(self)
-        self.name = name
-        self.turnOngoing = False
-
-    def run(self):
-        global timer
-        turnActive = False
-        while True:
-            c.acquire
-            if turnActive == True:
-                timer = 10
-                self.turnTimer()
-                c.notify_all()
-            else:
-                c.wait()
-            c.release()
-    
-    def turnTimer(self):
-        c = 0
-        while c < 10:
-            time.sleep(1)
-            c += 1
-            if c == 10:
-                print(c)
-        self.turnOngoing = True
-
-    def newTurn(self):
-        if self.turnOngoing == True:
-            return True
-
-def timer():
-        c = 0
-        while c < 10:
-            time.sleep(1)
-            c += 1
-            if c == 10:
-                print(c)
-   
-
-        

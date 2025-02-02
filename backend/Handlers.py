@@ -4,6 +4,7 @@ from Message import MessageType, Message
 import ConnectionManager
 import warnings
 from termcolor import colored
+
 warnings.simplefilter('always', UserWarning)
 
 def handleUsernameMsg(player: Player, username: str, CM: ConnectionManager):

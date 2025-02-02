@@ -18,8 +18,8 @@ class google_connector:
 
     #this method generates a dataframe containing the results for the word list. 
     def get_word_results(self, word_list):
-    
         result_df = self.pytrends.build_payload(word_list, cat = self.category, timeframe = self.timeframe, geo = self.search_region)
+        print(result_df)
         result_df = self.pytrends.interest_over_time()
         return result_df
 

@@ -1,12 +1,9 @@
-from cgi import test
-from pydoc import plain
 import warnings
-from flask import Flask, request, jsonify
+from flask import Flask, request 
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 from Message import Message, MessageType
 from Handlers import * 
-from Player import Player 
 from Lobby import LobbyIDGenerator
 from ConnectionManager import ConnectionManager
 from termcolor import colored
@@ -63,6 +60,7 @@ def onMessage(msg):
 
 
     msgType = decodedMessage.msgType
+    print(type(msgType))
     # Most messages will be interpreted by the player's corresponding lobby and are routed there 
     # However, some must be interpreted before a player is in any lobby
     # for each new message type we make, add a new case here for how to handle it + associated handler function
@@ -102,7 +100,7 @@ def health_check():
     return "OK", 200
 
 def main():
-    socketio.run(app, host='0.0.0.0', port='8000', allow_unsafe_werkzeug=True)
+    socketio.run(app, host='0.0.0.0', port=8000, allow_unsafe_werkzeug=True)
 
 if __name__ == '__main__':
     main()

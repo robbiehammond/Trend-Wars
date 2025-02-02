@@ -38,8 +38,7 @@ class Lobby:
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_STARTED, {"firstStartingWord": first_word}))
                     self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                     
-                    time.sleep(11)
-                    self.game.evaluateSubmissions()
+                    # self.game.evaluateSubmissions()
                     
                 else:
                     self.CM.send_to_player(player, Message(MessageType.GAME_CANNOT_START, {}))
@@ -65,12 +64,6 @@ class Lobby:
                 else: # if there is no game and a word was submitted somehow
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
 
-            case "TIME_OVER":
-                if self.count < 1:
-                    self.count = self.count + 1
-                    time.sleep(11)
-                    self.game.endTurn()
-
 
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
             # Basically, it means we don't need to do anything with the message, so just drop it.
@@ -86,10 +79,14 @@ class Lobby:
                 raise Exception(f'Invalid message type. A type of {msgType} was received by lobby {self.id}, but no corresponding function exists')
 
     def endGame(self):
-        self.game = None
-        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_ENDED, {}))
-        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.RESULTS, {"scores": self.game.scores}))
-        # Maybe start 30 to 60 sec timer for people to view scores, and then everyone gets kicked out afterwards?
+        if self.game is not None:
+            scores = self.game.scores  # save scores
+            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_ENDED, {}))
+            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.RESULTS, {"scores": scores}))
+            self.game = None
+        else:
+            warnings.warn(colored("endGame called when no game exists.", "yellow"))
+
 
     # should be called after the timer expires so players get kicked out of the lobby and it can be closed
     def kickOutPlayers(self):
