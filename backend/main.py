@@ -96,8 +96,13 @@ def onMessage(msg):
         case _:
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
             
+# For ELB health check.
+@app.route("/health")
+def health_check():
+    return "OK", 200
+
 def main():
-    socketio.run(app, host='0.0.0.0', port='8080', allow_unsafe_werkzeug=True)
+    socketio.run(app, host='0.0.0.0', port='8000', allow_unsafe_werkzeug=True)
 
 if __name__ == '__main__':
     main()
