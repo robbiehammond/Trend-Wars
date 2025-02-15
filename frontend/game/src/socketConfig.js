@@ -6,6 +6,6 @@ if (process.env.REACT_APP_LOCAL !== undefined) {
 }
 else {
     console.log("Will be connecting to AWS Fargate Backend.")
-    server_location = "http://trendw-trend-bjmoko6honyb-310907839.us-west-2.elb.amazonaws.com/"
+    server_location = "http://54.202.246.61:8000/"
 }
 export const ws = openSocket(server_location);

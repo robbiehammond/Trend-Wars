@@ -47,9 +47,6 @@ function Game(props) {
             let wordInput = document.getElementById('word-input');
             let passedTurnNum = message.msgData.turnNumber;
             console.log(message.msgData);
-            if(wordThisTurn !== message.msgData.startingWord) {
-              finishTurnTimer();
-            }
             if(passedTurnNum > lastTurnNum){
               setLastPhrase(wordThisTurn + ' + ' + userWord);
               wordInput.value='';

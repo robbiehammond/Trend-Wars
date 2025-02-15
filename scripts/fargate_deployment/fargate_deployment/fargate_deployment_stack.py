@@ -1,45 +1,61 @@
-
 import aws_cdk as cdk
 from constructs import Construct
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_ecr as ecr,
-    aws_ecs_patterns as ecs_patterns,
 )
 
 class TrendWarsStack(cdk.Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # Farget needs a VPC I guess
-        vpc = ec2.Vpc(self, "TrendWarsVPC", max_azs=2)
+        # Only public subnets (no NAT, no VPC endpoints)
+        vpc = ec2.Vpc(self, "TrendWarsVPC",
+            cidr="10.10.0.0/16",
+            max_azs=2,
+            subnet_configuration=[
+                ec2.SubnetConfiguration(
+                    name="public",
+                    subnet_type=ec2.SubnetType.PUBLIC,
+                    cidr_mask=24
+                )
+            ]
+        )
 
-        # ECS cluster to run container
         cluster = ecs.Cluster(self, "TrendWarsCluster", vpc=vpc)
 
-        # ECR Repository for storing Docker images (must already exist)
         repository_name = "trend-wars-backend"
         repository = ecr.Repository.from_repository_name(self, "TrendWarsRepository", repository_name)
 
+        task_definition = ecs.FargateTaskDefinition(self, "TaskDef",
+            memory_limit_mib=512,
+            cpu=256,
+        )
 
-        ecs_service = ecs_patterns.ApplicationLoadBalancedFargateService(
-            self, "TrendWarsFargateService",
+        container = task_definition.add_container("TrendWarsContainer",
+            image=ecs.ContainerImage.from_ecr_repository(repository),
+            logging=ecs.LogDrivers.aws_logs(stream_prefix="TrendWars")
+        )
+        container.add_port_mappings(
+            ecs.PortMapping(container_port=8000)
+        )
+
+        # allow inbound traffic on port 8000
+        service_sg = ec2.SecurityGroup(self, "TrendWarsSecurityGroup",
+            vpc=vpc,
+            description="Allow inbound HTTP traffic on port 8000",
+            allow_all_outbound=True
+        )
+        service_sg.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(8000), "Allow inbound traffic on port 8000")
+
+        service = ecs.FargateService(self, "TrendWarsFargateService",
             cluster=cluster,
-            task_image_options=ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
-                image=ecs.ContainerImage.from_ecr_repository(repository),
-                container_port=8000
-            ),
-            public_load_balancer=True  
+            task_definition=task_definition,
+            desired_count=1,
+            assign_public_ip=True,  
+            security_groups=[service_sg],
+            vpc_subnets=ec2.SubnetSelection(
+                subnet_type=ec2.SubnetType.PUBLIC
+            )
         )
-
-        # Set ALB to check /health
-        ecs_service.target_group.configure_health_check(
-            path="/health",  # Make sure this matches the endpoint
-            interval=cdk.Duration.seconds(30),
-            timeout=cdk.Duration.seconds(5),
-            unhealthy_threshold_count=2,
-            healthy_threshold_count=2,
-        )
-
-        # Note that this won't auto-update on a new image push. I might do that later via an ECS task def.
