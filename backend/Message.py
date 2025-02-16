@@ -32,6 +32,9 @@ class MessageType(Enum):
     INVALID_SUBMISSION = auto()
     DUPLICATE_WORD = auto()
     PLAYER_STATE = auto()
+    TURN_TIMER_TICK = auto()
+    TURN_TIMER_EXPIRED = auto()
+
 
 
     # returns string value of json 

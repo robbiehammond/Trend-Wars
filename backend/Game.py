@@ -80,8 +80,7 @@ class Game:
         self.wordSubmissions = {}
         self.lobby.count = 0
 
-
-        # certainly will need more logic here
+        self.start_turn_timer()
 
 
     # choose a word for players to complete
@@ -192,6 +191,24 @@ class Game:
 
     def setGameOver(self):
         self.gameEnded = True 
+
+    # TODO: Confirm this functions properly if the turn advances from everyone submitting.
+    def start_turn_timer(self, duration=10):
+        def timer_task():
+            remaining_time = duration
+            while remaining_time > 0:
+                self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.TURN_TIMER_TICK, {'time_left': remaining_time}))
+                self.CM.socketio.sleep(1)  
+                remaining_time -= 1
+
+            # Not actually moving onto next turn until I test this more.
+            if not self.gameEnded:
+                warnings.warn(colored(f'Turn would have automatically moved on here.', 'green'))
+                # self.evaluateSubmissions()
+                self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.TURN_TIMER_EXPIRED, {'message': 'Turn timer expired! Submissions are now closed.'}))
+                # self.prepareNextRound()
+
+        self.CM.socketio.start_background_task(target=timer_task)
 
 
     def __str__(self):

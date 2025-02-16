@@ -13,7 +13,7 @@ class Socket:
         self.socketio = socketio
 
     def emit(self, event, data):
-        emit(event, data, room=self.sid)
+        self.socketio.emit(event, data, room=self.sid)
 
     def getSocketID(self):
         return self.sid
