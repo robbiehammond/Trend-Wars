@@ -1,28 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
 
 body {
-  background-color: #30303e;
-  color: #f1f1f6;
-  text-align: center;
-  font-family: "Signika", sans-serif;
+	background-color: #30303e;
+	color: #f1f1f6;
+	text-align: center;
+	font-family: "Signika", sans-serif;
 }
 
 .App-header {
-  font-size: calc(10px + 3vmin);
-  font-weight: bold;
-  color: #908fbb;
-  text-align: center;
+	font-size: calc(10px + 3vmin);
+	font-weight: bold;
+	color: #908fbb;
+	text-align: center;
 }
 
 .App-link {
-  color: #61dafb;
+	color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }

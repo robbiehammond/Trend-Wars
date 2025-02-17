@@ -1,32 +1,32 @@
 .Lobby {
-  display: grid;
-  grid-template-columns: 75% 25%;
-  grid-gap: 1em;
+	display: grid;
+	grid-template-columns: 75% 25%;
+	grid-gap: 1em;
 }
 
 .Lobby-div {
-  text-align: center;
-  font-size: calc(10px + 2vmin);
-  color: #f1f1f6;
-  height: 100%;
-  width: 100vw;
+	text-align: center;
+	font-size: calc(10px + 2vmin);
+	color: #f1f1f6;
+	height: 100%;
+	width: 100vw;
 }
 
 .pointInc {
-  font-size: 3rem !important;
+	font-size: 3rem !important;
 }
 
 .word {
-  font-size: 5rem !important;
-  font-weight: bold !important;
-  background-color: #8fbb90;
-  border-radius: 8px;
-  margin: 20px !important;
-  color: #f1f1f6;
-  padding: 15px !important;
+	font-size: 5rem !important;
+	font-weight: bold !important;
+	background-color: #8fbb90;
+	border-radius: 8px;
+	margin: 20px !important;
+	color: #f1f1f6;
+	padding: 15px !important;
 }
 
 .word-container {
-  margin-top: 5%;
-  margin-bottom: 15px;
+	margin-top: 5%;
+	margin-bottom: 15px;
 }

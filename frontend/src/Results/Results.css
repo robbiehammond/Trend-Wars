@@ -1,28 +1,28 @@
 .results {
-    padding: 25px 25px 25px 25px;
-    background-color: #908fbb;
-    border-radius: 8px;
-    height: fit-content;
-    width: fit-content;
-    text-align: center;
-  }
-  
-  .results h2 {
-    font-size: 2rem;
-    text-align: center;
-  }
+	padding: 25px 25px 25px 25px;
+	background-color: #908fbb;
+	border-radius: 8px;
+	height: fit-content;
+	width: fit-content;
+	text-align: center;
+}
 
-  .GameResults-div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-  }
+.results h2 {
+	font-size: 2rem;
+	text-align: center;
+}
 
-  .MuiListItemText-primary {
-    font-size: 1.5rem;
-  }
+.GameResults-div {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
 
-  .break {
-    width: 100%;
-  }
+.MuiListItemText-primary {
+	font-size: 1.5rem;
+}
+
+.break {
+	width: 100%;
+}
