@@ -5,11 +5,7 @@ import Input from "@mui/material/Input";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import {ws} from "../socketConfig.js";
-import { Alert } from "@mui/material";
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import Fade from '@mui/material/Fade';
 import { useLocation } from "react-router-dom";
 
 function Game(props) {
