@@ -149,59 +149,51 @@ function Homepage() {
 							Good luck Soldier.
 						</p>
 					</Box>
-					<Box m={1} sx={{ width: "45%" }}>
-						<CssTextField
-							value={username}
-							onChange={(e) => {
-								setUsername(e.target.value);
-							}}
-							label="Username"
-							InputLabelProps={{
-								style: { color: "#8FBB90", borderColor: "#8FBB90" },
-							}}
-							sx={{ marginRight: 2, width: "45%" }}
-						></CssTextField>
-						<Button
-							sx={{ width: "50%" }}
-							className="Button"
-							variant="contained"
-							onClick={sendUsernameMessage}
-						>
-							Set Username
-						</Button>
-					</Box>
-					<Box m={1} sx={{ width: "45%" }}>
-						<CssTextField
-							sx={{ marginRight: 2, width: "45%" }}
-							value={lobbyID}
-							onChange={(e) => {
-								setLobbyID(e.target.value);
-							}}
-							label="Lobby Code"
-							color="secondary"
-							InputLabelProps={{
-								style: { color: "#8FBB90", borderColor: "#8FBB90" },
-							}}
-						></CssTextField>
-						<Button
-							sx={{ width: "50%" }}
-							className="Button"
-							variant="contained"
-							onClick={sendJoinLobbyMessage}
-						>
-							Join Lobby
-						</Button>
-					</Box>
-					<Box m={1} sx={{ width: "45%" }}>
-						<Button
-							className="Button"
-							variant="contained"
-							onClick={sendCreateLobbyMessage}
-							sx={{ width: "50%" }}
-						>
-							Create Lobby
-						</Button>
-					</Box>
+					<CssTextField
+						value={username}
+						onChange={(e) => {
+							setUsername(e.target.value);
+						}}
+						label="Username"
+						InputLabelProps={{
+							style: { color: "#8FBB90", borderColor: "#8FBB90" },
+						}}
+						FormHelperTextProps={{
+							style: { color: "#8FBB90", borderColor: "#8FBB90" },
+						}}
+						helperText="Press enter to set your username"
+						sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") sendUsernameMessage();
+						}}
+					></CssTextField>
+					<CssTextField
+						sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
+						value={lobbyID}
+						onChange={(e) => {
+							setLobbyID(e.target.value);
+						}}
+						label="Lobby Code"
+						color="secondary"
+						InputLabelProps={{
+							style: { color: "#8FBB90", borderColor: "#8FBB90" },
+						}}
+						helperText="Press enter to join the lobby"
+						FormHelperTextProps={{
+							style: { color: "#8FBB90", borderColor: "#8FBB90" },
+						}}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") sendJoinLobbyMessage();
+						}}
+					></CssTextField>
+					<Button
+						className="Button"
+						variant="contained"
+						onClick={sendCreateLobbyMessage}
+						sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
+					>
+						Create Lobby
+					</Button>
 				</header>
 			) : (
 				<CircularProgress />
@@ -211,8 +203,3 @@ function Homepage() {
 }
 
 export default Homepage;
-
-// sx={{
-//   color: "#30303E",
-//   borderColor: '#30303E !important'
-// }}
