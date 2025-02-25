@@ -1,16 +1,4 @@
-.Lobby {
-	display: grid;
-	grid-template-columns: 75% 25%;
-	grid-gap: 1em;
-}
 
-.Lobby-div {
-	text-align: center;
-	font-size: calc(10px + 2vmin);
-	color: #f1f1f6;
-	height: 100%;
-	width: 100vw;
-}
 
 .word {
 	font-size: 5rem !important;

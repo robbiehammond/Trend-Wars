@@ -60,7 +60,6 @@ function Game(props) {
 				break;
 		}
 	});
-	//let warning = null;
 
 	return (
 		<div className="Game">

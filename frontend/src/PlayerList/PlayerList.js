@@ -5,26 +5,34 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
+import { Button } from "@mui/material";
 import { BigHead } from "@bigheads/core";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { ws } from "../socketConfig.js";
 import Message from "../Message/Message";
+import MessageType from "../Message/MessageType.js";
 import { useLocation } from "react-router-dom";
 import LooksOneRoundedIcon from "@mui/icons-material/LooksOneRounded";
 import LooksTwoRoundedIcon from "@mui/icons-material/LooksTwoRounded";
 import Looks3RoundedIcon from "@mui/icons-material/Looks3Rounded";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
 
 function PlayerList(props) {
 	const location = useLocation();
 	const [yourId] = useState(
 		location.state ? location.state.yourId : props.yourId
 	);
-	const [isOnResults] = useState(props.isOnResults);
+	// const [isOnResults] = useState(props.isOnResults);
 	const [isOnHomepage] = useState(props.isOnHomepage);
 	const [players, setPlayers] = useState(
 		location.state ? location.state.players : props.players
 	);
 	const [hasGameStarted, setGameStarted] = useState(false);
+
+	function sendRandomizeMessage() {
+		const msg = new Message(MessageType.RANDOMIZE_BIGHEAD, { data: "meme" });
+		ws.emit("message", msg.toJSON());
+	}
 
 	ws.on("message", function (json) {
 		let message = Message.fromJSON(json);
@@ -51,8 +59,7 @@ function PlayerList(props) {
 				isOnHomepage
 					? { marginBottom: "25px" }
 					: {
-							float: "right",
-							marginRight: "75px",
+							marginLeft: "75px",
 							padding: "15px 10px 20px 10px",
 							marginTop: "15%",
 					  }
@@ -65,10 +72,8 @@ function PlayerList(props) {
 					.map((player, index) => {
 						const labelId = `checkbox-list-secondary-label-${player}`;
 						return (
-							<ListItem key={player.id} disablePadding>
-								{!hasGameStarted ? (
-									""
-								) : index > 2 ? (
+							<ListItem key={player.id}>
+								{!hasGameStarted ? "" : index > 2 ? (
 									<LooksOneRoundedIcon
 										sx={{ visibility: "hidden" }}
 									></LooksOneRoundedIcon>
@@ -79,56 +84,56 @@ function PlayerList(props) {
 								) : (
 									<LooksOneRoundedIcon></LooksOneRoundedIcon>
 								)}
-								<ListItemButton>
-									<ListItemAvatar>
-										<BigHead
-											accessory={player.bigHead.accessory}
-											body={player.bigHead.body}
-											circleColor={player.bigHead.circleColor}
-											clothing={player.bigHead.clothing}
-											clothingColor={player.bigHead.clothingColor}
-											eyebrows={player.bigHead.eyebrows}
-											eyes={player.bigHead.eyes}
-											facialHair={player.bigHead.facialHair}
-											graphic={player.bigHead.graphic}
-											hair={player.bigHead.hair}
-											hairColor={player.bigHead.hairColor}
-											hat={player.bigHead.hat}
-											hatColor={player.bigHead.hatColor}
-											lashes={player.bigHead.lashes}
-											lipColor={player.bigHead.lipColor}
-											mask={false}
-											faceMask={false}
-											mouth={player.bigHead.mouth}
-											skinTone={player.bigHead.skinTone}
-										/>
-									</ListItemAvatar>
-									<ListItemText
-										id={labelId}
-										sx={{
-											fontSize: "40",
-											fontWeight: "medium",
-										}}
-										primary={`${
-											player.id === yourId
-												? player.username + " (You)"
-												: player.username
-										} ${hasGameStarted ? ": " + player.score + " pts" : ""}`}
+								<ListItemAvatar>
+									<BigHead
+										accessory={player.bigHead.accessory}
+										body={player.bigHead.body}
+										circleColor={player.bigHead.circleColor}
+										clothing={player.bigHead.clothing}
+										clothingColor={player.bigHead.clothingColor}
+										eyebrows={player.bigHead.eyebrows}
+										eyes={player.bigHead.eyes}
+										facialHair={player.bigHead.facialHair}
+										graphic={player.bigHead.graphic}
+										hair={player.bigHead.hair}
+										hairColor={player.bigHead.hairColor}
+										hat={player.bigHead.hat}
+										hatColor={player.bigHead.hatColor}
+										lashes={player.bigHead.lashes}
+										lipColor={player.bigHead.lipColor}
+										mask={false}
+										faceMask={false}
+										mouth={player.bigHead.mouth}
+										skinTone={player.bigHead.skinTone}
 									/>
-									<>
-										{!hasGameStarted ? (
-											player.ready ? (
-												<CheckCircleIcon></CheckCircleIcon>
-											) : (
-												""
-											)
-										) : player.wordSubmittedThisTurn ? (
+								</ListItemAvatar>
+								<ListItemText
+									id={labelId}
+									sx={{
+										fontSize: "40",
+										fontWeight: "medium",
+									}}
+									primary={`${
+										player.id === yourId
+											? player.username + " (You)"
+											: player.username
+									} ${hasGameStarted ? ": " + player.score + " pts" : ""}`}
+								/>
+								<>
+									{!hasGameStarted ? (
+										player.ready ? (
 											<CheckCircleIcon></CheckCircleIcon>
 										) : (
-											""
-										)}
-									</>
-								</ListItemButton>
+											player.id === yourId ?
+												<AutorenewIcon sx={{ color: "white" }}
+													onClick={sendRandomizeMessage}
+												></AutorenewIcon> : ''
+										)
+									) : player.wordSubmittedThisTurn ? (
+										<CheckCircleIcon></CheckCircleIcon>
+									) : "" 
+									}
+								</>
 							</ListItem>
 						);
 					})}

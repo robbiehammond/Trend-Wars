@@ -77,9 +77,12 @@ class Lobby extends React.Component {
 			return <Results res={this.state.results} />;
 		} else {
 			return (
-				<div className="Lobby">
-					<div className="Lobby-div">{lobbyContent}</div>
-					<div className="PlayerList-div">{playerList}</div>
+				<div className="game-wrapper">
+					<div className="game-logo" >
+						<h1>TREND WARS</h1>
+					</div>
+					<div className="game-content">{lobbyContent}</div>
+					<div className="game-players">{playerList}</div>
 				</div>
 			);
 		}

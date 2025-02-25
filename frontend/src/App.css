@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
+:root{
+	--BORDER_GAP: 6px;
+}
 
 body {
 	background-color: #30303e;
@@ -7,22 +10,64 @@ body {
 	font-family: "Signika", sans-serif;
 }
 
-.App-header {
+.logo-text {
 	font-size: calc(10px + 3vmin);
 	font-weight: bold;
 	color: #908fbb;
+}
+
+.Lobby {
+	display: grid;
+	grid-template-columns: 75% 25%;
+}
+
+.game-content {
+	grid-area: canvas;
 	text-align: center;
+	font-size: calc(10px + 2vmin);
+	color: #f1f1f6;
+	height: 100%;
+	width: 100%;
+
 }
 
 .App-link {
 	color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
+.game-wrapper {
+    height: 100%;
+    font-size: var(--FONT_SIZE);
+    display: grid;
+    grid-gap: var(--BORDER_GAP);
+    gap: var(--BORDER_GAP);
+    grid-template-areas: "logo    logo   logo" "bar     bar    bar" "players canvas chat" "footer  tools  .";
+    grid-template-columns: min-content auto auto;
+    grid-template-rows: min-content var(--UNIT) min-content min-content;
+}
+
+.game-logo {
+    grid-area: logo;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 90px;
+	font-size: calc(10px + 3vmin);
+	font-weight: bold;
+	color: #908fbb;
+	padding: 1rem 2rem;
+}
+
+.game-players {
+    grid-area: players;
+    position: relative;
+    flex: 0 0 auto;
+    width: 500px;
+    border-radius: var(--BORDER_RADIUS);
+    display: flex;
+    flex-direction: column
+}
+
+.game-chat {
+	grid-area: chat;
 }

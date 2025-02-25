@@ -4,7 +4,6 @@ import { ws } from "../socketConfig.js";
 import Button from "@mui/material/Button";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
-import { Box } from "@mui/system";
 import { useState } from "react";
 import { CssTextField } from "../Homepage/Homepage";
 import { useLocation } from "react-router-dom";
@@ -37,50 +36,48 @@ function Landing() {
 	return (
 		<div className="Landing">
 			<p> Your Lobby ID is {lobbyID}</p>
-			<Box m={1} sx={{ width: "45%" }}>
-				<CssTextField
-					value={username}
-					onChange={(e) => {
-						setUsername(e.target.value);
-					}}
-					label="Username"
-					InputLabelProps={{
-						style: { color: "#8FBB90", borderColor: "#8FBB90" },
-					}}
-					sx={{ marginRight: 2, width: "45%" }}
-				></CssTextField>
-				<Button
-					sx={{ width: "50%" }}
-					className="Button"
-					variant="contained"
-					onClick={sendUsernameMessage}
-				>
-					Set Username
-				</Button>
-			</Box>
-			<Box m={1}>
-				<Button
-					className="Button"
-					variant="contained"
-					onClick={sendRandomizeMessage}
-				>
-					Randomize Avatar
-				</Button>
-			</Box>
-			<Box m={1}>
-				<Button className="Button" variant="contained" onClick={sendReadyMsg}>
-					Ready Up
-				</Button>
-			</Box>
-			<Box m={1}>
-				<Button
-					className="Button"
-					variant="contained"
-					onClick={sendStartGameMsg}
-				>
-					Start Game
-				</Button>
-			</Box>
+			<CssTextField
+				value={username}
+				onChange={(e) => {
+					setUsername(e.target.value);
+				}}
+				label="Username"
+				InputLabelProps={{
+					style: { color: "#8FBB90", borderColor: "#8FBB90" },
+				}}
+				FormHelperTextProps={{
+					style: { color: "#8FBB90", borderColor: "#8FBB90" },
+				}}
+				helperText="Press enter to set your username"
+				sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
+				onKeyDown={(e) => {
+					if (e.key === "Enter") sendUsernameMessage();
+				}}
+			></CssTextField>
+			<Button
+				className="Button"
+				variant="contained"
+				onClick={sendRandomizeMessage}
+				sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
+			>
+				Randomize Avatar
+			</Button>
+			<Button
+				className="Button"
+				variant="contained"
+				onClick={sendReadyMsg}
+				sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
+			>
+				Ready Up
+			</Button>
+			<Button
+				className="Button"
+				variant="contained"
+				onClick={sendStartGameMsg}
+				sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
+			>
+				Start Game
+			</Button>
 		</div>
 	);
 }

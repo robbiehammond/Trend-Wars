@@ -12,9 +12,6 @@ function App() {
 	return (
 		<div className="App">
 			<ThemeProvider theme={theme}>
-				<header className="App-header">
-					<h1>TREND WARS</h1>
-				</header>
 				<div className="main">
 					<Routes>
 						<Route path="/lobby/:id" element={<Lobby />} />
