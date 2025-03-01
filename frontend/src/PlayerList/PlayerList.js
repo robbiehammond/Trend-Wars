@@ -59,7 +59,6 @@ function PlayerList(props) {
 				isOnHomepage
 					? { marginBottom: "25px" }
 					: {
-							marginLeft: "75px",
 							padding: "15px 10px 20px 10px",
 							marginTop: "15%",
 					  }
@@ -125,7 +124,7 @@ function PlayerList(props) {
 											<CheckCircleIcon></CheckCircleIcon>
 										) : (
 											player.id === yourId ?
-												<AutorenewIcon sx={{ color: "white" }}
+												<AutorenewIcon sx={{ color: "white" }} className="hover:stroke-current hover:text-white"
 													onClick={sendRandomizeMessage}
 												></AutorenewIcon> : ''
 										)

@@ -19,6 +19,7 @@ class Lobby extends React.Component {
 			playerListShouldShow: true,
 			firstStartingWord: "N/A",
 			results: "",
+			round: 1,
 		};
 	}
 
@@ -54,6 +55,11 @@ class Lobby extends React.Component {
 							results: message.msgData.scores,
 						});
 						break;
+					case "LOBBY_STATE":
+						this.setState({
+							round: message.msgData.turnNumber
+						});
+						break;
 					default:
 						break;
 				}
@@ -78,8 +84,13 @@ class Lobby extends React.Component {
 		} else {
 			return (
 				<div className="game-wrapper">
-					<div className="game-logo" >
+					<div className="game-logo">
 						<h1>TREND WARS</h1>
+					</div>
+					<div className="game-bar">
+						{this.state.hasGameStarted
+							? `Round ${this.state.round} of 5`
+							: `Waiting for players to ready up...`}
 					</div>
 					<div className="game-content">{lobbyContent}</div>
 					<div className="game-players">{playerList}</div>

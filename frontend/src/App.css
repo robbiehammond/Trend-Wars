@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
 :root{
 	--BORDER_GAP: 6px;
+	--BORDER_RADIUS: 6px;
 }
 
 body {
@@ -11,7 +12,7 @@ body {
 }
 
 .logo-text {
-	font-size: calc(10px + 3vmin);
+	font-size: calc(10px + 3vmin) !important;
 	font-weight: bold;
 	color: #908fbb;
 }
@@ -37,6 +38,8 @@ body {
 
 .game-wrapper {
     height: 100%;
+	max-width: 1312px;
+	margin: auto;
     font-size: var(--FONT_SIZE);
     display: grid;
     grid-gap: var(--BORDER_GAP);
@@ -55,17 +58,27 @@ body {
 	font-size: calc(10px + 3vmin);
 	font-weight: bold;
 	color: #908fbb;
-	padding: 1rem 2rem;
+	padding: 1rem 0rem;
 }
 
 .game-players {
     grid-area: players;
     position: relative;
     flex: 0 0 auto;
-    width: 500px;
+    max-width: 500px;
     border-radius: var(--BORDER_RADIUS);
     display: flex;
     flex-direction: column
+}
+
+.game-bar {
+    grid-area: bar;
+    height: 100%;
+	font-size: calc(10px + 2vmin);
+	color: #f1f1f6;
+    text-align: left;
+    position: relative;
+    border-radius: var(--BORDER_RADIUS)
 }
 
 .game-chat {

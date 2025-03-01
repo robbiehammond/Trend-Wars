@@ -58,6 +58,10 @@ class Results extends React.Component {
 		});
 
 		return (
+			<>
+			<header className="logo-text">
+					<h1>TREND WARS</h1>
+			</header>
 			<div className="GameResults-div">
 				<div className="results">
 					<h2>Results</h2>
@@ -127,6 +131,7 @@ class Results extends React.Component {
 					</Button>
 				</Box>
 			</div>
+			</>
 		);
 	}
 }

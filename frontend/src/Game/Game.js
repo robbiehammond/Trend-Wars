@@ -43,7 +43,6 @@ function Game(props) {
 				console.log(message.msgData);
 				if (passedTurnNum > lastTurnNum) {
 					setLastPhrase(wordThisTurn + " + " + userWord);
-					wordInput.value = "";
 					let players = message.msgData.players;
 					let you = players.filter((p) => p.id === yourId)[0];
 					setPointIncrease(you.pointInc);
