@@ -53,6 +53,7 @@ At some point the deployment process will be simplified, but for now it is this:
 - Create an [ECR](https://aws.amazon.com/ecr/) repo in AWS named `trend-wars-backend`
 - Build the Dockerfile in the backend via `docker build -t trend-wars-backend .`
 - Run `docker tag trend-wars-backend [AWS ACCOUNT ID].dkr.ecr.[REGION].amazonaws.com/trend-wars-backend`
+- Login to ECR via `aws ecr get-login-password | docker login --username AWS --password-stdin [AWS ACCOUNT ID].dkr.ecr.[REGION].amazonaws.com`
 - Run `docker push [AWS ACCOUNT ID].dkr.ecr.[REGION].amazonaws.com/trend-wars-backend`
 - Go into the `fargate_deployment` directory and run `cdk deploy`, answer `y` to changes it says it'll make
 - Figure out the public IP of the fargate task. Find the task in the AWS console, click the "Network bindings" tab, and it'll be the only one in the table.
