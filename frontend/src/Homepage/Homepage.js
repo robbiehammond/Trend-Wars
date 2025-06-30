@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
-import { TextField } from "@mui/material";
+import { Container, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import PlayerList from "../PlayerList/PlayerList";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -131,74 +131,104 @@ function Homepage() {
 					<header className="logo-text">
 						<h1>TREND WARS</h1>
 					</header>
-					<div className="main-content">
-						<p>
-							This is You <ArrowDownwardIcon></ArrowDownwardIcon>
-						</p>
-						<PlayerList
-							players={[player]}
-							yourId={player.id}
-							isOnHomepage={true}
-						></PlayerList>
-						<Box m={1} sx={{ width: "80%" }}>
-							<p style={{ fontSize: "1rem" }}>
-								Trend Wars is a multiplayer game with 2 to 5 players. You will
-								be given a word each round. Come up with a trendy phrase to pair
-								with it.
-								<br></br>Based on Google Trends, your phrase will be scored from
-								0 to 100. The player with the most points after 5 round wins.
-								<br></br>
-								<br></br>
-								You can set your username, join a lobby, or create a lobby
-								below. Good luck Soldier.
+					<Container>
+						<Container
+							sx={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+							}}
+						>
+							<p>
+								This is You <ArrowDownwardIcon></ArrowDownwardIcon>
 							</p>
-						</Box>
-						<CssTextField
-							value={username}
-							onChange={(e) => {
-								setUsername(e.target.value);
-							}}
-							label="Username"
-							InputLabelProps={{
-								style: { color: "#8FBB90", borderColor: "#8FBB90" },
-							}}
-							FormHelperTextProps={{
-								style: { color: "#8FBB90", borderColor: "#8FBB90" },
-							}}
-							helperText="Press enter to set your username"
-							sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
-							onKeyDown={(e) => {
-								if (e.key === "Enter") sendUsernameMessage();
-							}}
-						></CssTextField>
-						<CssTextField
-							sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
-							value={lobbyID}
-							onChange={(e) => {
-								setLobbyID(e.target.value);
-							}}
-							label="Lobby Code"
-							color="secondary"
-							InputLabelProps={{
-								style: { color: "#8FBB90", borderColor: "#8FBB90" },
-							}}
-							helperText="Press enter to join the lobby"
-							FormHelperTextProps={{
-								style: { color: "#8FBB90", borderColor: "#8FBB90" },
-							}}
-							onKeyDown={(e) => {
-								if (e.key === "Enter") sendJoinLobbyMessage();
-							}}
-						></CssTextField>
+							<PlayerList
+								players={[player]}
+								yourId={player.id}
+								isOnHomepage={true}
+							></PlayerList>
+							<Box m={1} sx={{ width: "85%", maxWidth: "600px" }}>
+								<span style={{ fontSize: "1rem" }}>
+									<p>
+										Trend Wars is a multiplayer game with 2 to 5 players. You
+										will be given a word each round. Come up with a trendy
+										phrase to pair with it.
+									</p>
+									<p>
+										Based on Google Trends, your phrase will be scored from 0 to
+										100. The player with the most points after 5 round wins. You
+										can set your username, join a lobby, or create a lobby
+										below. Good luck Soldier.
+									</p>
+								</span>
+							</Box>
+						</Container>
+						<Container>
+							<CssTextField
+								value={username}
+								onChange={(e) => {
+									setUsername(e.target.value);
+								}}
+								label="Username"
+								InputLabelProps={{
+									style: { color: "#8FBB90", borderColor: "#8FBB90" },
+								}}
+								FormHelperTextProps={{
+									style: { color: "#8FBB90", borderColor: "#8FBB90" },
+								}}
+								helperText="Press enter or hit 'SET' to set your username"
+								sx={{ margin: 1, maxWidth: "350px", width: "75%" }}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") sendUsernameMessage();
+								}}
+							></CssTextField>
+							<Button
+								className="Button"
+								variant="contained"
+								onClick={sendUsernameMessage}
+								sx={{ margin: 1, maxWidth: "100px", width: "10%" }}
+							>
+								Set
+							</Button>
+						</Container>
+						<Container>
+							<CssTextField
+								sx={{ margin: 1, maxWidth: "350px", width: "75%" }}
+								value={lobbyID}
+								onChange={(e) => {
+									setLobbyID(e.target.value);
+								}}
+								label="Lobby Code"
+								color="secondary"
+								InputLabelProps={{
+									style: { color: "#8FBB90", borderColor: "#8FBB90" },
+								}}
+								helperText="Press enter or hit 'GO' to join the lobby"
+								FormHelperTextProps={{
+									style: { color: "#8FBB90", borderColor: "#8FBB90" },
+								}}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") sendJoinLobbyMessage();
+								}}
+							></CssTextField>
+							<Button
+								className="Button"
+								variant="contained"
+								onClick={sendJoinLobbyMessage}
+								sx={{ m: 1, maxWidth: "100px", width: "10%" }}
+							>
+								Go
+							</Button>
+						</Container>
 						<Button
 							className="Button"
 							variant="contained"
 							onClick={sendCreateLobbyMessage}
-							sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
+							sx={{ my: 1, maxWidth: "466px", width: "85%" }}
 						>
 							Create Lobby
 						</Button>
-					</div>
+					</Container>
 				</div>
 			) : (
 				<div>
