@@ -14,3 +14,20 @@
 .Homepage-link {
   color: #61dafb;
 }
+
+.homepage-btn {
+  max-width: 100px;
+  width: 10%;
+}
+
+@media (max-width: 600px) {
+  .homepage-btn {
+    width: 80%;
+    max-width: 350px;
+  }
+
+  .create-btn {
+    width: 80%;
+    max-width: 350px;
+  }
+}

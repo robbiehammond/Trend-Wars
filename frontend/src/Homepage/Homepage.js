@@ -177,23 +177,23 @@ function Homepage() {
 									style: { color: "#8FBB90", borderColor: "#8FBB90" },
 								}}
 								helperText="Press enter or hit 'SET' to set your username"
-								sx={{ margin: 1, maxWidth: "350px", width: "75%" }}
+								sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
 								onKeyDown={(e) => {
 									if (e.key === "Enter") sendUsernameMessage();
 								}}
 							></CssTextField>
 							<Button
-								className="Button"
+								className="Button homepage-btn"
 								variant="contained"
 								onClick={sendUsernameMessage}
-								sx={{ margin: 1, maxWidth: "100px", width: "10%" }}
+								sx={{ margin: 1 }}
 							>
 								Set
 							</Button>
 						</Container>
 						<Container>
 							<CssTextField
-								sx={{ margin: 1, maxWidth: "350px", width: "75%" }}
+								sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
 								value={lobbyID}
 								onChange={(e) => {
 									setLobbyID(e.target.value);
@@ -212,22 +212,24 @@ function Homepage() {
 								}}
 							></CssTextField>
 							<Button
-								className="Button"
+								className="Button homepage-btn"
 								variant="contained"
 								onClick={sendJoinLobbyMessage}
-								sx={{ m: 1, maxWidth: "100px", width: "10%" }}
+								sx={{ m: 1 }}
 							>
 								Go
 							</Button>
 						</Container>
-						<Button
-							className="Button"
-							variant="contained"
-							onClick={sendCreateLobbyMessage}
-							sx={{ my: 1, maxWidth: "466px", width: "85%" }}
-						>
-							Create Lobby
-						</Button>
+						<Container>
+							<Button
+								className="Button .create-btn"
+								variant="contained"
+								onClick={sendCreateLobbyMessage}
+								sx={{ m: 2, maxWidth: "466px", width: "90%" }}
+							>
+								Create Lobby
+							</Button>
+						</Container>
 					</Container>
 				</div>
 			) : (
