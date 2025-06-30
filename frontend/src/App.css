@@ -14,7 +14,8 @@ body {
 .logo-text {
 	font-size: calc(10px + 3vmin) !important;
 	font-weight: bold;
-	color: #908fbb;
+	/* color: #908fbb; */
+	color: #f1f1f6;
 }
 
 .Lobby {

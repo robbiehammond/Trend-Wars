@@ -12,6 +12,8 @@ import { styled } from "@mui/material/styles";
 import PlayerList from "../PlayerList/PlayerList";
 import CircularProgress from "@mui/material/CircularProgress";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import Card from "@mui/material/Card";
+import Paper from "@mui/material/Paper";
 
 export const CssTextField = styled(TextField)({
 	"& label.Mui-focused": {
@@ -125,13 +127,16 @@ function Homepage() {
 	});
 
 	return (
-		<div className="Homepage">
+		<div className="mx-auto max-w-screen-lg p-4">
 			{loaded ? (
-				<div className="Homepage-body">
-					<header className="logo-text">
-						<h1>TREND WARS</h1>
-					</header>
-					<Container>
+				<div>
+					<Card className="mb-4">
+						<header className="logo-text">
+							<h1>TREND WARS</h1>
+						</header>
+					</Card>
+
+					<Card>
 						<Container
 							sx={{
 								display: "flex",
@@ -230,15 +235,21 @@ function Homepage() {
 								Create Lobby
 							</Button>
 						</Container>
-					</Container>
+					</Card>
 				</div>
 			) : (
-				<div>
-					<header className="logo-text">
-						<h1>TREND WARS</h1>
-					</header>
-					<CircularProgress />
-				</div>
+				<>
+					<Card className="mb-4">
+						<header className="logo-text">
+							<h1>TREND WARS</h1>
+						</header>
+					</Card>
+					<Card>
+						<Container className="p-4">
+							<CircularProgress />
+						</Container>
+					</Card>
+				</>
 			)}
 		</div>
 	);
