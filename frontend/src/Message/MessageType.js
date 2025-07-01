@@ -12,6 +12,7 @@ let MessageType = {
 	LOBBY_CLOSING: "LOBBY_CLOSING",
 	TIME_OVER: "TIME_OVER",
 	RANDOMIZE_BIGHEAD: "RANDOMIZE_BIGHEAD",
+	CHAT: "CHAT",
 	//insert more types as needed, make sure one exists on backend too
 };
 

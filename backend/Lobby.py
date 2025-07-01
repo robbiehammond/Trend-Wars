@@ -27,6 +27,10 @@ class Lobby:
     def handleMessage(self, message: Message, player: Player):
         msgType = message.msgType
         match msgType:
+            case "CHAT":
+                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.CHAT, {
+                    "text": f"{player.username}: {message.msgData['text']}"
+                }))
             case "READY":
                 player.ready = not player.ready
                 self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))

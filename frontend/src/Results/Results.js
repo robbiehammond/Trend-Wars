@@ -51,7 +51,7 @@ class Results extends React.Component {
 
 		ws.on("message", function (json) {
 			let message = Message.fromJSON(json);
-			console.log(message);
+			// console.log(message);
 
 			switch (message.msgType) {
 			}

@@ -36,7 +36,7 @@ function PlayerList(props) {
 
 	ws.on("message", function (json) {
 		let message = Message.fromJSON(json);
-		console.log(message);
+		// console.log(message);
 		switch (message.msgType) {
 			case "LOBBY_STATE":
 				setPlayers(message.msgData.players);

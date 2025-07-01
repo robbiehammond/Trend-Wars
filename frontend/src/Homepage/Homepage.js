@@ -103,7 +103,7 @@ function Homepage() {
 
 	ws.on("message", (json) => {
 		let message = Message.fromJSON(json);
-		console.log(message);
+		// console.log(message);
 		switch (message.msgType) {
 			case "PLAYER_ID":
 				setYourId(message.msgData.your_id);

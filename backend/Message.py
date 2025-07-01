@@ -34,6 +34,7 @@ class MessageType(Enum):
     PLAYER_STATE = auto()
     TURN_TIMER_TICK = auto()
     TURN_TIMER_EXPIRED = auto()
+    CHAT = auto() # used to send a chat message to all players in a lobby
 
 
 

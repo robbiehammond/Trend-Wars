@@ -106,6 +106,7 @@ class ConnectionManager:
         # loop through all sockets, send this message to all players sharing the same lobby ID
         for sock in self.connections:
             if self.socketToPlayer[sock].lobbyID == lobbyID:
+                print(f"Sending message to player {self.socketToPlayer[sock].username} in lobby {lobbyID}")
                 sock.emit('message', message.toJSON())
     
     def send_to_player(self, player: Player, message: Message):

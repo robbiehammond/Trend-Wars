@@ -41,7 +41,6 @@ function Game(props) {
 		let message = Message.fromJSON(json);
 		switch (message.msgType) {
 			case "LOBBY_STATE":
-				let wordInput = document.getElementById("word-input");
 				let passedTurnNum = message.msgData.turnNumber;
 				console.log(message.msgData);
 				if (passedTurnNum > lastTurnNum) {

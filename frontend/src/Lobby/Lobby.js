@@ -27,6 +27,8 @@ class Lobby extends React.Component {
 			firstStartingWord: "N/A",
 			results: "",
 			round: 1,
+			messages: [],
+			currentMessage: "",
 		};
 	}
 
@@ -43,6 +45,14 @@ class Lobby extends React.Component {
 				console.log(message);
 
 				switch (message.msgType) {
+					case "CHAT":
+						// Handle chat messages here if needed
+						if (message.msgData.text === "") {
+							return; // Ignore empty messages
+						}
+						this.setState((prevState) => ({
+							messages: [...prevState.messages, message.msgData.text],
+						}));
 					case "GAME_STARTED":
 						this.setState({
 							hasGameStarted: true,
@@ -114,25 +124,30 @@ class Lobby extends React.Component {
 									{playerList}
 								</Grid>
 								<Grid item xs={6}>
-									<Card className="my-4 !bg-[#908fbb] h-[370px] flex flex-col">
+									{!this.state.lobbyDoesntExist && <Card className="my-4 !bg-[#908fbb] h-[370px] flex flex-col">
 										<Stack spacing={2} className="text-left overflow-y-scroll p-4">
-											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
-											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
-											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
-											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
-											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
-											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
-											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
-											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
-											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+											{ this.state.messages.length === 0 ? (
+												<p>No messages yet.</p>
+											) : (
+												this.state.messages.map((msg, index) => (
+													<p key={index}>{msg}</p>
+												))
+											)}
 										</Stack>
 										<div className=" flex px-2 py-2 gap-2">
-											<TextField fullWidth variant="filled" autoComplete="off"></TextField>
-											<Button variant="contained" endIcon={<SendIcon />}>
+											<TextField fullWidth variant="filled" autoComplete="off" onChange={(e) => {
+												this.setState({ currentMessage: e.target.value });
+											}}></TextField>
+											<Button variant="contained" endIcon={<SendIcon />} onClick={() => {
+												const msg = new Message(MessageType.CHAT, {
+													text: this.state.currentMessage
+												});
+												ws.emit("message", msg.toJSON());
+											}}>
 												Send
 											</Button>
 										</div>
-									</Card>
+									</Card>}
 								</Grid>
 								<Grid item xs={12}>
 									{lobbyContent}
