@@ -7,6 +7,8 @@ import MessageType from "../Message/MessageType";
 import { useState } from "react";
 import { CssTextField } from "../Homepage/Homepage";
 import { useLocation } from "react-router-dom";
+import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
 
 function Landing() {
 	const location = useLocation();
@@ -34,51 +36,63 @@ function Landing() {
 	}
 
 	return (
-		<div className="Landing">
-			<p> Your Lobby ID is {lobbyID}</p>
-			<CssTextField
-				value={username}
-				onChange={(e) => {
-					setUsername(e.target.value);
-				}}
-				label="Username"
-				InputLabelProps={{
-					style: { color: "#8FBB90", borderColor: "#8FBB90" },
-				}}
-				FormHelperTextProps={{
-					style: { color: "#8FBB90", borderColor: "#8FBB90" },
-				}}
-				helperText="Press enter to set your username"
-				sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
-				onKeyDown={(e) => {
-					if (e.key === "Enter") sendUsernameMessage();
-				}}
-			></CssTextField>
-			<Button
-				className="Button"
-				variant="contained"
-				onClick={sendRandomizeMessage}
-				sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
-			>
-				Randomize Avatar
-			</Button>
-			<Button
-				className="Button"
-				variant="contained"
-				onClick={sendReadyMsg}
-				sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
-			>
-				Ready Up
-			</Button>
-			<Button
-				className="Button"
-				variant="contained"
-				onClick={sendStartGameMsg}
-				sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
-			>
-				Start Game
-			</Button>
-		</div>
+		<Grid container spacing={2} className="mb-4">
+			<Grid item xs={12}>
+				<Grid container justifyContent="center" spacing={2}>
+					<Grid item xs={6} className="*:w-full">
+						<CssTextField
+							value={username}
+							onChange={(e) => {
+								setUsername(e.target.value);
+							}}
+							label="Username"
+							InputLabelProps={{
+								style: { color: "#8FBB90", borderColor: "#8FBB90" },
+							}}
+							FormHelperTextProps={{
+								style: { color: "#8FBB90", borderColor: "#8FBB90" },
+							}}
+							helperText="Press enter or hit 'SET' to set your username"
+							onKeyDown={(e) => {
+								if (e.key === "Enter") sendUsernameMessage();
+							}}
+						></CssTextField>
+					</Grid>
+					<Grid item xs={6} className="*:w-full">
+						<Button
+							className="Button"
+							variant="contained"
+							onClick={sendUsernameMessage}
+						>
+							Set
+						</Button>
+					</Grid>
+				</Grid>
+			</Grid>
+
+			<Grid item xs={12}>
+				<Grid container justifyContent="center" spacing={2}>
+					<Grid item xs={6} className="*:w-full">
+						<Button
+							className="Button"
+							variant="contained"
+							onClick={sendReadyMsg}
+						>
+							Ready Up
+						</Button>
+					</Grid>
+					<Grid item xs={6} className="*:w-full">
+						<Button
+							className="Button"
+							variant="contained"
+							onClick={sendStartGameMsg}
+						>
+							Start Game
+						</Button>
+					</Grid>
+				</Grid>
+			</Grid>
+		</Grid>
 	);
 }
 

@@ -8,6 +8,13 @@ import Message from "../Message/Message";
 import MessageType from "../Message/MessageType";
 import ErrorPage from "../ErrorPage/Error";
 import Results from "../Results/Results";
+import Card from "@mui/material/Card";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
 
 class Lobby extends React.Component {
 	constructor(props) {
@@ -57,7 +64,7 @@ class Lobby extends React.Component {
 						break;
 					case "LOBBY_STATE":
 						this.setState({
-							round: message.msgData.turnNumber
+							round: message.msgData.turnNumber,
 						});
 						break;
 					default:
@@ -83,17 +90,56 @@ class Lobby extends React.Component {
 			return <Results res={this.state.results} />;
 		} else {
 			return (
-				<div className="game-wrapper">
-					<div className="game-logo">
-						<h1>TREND WARS</h1>
-					</div>
-					<div className="game-bar">
-						{this.state.hasGameStarted
-							? `Round ${this.state.round} of 5`
-							: `Waiting for players to ready up...`}
-					</div>
-					<div className="game-content">{lobbyContent}</div>
-					<div className="game-players">{playerList}</div>
+				<div className="mx-auto max-w-screen-lg h-[90vh] p-4 text-sm">
+					<Card className="mb-4">
+						<header className="logo-text">
+							<h1>TREND WARS</h1>
+						</header>
+					</Card>
+					<Card>
+						<div className="game-bar mt-4">
+							<p>
+								{" "}
+								Lobby ID:{" "}
+								{window.location.pathname.split("/").pop().toUpperCase()}
+							</p>
+
+							{this.state.hasGameStarted
+								? `Round ${this.state.round} of 5`
+								: `Waiting for players to ready up...`}
+						</div>
+						<Container className="p-4 !max-w-[800px] mx-auto">
+							<Grid container spacing={2} className="h-full">
+								<Grid item xs={6} className="">
+									{playerList}
+								</Grid>
+								<Grid item xs={6}>
+									<Card className="my-4 !bg-[#908fbb] h-[300px] flex flex-col">
+										<Stack spacing={2} className="text-left overflow-y-scroll p-4">
+											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
+										</Stack>
+										<div className=" flex px-2 py-2 gap-2">
+											<TextField fullWidth variant="filled"></TextField>
+											<Button variant="contained" endIcon={<SendIcon />}>
+												Send
+											</Button>
+										</div>
+									</Card>
+								</Grid>
+								<Grid item xs={12}>
+									{lobbyContent}
+								</Grid>
+							</Grid>
+						</Container>
+					</Card>
 				</div>
 			);
 		}

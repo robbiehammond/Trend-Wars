@@ -1,20 +1,3 @@
-
-
-.word {
-	font-size: 5rem !important;
-	font-weight: bold !important;
-	background-color: #8fbb90;
-	border-radius: 8px;
-	margin: 20px !important;
-	color: #f1f1f6;
-	padding: 15px !important;
-}
-
-.word-container {
-	margin-top: 10%;
-	margin-bottom: 15px;
-}
-
 .Button {
 	margin: 15px;
 	font-size: 1.5rem !important;

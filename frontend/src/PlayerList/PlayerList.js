@@ -54,17 +54,16 @@ function PlayerList(props) {
 
 	return (
 		<div
-			className="playerList"
+			className="rounded bg-[#908fbb] w-auto mx-auto my-4"
 			style={
 				isOnHomepage
-					? { marginBottom: "25px" }
+					? { width: "250px" }
 					: {
-							padding: "15px 10px 20px 10px",
-							marginTop: "15%",
+						height: 300
 					  }
 			}
 		>
-			{isOnHomepage ? "" : <h2>Player List</h2>}
+			{/* {isOnHomepage ? "" : <h2>Player List</h2>} */}
 			<List dense>
 				{players
 					.sort((a, b) => b.score - a.score)
@@ -72,7 +71,9 @@ function PlayerList(props) {
 						const labelId = `checkbox-list-secondary-label-${player}`;
 						return (
 							<ListItem key={player.id}>
-								{!hasGameStarted ? "" : index > 2 ? (
+								{!hasGameStarted ? (
+									""
+								) : index > 2 ? (
 									<LooksOneRoundedIcon
 										sx={{ visibility: "hidden" }}
 									></LooksOneRoundedIcon>
@@ -111,6 +112,7 @@ function PlayerList(props) {
 									sx={{
 										fontSize: "40",
 										fontWeight: "medium",
+										overflow: "clip",
 									}}
 									primary={`${
 										player.id === yourId
@@ -118,21 +120,25 @@ function PlayerList(props) {
 											: player.username
 									} ${hasGameStarted ? ": " + player.score + " pts" : ""}`}
 								/>
-								<>
+								<div className="flex items-center pl-2">
 									{!hasGameStarted ? (
 										player.ready ? (
 											<CheckCircleIcon></CheckCircleIcon>
+										) : player.id === yourId ? (
+											<AutorenewIcon
+												sx={{ color: "white" }}
+												className="hover:stroke-current hover:text-white"
+												onClick={sendRandomizeMessage}
+											></AutorenewIcon>
 										) : (
-											player.id === yourId ?
-												<AutorenewIcon sx={{ color: "white" }} className="hover:stroke-current hover:text-white"
-													onClick={sendRandomizeMessage}
-												></AutorenewIcon> : ''
+											""
 										)
 									) : player.wordSubmittedThisTurn ? (
 										<CheckCircleIcon></CheckCircleIcon>
-									) : "" 
-									}
-								</>
+									) : (
+										""
+									)}
+								</div>
 							</ListItem>
 						);
 					})}

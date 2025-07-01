@@ -12,7 +12,7 @@ body {
 }
 
 .logo-text {
-	font-size: calc(10px + 3vmin) !important;
+	font-size: calc(10px + 2vmin) !important;
 	font-weight: bold;
 	/* color: #908fbb; */
 	color: #f1f1f6;
@@ -30,7 +30,6 @@ body {
 	color: #f1f1f6;
 	height: 100%;
 	width: 100%;
-
 }
 
 .App-link {
@@ -38,9 +37,7 @@ body {
 }
 
 .game-wrapper {
-    height: 100%;
-	max-width: 1312px;
-	margin: auto;
+	/* margin: auto; */
     font-size: var(--FONT_SIZE);
     display: grid;
     grid-gap: var(--BORDER_GAP);
@@ -73,13 +70,10 @@ body {
 }
 
 .game-bar {
-    grid-area: bar;
+	text-align: center;
     height: 100%;
 	font-size: calc(10px + 2vmin);
 	color: #f1f1f6;
-    text-align: left;
-    position: relative;
-    border-radius: var(--BORDER_RADIUS)
 }
 
 .game-chat {

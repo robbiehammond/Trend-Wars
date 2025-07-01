@@ -7,6 +7,7 @@ import MessageType from "../Message/MessageType";
 import { ws } from "../socketConfig.js";
 import Slide from "@mui/material/Slide";
 import { useLocation } from "react-router-dom";
+import { TextField } from "@mui/material";
 
 function Game(props) {
 	const location = useLocation();
@@ -74,30 +75,29 @@ function Game(props) {
 				>
 					{
 						<div
-							className="pointInc"
 							style={{ color: "#8FBB90" }}
 						>{`+${pointIncrease} pts for ${lastPhrase}`}</div>
 					}
 				</Slide>
 			</div>
-			<div className="word-container">
-				<span className="word">{wordThisTurn}</span>{" "}
-				<span className="word"> +</span>
-				<Input
-					onChange={(e) => {
-						setUserWord(e.target.value);
-					}}
-					autoFocus
-					sx={{
-						color: "white",
-						backgroundColor: "#8FBB90",
-						borderRadius: "8px",
-						width: "25%",
-					}}
-					className="word"
-					id="word-input"
-					variant="filled"
-				></Input>
+			<div className="">
+				<div className="word">{wordThisTurn}</div>
+				<div className="word">
+					<TextField
+						onChange={(e) => {
+							setUserWord(e.target.value);
+						}}
+						autoFocus
+						sx={{
+							color: "white",
+							// backgroundColor: "#8FBB90",
+						}}
+						className="word min-w-full"
+						id="word-TextField"
+						variant="filled"
+						placeholder="Enter your word.."
+					></TextField>
+				</div>
 			</div>
 			<Button
 				className="Button"
