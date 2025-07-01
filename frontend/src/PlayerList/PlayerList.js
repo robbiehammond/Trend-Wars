@@ -59,7 +59,7 @@ function PlayerList(props) {
 				isOnHomepage
 					? { width: "250px" }
 					: {
-						height: 300
+						height: 370
 					  }
 			}
 		>

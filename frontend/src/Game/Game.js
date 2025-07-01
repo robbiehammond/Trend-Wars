@@ -8,6 +8,8 @@ import { ws } from "../socketConfig.js";
 import Slide from "@mui/material/Slide";
 import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import { TypewriterInput } from "../TypewriterInput/TypewriterInput.js";
 
 function Game(props) {
 	const location = useLocation();
@@ -63,42 +65,51 @@ function Game(props) {
 
 	return (
 		<div className="Game">
-			<div
-				className="pointIncrease"
-				ref={containerRef}
-				style={{ overflow: "hidden" }}
-			>
+			<div className="h-10 *:text-xl *:text-[#8FBB90] mb-4 mt-[-16px]" ref={containerRef}>
+				{duplicateWordSubmitted ? (
+					<p className="mb-4">This word has already been submitted by someone else!</p>
+				) : (
+					""
+				)}
 				<Slide
 					in={showPointInc}
 					direction="up"
 					container={containerRef.current}
 				>
 					{
-						<div
-							style={{ color: "#8FBB90" }}
-						>{`+${pointIncrease} pts for ${lastPhrase}`}</div>
+						<div>
+							{`+${pointIncrease} pts for ${lastPhrase}`}{" "}
+						</div>
 					}
 				</Slide>
 			</div>
-			<div className="">
-				<div className="word">{wordThisTurn}</div>
-				<div className="word">
-					<TextField
-						onChange={(e) => {
-							setUserWord(e.target.value);
+			<Grid container spacing={2} className="h-full">
+				<Grid item xs={12} className="justify-center flex">
+					<TypewriterInput
+						firstWord={wordThisTurn}
+						onValueChange={(value) => {
+							setUserWord(value);
+							console.log(value);
 						}}
-						autoFocus
-						sx={{
-							color: "white",
-							// backgroundColor: "#8FBB90",
+						handleKeyDown={(e) => {
+							if (
+								e.key === "Backspace" &&
+								userWord === "" &&
+								e.target.selectionStart === 0
+							) {
+								e.preventDefault();
+							}
+							if (e.key === "Enter") {
+								// Handle Enter key press when typing is complete
+								if (e.target.value.trim() !== "") {
+									console.log("Submitting word:", userWord);
+									submitWordMsg();
+								}
+							}
 						}}
-						className="word min-w-full"
-						id="word-TextField"
-						variant="filled"
-						placeholder="Enter your word.."
-					></TextField>
-				</div>
-			</div>
+					/>
+				</Grid>
+			</Grid>
 			<Button
 				className="Button"
 				variant="contained"
@@ -107,11 +118,6 @@ function Game(props) {
 			>
 				Submit Word
 			</Button>
-			{duplicateWordSubmitted ? (
-				<p>This word has already been submitted by someone else!</p>
-			) : (
-				""
-			)}
 		</div>
 	);
 }

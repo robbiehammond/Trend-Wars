@@ -108,13 +108,13 @@ class Lobby extends React.Component {
 								? `Round ${this.state.round} of 5`
 								: `Waiting for players to ready up...`}
 						</div>
-						<Container className="p-4 !max-w-[800px] mx-auto">
+						<Container className="p-4 !max-w-[870px] mx-auto">
 							<Grid container spacing={2} className="h-full">
-								<Grid item xs={6} className="">
+								<Grid item xs={6}>
 									{playerList}
 								</Grid>
 								<Grid item xs={6}>
-									<Card className="my-4 !bg-[#908fbb] h-[300px] flex flex-col">
+									<Card className="my-4 !bg-[#908fbb] h-[370px] flex flex-col">
 										<Stack spacing={2} className="text-left overflow-y-scroll p-4">
 											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
 											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
@@ -127,7 +127,7 @@ class Lobby extends React.Component {
 											<div>Foobar: lorem ipsumn asdfja sdfkj asdflk.</div>
 										</Stack>
 										<div className=" flex px-2 py-2 gap-2">
-											<TextField fullWidth variant="filled"></TextField>
+											<TextField fullWidth variant="filled" autoComplete="off"></TextField>
 											<Button variant="contained" endIcon={<SendIcon />}>
 												Send
 											</Button>

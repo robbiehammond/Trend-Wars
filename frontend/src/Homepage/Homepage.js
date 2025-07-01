@@ -170,6 +170,7 @@ function Homepage() {
 						</Container>
 						<Container>
 							<CssTextField
+								autoComplete="off"
 								value={username}
 								onChange={(e) => {
 									setUsername(e.target.value);
@@ -198,6 +199,7 @@ function Homepage() {
 						</Container>
 						<Container>
 							<CssTextField
+								autoComplete="off"
 								sx={{ margin: 1, maxWidth: "350px", width: "80%" }}
 								value={lobbyID}
 								onChange={(e) => {

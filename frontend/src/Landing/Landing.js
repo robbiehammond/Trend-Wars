@@ -41,6 +41,7 @@ function Landing() {
 				<Grid container justifyContent="center" spacing={2}>
 					<Grid item xs={6} className="*:w-full">
 						<CssTextField
+							autoComplete="off"
 							value={username}
 							onChange={(e) => {
 								setUsername(e.target.value);
