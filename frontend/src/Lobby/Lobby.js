@@ -15,12 +15,13 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
+import { useLocation } from "react-router-dom";
 
 class Lobby extends React.Component {
-	constructor(props) {
+	constructor({ players }) {
 		super();
 		this.state = {
-			players: this.props && this.props.players ? this.props.players : [],
+			players: players || [],
 			hasGameStarted: false,
 			lobbyDoesntExist: false,
 			playerListShouldShow: true,
@@ -33,14 +34,10 @@ class Lobby extends React.Component {
 	}
 
 	componentDidMount() {
-		const msg = new Message(MessageType.URL, { data: window.location.href });
-		ws.emit("message", msg.toJSON());
-	}
+			const msg = new Message(MessageType.URL, { data: window.location.href });
+			ws.emit("message", msg.toJSON());
 
-	render() {
-		ws.on(
-			"message",
-			function (json) {
+			this.wsMessageHandler = (json) => {
 				let message = Message.fromJSON(json);
 				console.log(message);
 
@@ -53,6 +50,7 @@ class Lobby extends React.Component {
 						this.setState((prevState) => ({
 							messages: [...prevState.messages, message.msgData.text],
 						}));
+						break;
 					case "GAME_STARTED":
 						this.setState({
 							hasGameStarted: true,
@@ -80,9 +78,16 @@ class Lobby extends React.Component {
 					default:
 						break;
 				}
-			}.bind(this)
-		);
+			};
 
+			ws.on("message", this.wsMessageHandler);
+		}
+
+		componentWillUnmount() {
+			ws.off("message", this.wsMessageHandler);
+		}
+
+	render() {
 		let lobbyContent;
 		let playerList;
 
@@ -162,3 +167,9 @@ class Lobby extends React.Component {
 }
 
 export default Lobby;
+
+export function LobbyWrapper() {
+	const location = useLocation();
+	const players = location.state ? location.state.players : [];
+	return <Lobby players={players} />;
+}

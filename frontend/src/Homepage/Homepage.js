@@ -1,7 +1,7 @@
 import "./Homepage.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ws } from "../socketConfig.js";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -13,7 +13,8 @@ import PlayerList from "../PlayerList/PlayerList";
 import CircularProgress from "@mui/material/CircularProgress";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import Card from "@mui/material/Card";
-import Paper from "@mui/material/Paper";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 export const CssTextField = styled(TextField)({
 	"& label.Mui-focused": {
@@ -68,17 +69,18 @@ function Homepage() {
 	});
 
 	const [username, setUsername] = useState("");
-	const [yourId, setYourId] = useState(-37);
+	const [yourId, setYourId] = useState('');
 	const [lobbyID, setLobbyID] = useState("");
 	const [loaded, setLoaded] = useState(false);
+	const currentPlayerIdRef = useRef('');
 	const navigate = useNavigate();
 
-	function rerouteToLobby(data) {
+	function rerouteToLobby(data, playerId = currentPlayerIdRef.current || yourId) {
 		navigate(`/lobby/${data.lobbyID}`, {
 			replace: true,
 			state: {
 				players: data.lobby_state.players,
-				yourId: yourId,
+				yourId: playerId,
 				lobbyID: data.lobbyID,
 			},
 		});
@@ -101,30 +103,42 @@ function Homepage() {
 		ws.emit("message", msg.toJSON());
 	}
 
-	ws.on("message", (json) => {
-		let message = Message.fromJSON(json);
-		// console.log(message);
-		switch (message.msgType) {
-			case "PLAYER_ID":
-				setYourId(message.msgData.your_id);
-				break;
-			case "LOBBY_CREATED":
-				rerouteToLobby(message.msgData);
-				break;
-			case "USERNAME_CHANGED":
-				break;
-			//if you wanna visually show that the username has been changed or somethin, do that here
-			case "PLAYER_STATE":
-				setLoaded(true);
-				setPlayer(message.msgData);
-				break;
-			case "LOBBY_JOINED":
-				rerouteToLobby(message.msgData);
-				break;
-			default:
-				break;
+	useEffect(() => {
+		const msg = new Message(MessageType.URL, { data: window.location.href });
+		ws.emit("message", msg.toJSON());
+
+		ws.on("message", (json) => {
+			let message = Message.fromJSON(json);
+			console.log(message);
+			switch (message.msgType) {
+				case "PLAYER_ID":
+					currentPlayerIdRef.current = message.msgData.your_id;
+					setYourId(message.msgData.your_id);
+					break;
+				case "LOBBY_CREATED":
+					rerouteToLobby(message.msgData, currentPlayerIdRef.current);
+					break;
+				case "USERNAME_CHANGED":
+					break;
+				//if you wanna visually show that the username has been changed or somethin, do that here
+				case "PLAYER_STATE":
+					setLoaded(true);
+					setPlayer(message.msgData);
+					break;
+				case "LOBBY_JOINED":
+					rerouteToLobby(message.msgData, currentPlayerIdRef.current);
+					break;
+				default:
+					break;
+			}
+		});
+	}, []);
+
+	useEffect(() => {
+		if (yourId) {
+			console.log("yourId state updated to:", yourId);
 		}
-	});
+	}, [yourId]);
 
 	return (
 		<div className="mx-auto max-w-screen-lg p-4">

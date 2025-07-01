@@ -1,11 +1,9 @@
 import "./PlayerList.css";
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import { Button } from "@mui/material";
 import { BigHead } from "@bigheads/core";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { ws } from "../socketConfig.js";
@@ -34,23 +32,26 @@ function PlayerList(props) {
 		ws.emit("message", msg.toJSON());
 	}
 
-	ws.on("message", function (json) {
-		let message = Message.fromJSON(json);
-		// console.log(message);
-		switch (message.msgType) {
-			case "LOBBY_STATE":
-				setPlayers(message.msgData.players);
-				break;
-			case "GAME_STARTED":
-				setGameStarted(true);
-				break;
-			case "PLAYER_STATE":
-				setPlayers([message.msgData]);
-				break;
-			default:
-				break;
-		}
-	});
+	useEffect(() => {
+		const msg = new Message(MessageType.URL, { data: window.location.href });
+		ws.emit("message", msg.toJSON());
+		ws.on("message", (json) => {
+			let message = Message.fromJSON(json);
+			switch (message.msgType) {
+				case "LOBBY_STATE":
+					setPlayers(message.msgData.players);
+					break;
+				case "GAME_STARTED":
+					setGameStarted(true);
+					break;
+				case "PLAYER_STATE":
+					setPlayers([message.msgData]);
+					break;
+				default:
+					break;
+			}
+		});
+	}, []);
 
 	return (
 		<div
@@ -59,7 +60,7 @@ function PlayerList(props) {
 				isOnHomepage
 					? { width: "250px" }
 					: {
-						height: 370
+							height: 370,
 					  }
 			}
 		>

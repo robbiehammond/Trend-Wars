@@ -88,7 +88,6 @@ function Game(props) {
 						firstWord={wordThisTurn}
 						onValueChange={(value) => {
 							setUserWord(value);
-							console.log(value);
 						}}
 						handleKeyDown={(e) => {
 							if (
@@ -101,7 +100,6 @@ function Game(props) {
 							if (e.key === "Enter") {
 								// Handle Enter key press when typing is complete
 								if (e.target.value.trim() !== "") {
-									console.log("Submitting word:", userWord);
 									submitWordMsg();
 								}
 							}
