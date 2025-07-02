@@ -8,7 +8,6 @@ import { useState } from "react";
 import { CssTextField } from "../Homepage/Homepage";
 import { useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
 
 function Landing() {
 	const location = useLocation();
@@ -39,7 +38,7 @@ function Landing() {
 		<Grid container spacing={2} className="mb-4">
 			<Grid item xs={12}>
 				<Grid container justifyContent="center" spacing={2}>
-					<Grid item xs={6} className="*:w-full">
+					<Grid item xs={12} sm={6} className="*:w-full">
 						<CssTextField
 							autoComplete="off"
 							value={username}
@@ -59,7 +58,7 @@ function Landing() {
 							}}
 						></CssTextField>
 					</Grid>
-					<Grid item xs={6} className="*:w-full">
+					<Grid item xs={12} sm={6} className="*:w-full">
 						<Button
 							className="Button"
 							variant="contained"

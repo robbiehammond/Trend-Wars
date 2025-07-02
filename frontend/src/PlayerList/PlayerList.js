@@ -55,7 +55,7 @@ function PlayerList(props) {
 
 	return (
 		<div
-			className="rounded bg-[#908fbb] w-auto mx-auto my-4"
+			className="rounded bg-[#908fbb] w-auto mx-auto mb-4"
 			style={
 				isOnHomepage
 					? { width: "250px" }
@@ -85,8 +85,9 @@ function PlayerList(props) {
 								) : (
 									<LooksOneRoundedIcon></LooksOneRoundedIcon>
 								)}
-								<ListItemAvatar>
+								<ListItemAvatar className="min-w-[32px]">
 									<BigHead
+										className="w-10"
 										accessory={player.bigHead.accessory}
 										body={player.bigHead.body}
 										circleColor={player.bigHead.circleColor}
@@ -111,8 +112,6 @@ function PlayerList(props) {
 								<ListItemText
 									id={labelId}
 									sx={{
-										fontSize: "40",
-										fontWeight: "medium",
 										overflow: "clip",
 									}}
 									primary={`${

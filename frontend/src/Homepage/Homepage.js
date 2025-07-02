@@ -141,16 +141,15 @@ function Homepage() {
 	}, [yourId]);
 
 	return (
-		<div className="mx-auto max-w-screen-lg p-4">
+		<div className="mx-auto max-w-[950px] sm:px-4 !bg-neutral-800 h-full bg-fixed">
 			{loaded ? (
-				<div>
-					<Card className="mb-4">
+				<div className="flex flex-col h-full">
+					<Card className="my-4 hidden sm:block">
 						<header className="logo-text">
 							<h1>TREND WARS</h1>
 						</header>
 					</Card>
-
-					<Card>
+					<Card className="flex-grow sm:mb-4">
 						<Container
 							sx={{
 								display: "flex",

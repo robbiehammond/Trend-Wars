@@ -21,7 +21,7 @@ def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
             if lobby.id == lobbyID:
                 lobby.addPlayer(player)
                 player.lobbyID = lobby.id
-                if player.username == '?':
+                if player.username == '':
                     player.username = 'Player ' + str(lobby.size())
                 CM.send_to_player(player, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id, "lobby_state": lobby.getLobbyState()}))
                 CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
@@ -39,7 +39,7 @@ def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM
     player = sidToPlayer[sid]
     lobby.addPlayer(player)
     player.lobbyID = lobby.id
-    if player.username == '?':
+    if player.username == '':
         print("here")
         player.username = 'Player ' + str(lobby.size())
     CM.send_to_player(player, Message(MessageType.LOBBY_CREATED, {"lobbyID": lobby.id, "lobby_state": lobby.getLobbyState()})) # Seems like frontend isn't set up such that the page changes if this isn't sent
