@@ -3,6 +3,7 @@ class Player:
         self.id = id
         self.lobbyID = None
         self.username = username
+        self.host = False
         self.ready = ready
         self.guessedWord = None # will be overrided with their guessed word during the game 
         self.score = 0
@@ -24,8 +25,8 @@ class Player:
             "bestWord": self.bestWord,
             "rank": self.rank,
             "variant": self.variant,
-            "pointInc": self.pointInc
-
+            "pointInc": self.pointInc,
+            "host": self.host
         }
 
     def __str__(self):

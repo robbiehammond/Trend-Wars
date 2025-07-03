@@ -38,6 +38,7 @@ def handleCreateLobbyMsg(msg, lobbyCreator, sidToPlayer, sid, lobbies, newID, CM
     player = sidToPlayer[sid]
     lobby.addPlayer(player)
     player.lobbyID = lobby.id
+    player.host = True
     if player.username == '':
         print("here")
         player.username = 'Player ' + str(lobby.size())
