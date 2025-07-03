@@ -17,6 +17,7 @@ class Lobby:
             "timeLimit": -1,  # default time limit in seconds
             "wordGeneration": "default"  # default word generation method
         }
+        self.maxPlayers = 5
         self.game = None
         self.id = id
         self.playerIDs = set() # set of player IDs in this lobby (so we don't need to loop over players list to see who's here)

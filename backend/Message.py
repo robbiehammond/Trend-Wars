@@ -25,6 +25,7 @@ class MessageType(Enum):
     CHAT = auto() # used to send a chat message to all players in a lobby
     LOBBY_SETTINGS = auto() # used to notify the server that a player has changed the lobby settings (e.g. num rounds, time limit, etc)
     LOBBY_SETTINGS_UPDATED = auto() # used to notify all players in a lobby that the lobby settings have been updated
+    LOBBY_FULL = auto() # used to notify the client that a lobby is full and they cannot join
     STARTING_WORD = auto()
     NEW_TURN = auto()
     URL = auto()

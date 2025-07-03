@@ -18,6 +18,9 @@ def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
     else:
         for lobby in lobbies:
             if lobby.id == lobbyID:
+                if lobby.size() >= lobby.maxPlayers:
+                    CM.send_to_player(player, Message(MessageType.LOBBY_FULL, {'data': 'Lobby is full'}))
+                    return
                 lobby.addPlayer(player)
                 player.lobbyID = lobby.id
                 if player.username == '':

@@ -80,7 +80,10 @@ def onMessage(msg):
                 warnings.warn(colored("Player already in a lobby somehow, even though they joined via URL?. Not handling request.", "yellow"))
             else:
                 raw_data = decodedMessage.msgData['data']
-                lobbyID = raw_data.rsplit('/', 1)[1]
+                
+                split_data = raw_data.rsplit('/', 1)
+                lobbyID = split_data[1]
+                warnings.warn(colored(f"Raw data: {split_data}", "yellow"))
                 for lobby in lobbies:
                     if lobby.id == lobbyID:
                         lobby.addPlayer(sendingPlayer)
@@ -88,8 +91,9 @@ def onMessage(msg):
                         CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id}))
                         CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
                         return
-                CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_DOESNT_EXIST, {'data': 'bruh moment'}))
-                warnings.warn(colored(f"No lobby with ID {lobbyID} exists. Sending a LOBBY_DOESNT_EXIST message to client.", "yellow"))
+                if 'lobby' in split_data[0]:
+                    CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_DOESNT_EXIST, {'data': 'bruh moment'}))
+                    warnings.warn(colored(f"No lobby with ID {lobbyID} exists. Sending a LOBBY_DOESNT_EXIST message to client.", "yellow"))
         case _:
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
             
