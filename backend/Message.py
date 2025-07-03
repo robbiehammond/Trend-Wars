@@ -23,6 +23,9 @@ class MessageType(Enum):
     SCORE = auto() # used to notify players about a certain player's score
     GAME_CANNOT_START = auto() # used to notify the client if they try starting the game before there are enough players readied up
     LOBBY_DOESNT_EXIST = auto() # send server to client to inform the client that the lobby they tried to join doesn't exist
+    CHAT = auto() # used to send a chat message to all players in a lobby
+    LOBBY_SETTINGS = auto() # used to notify the server that a player has changed the lobby settings (e.g. num rounds, time limit, etc)
+    LOBBY_SETTINGS_UPDATED = auto() # used to notify all players in a lobby that the lobby settings have been updated
     STARTING_WORD = auto()
     NEW_TURN = auto()
     URL = auto()
@@ -34,9 +37,6 @@ class MessageType(Enum):
     PLAYER_STATE = auto()
     TURN_TIMER_TICK = auto()
     TURN_TIMER_EXPIRED = auto()
-    CHAT = auto() # used to send a chat message to all players in a lobby
-
-
 
     # returns string value of json 
     def __str__(self):

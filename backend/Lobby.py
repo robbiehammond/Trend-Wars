@@ -12,6 +12,11 @@ import time
 
 class Lobby:
     def __init__(self, id, CM: ConnectionManager):
+        self.gameSettings = {
+            "maxTurns": 5,  # default number of turns
+            "timeLimit": -1,  # default time limit in seconds
+            "wordGeneration": "default"  # default word generation method
+        }
         self.game = None
         self.id = id
         self.playerIDs = set() # set of player IDs in this lobby (so we don't need to loop over players list to see who's here)
@@ -67,7 +72,11 @@ class Lobby:
                         self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
                 else: # if there is no game and a word was submitted somehow
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
-
+            
+            case "LOBBY_SETTINGS":
+                # This message is sent by the frontend when a player changes the lobby settings
+                self.updateLobbySettings(message.msgData['data'])
+                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_SETTINGS_UPDATED, self.gameSettings))
 
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
             # Basically, it means we don't need to do anything with the message, so just drop it.
@@ -120,7 +129,7 @@ class Lobby:
 
 
     def startGame(self):
-        self.game = Game(self.players, 5, self.CM, self)
+        self.game = Game(self.players, self.gameSettings.maxTurns, self.gameSettings.timeLimit, self.gameSettings.wordGeneration, self.CM, self)
 
     def getLobbyState(self) -> dict:
         return {
@@ -130,6 +139,14 @@ class Lobby:
             "gameStarted": self.game is not None,
             "turnNumber": self.game.turn if self.game is not None else "N/A"
         }
+    
+    def updateLobbySettings(self, settings):
+        warnings.warn(colored(f"Passed Settings:{settings}", 'yellow'))
+        self.gameSettings['maxTurns'] = settings['maxTurns']
+        self.gameSettings['timeLimit'] = settings['timeLimit']
+        self.gameSettings['wordGeneration'] = settings['wordGeneration']
+
+        warnings.warn(colored(f"Game Settings:{self.gameSettings}", 'yellow'))
 
 
 class LobbyIDGenerator:

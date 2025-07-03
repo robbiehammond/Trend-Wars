@@ -22,7 +22,7 @@ numberOfTrendsAPISuccesses = 0
 
 
 class Game:
-    def __init__(self, players, maxTurns, CM: ConnectionManager, lobby: Lobby):
+    def __init__(self, players, maxTurns, timeLimit, wordGeneration, CM: ConnectionManager, lobby: Lobby):
         # also need to implement a turn timer at some point so turns don't just end when everyone submits
         threading.Thread.__init__(self)
         self.players = players
@@ -31,6 +31,8 @@ class Game:
         self.scores = {} # map each player to their score
         self.wordSubmissions = {} # map each player to their submitted word. Is cleared and re-populated every turn
         self.maxTurns = maxTurns
+        self.wordGeneration = 'default' # default word generation method
+        self.timeLimit = -1 # default time limit for each turn
         self.readyForNextTurn = {} # Once the game has started, all players start as ready
         self.gameEnded = False
         self.turnActive = False
@@ -80,7 +82,8 @@ class Game:
         self.wordSubmissions = {}
         self.lobby.count = 0
 
-        self.start_turn_timer()
+        if self.timeLimit > 0:
+            self.start_turn_timer(duration=self.timeLimit)
 
 
     # choose a word for players to complete
