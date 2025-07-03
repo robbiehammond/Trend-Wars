@@ -7,11 +7,10 @@ from termcolor import colored
 
 warnings.simplefilter('always', UserWarning)
 
-def handleUsernameMsg(player: Player, username: str, CM: ConnectionManager):
+def handlePlayerUpdateMsg(player: Player, username: str, variant: str, CM: ConnectionManager):
     player.username = username
+    player.variant = variant
     CM.send_to_player(player, Message(MessageType.PLAYER_STATE, player.toJSON()))
-    CM.send_to_player(player, Message(MessageType.USERNAME_CHANGED, {"username": player.username})) 
-
 
 def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
     if player.lobbyID is not None:

@@ -65,8 +65,8 @@ def onMessage(msg):
     # However, some must be interpreted before a player is in any lobby
     # for each new message type we make, add a new case here for how to handle it + associated handler function
     match msgType:
-        case "USERNAME":
-            handleUsernameMsg(sendingPlayer, decodedMessage.msgData['data'], CM)
+        case "PLAYER_UPDATE":
+            handlePlayerUpdateMsg(sendingPlayer, decodedMessage.msgData['data']['username'], decodedMessage.msgData['data']['variant'], CM)
         case "PLAYER_JOIN":
             handlePlayerJoinMsg(sendingPlayer, CM, lobbies, decodedMessage.msgData['data']['lobbyID'])
         case "CREATE_LOBBY":
@@ -90,9 +90,6 @@ def onMessage(msg):
                         return
                 CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_DOESNT_EXIST, {'data': 'bruh moment'}))
                 warnings.warn(colored(f"No lobby with ID {lobbyID} exists. Sending a LOBBY_DOESNT_EXIST message to client.", "yellow"))
-        case "RANDOMIZE_BIGHEAD":
-            sendingPlayer.randomizeBigHead()
-            CM.send_to_player(sendingPlayer, Message(MessageType.PLAYER_STATE, sendingPlayer.toJSON()))
         case _:
             raise Exception(f'Invalid message type. A type of {msgType} was received, but no corresponding function exists')
             
