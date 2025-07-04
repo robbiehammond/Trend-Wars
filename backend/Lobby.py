@@ -9,6 +9,12 @@ from termcolor import colored
 import warnings
 import time
 
+DEFAULT_LOBBY_SETTINGS = {
+    "maxTurns": 5,  # default number of turns
+    "timeLimit": -1,  # default time limit in seconds
+    "wordGeneration": "default"  # default word generation method
+}
+
 
 class Lobby:
     def __init__(self, id, CM: ConnectionManager):

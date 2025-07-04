@@ -1,4 +1,4 @@
-from Lobby import Lobby 
+from Lobby import DEFAULT_LOBBY_SETTINGS, Lobby 
 from Player import Player 
 from Message import MessageType, Message
 import ConnectionManager
@@ -27,6 +27,14 @@ def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
                     player.username = 'Player ' + str(lobby.size())
                 CM.send_to_player(player, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id, "lobby_state": lobby.getLobbyState()}))
                 CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
+                warnings.warn(colored(f"Sending lobby settings: {lobby.gameSettings}", "yellow"))
+                if lobby.gameSettings != DEFAULT_LOBBY_SETTINGS:
+                    CM.send_to_player(player, Message(MessageType.LOBBY_SETTINGS_UPDATED, lobby.gameSettings))
+                    CM.send_to_player(player, Message(MessageType.CHAT, {
+                        "username": 'System',
+                        "variant": 'beam',
+                        "text": "Lobby settings updated."
+                    }))
                 return
         CM.send_to_player(player, Message(MessageType.LOBBY_DOESNT_EXIST, {'data': 'bruh moment'}))
         warnings.warn(f"No lobby with ID {lobbyID} exists. Not handling request.")

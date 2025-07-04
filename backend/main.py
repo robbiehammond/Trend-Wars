@@ -83,13 +83,19 @@ def onMessage(msg):
                 
                 split_data = raw_data.rsplit('/', 1)
                 lobbyID = split_data[1]
-                warnings.warn(colored(f"Raw data: {split_data}", "yellow"))
                 for lobby in lobbies:
                     if lobby.id == lobbyID:
                         lobby.addPlayer(sendingPlayer)
                         sendingPlayer.lobbyID = lobby.id
                         CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id}))
                         CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
+                        warnings.warn(colored(f"Sending lobby settings: {lobby.gameSettings}", "yellow"))
+                        CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_SETTINGS_UPDATED, lobby.gameSettings))
+                        CM.send_to_player(sendingPlayer, Message(MessageType.CHAT, {
+                            "username": 'System',
+                            "variant": 'beam',
+                            "text": "Lobby settings updated."
+                        }))
                         return
                 if 'lobby' in split_data[0]:
                     CM.send_to_player(sendingPlayer, Message(MessageType.LOBBY_DOESNT_EXIST, {'data': 'bruh moment'}))
