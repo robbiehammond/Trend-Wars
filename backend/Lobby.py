@@ -78,7 +78,17 @@ class Lobby:
                         self.CM.send_to_all_in_lobby(self.id, Message(MessageType.WORD_SUBMITTED, {"playerID": player.id}))
                         if self.game.everyoneHasSubmitted():
                             self.game.evaluateSubmissions()
+                            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.CHAT, {
+                                "username": 'System',
+                                "variant": 'beam',
+                                "text": "Starting new round..."
+                            }))
                         self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_STATE, self.getLobbyState()))
+                        self.CM.send_to_all_in_lobby(self.id, Message(MessageType.CHAT, {
+                            "username": player.username,
+                            "variant": player.variant,
+                            "text": f"Submitted word \"{message.msgData['word']}\""
+                        }))
                 else: # if there is no game and a word was submitted somehow
                     warnings.warn(colored(f"Game has not started for lobby {self.id}. Not handling request.", 'yellow'))
             
@@ -107,6 +117,11 @@ class Lobby:
             scores = self.game.scores  # save scores
             self.CM.send_to_all_in_lobby(self.id, Message(MessageType.GAME_ENDED, {}))
             self.CM.send_to_all_in_lobby(self.id, Message(MessageType.RESULTS, {"scores": scores}))
+            self.CM.send_to_all_in_lobby(self.id, Message(MessageType.CHAT, {
+                "username": 'System',
+                "variant": 'beam',
+                "text": "Game ended."
+            }))
             self.game = None
         else:
             warnings.warn(colored("endGame called when no game exists.", "yellow"))
