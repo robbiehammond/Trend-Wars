@@ -35,7 +35,9 @@ class Lobby:
         match msgType:
             case "CHAT":
                 self.CM.send_to_all_in_lobby(self.id, Message(MessageType.CHAT, {
-                    "text": f"{player.username}: {message.msgData['text']}"
+                    "username": player.username,
+                    "variant": player.variant,
+                    "text": message.msgData['text']
                 }))
             case "READY":
                 player.ready = not player.ready
@@ -78,6 +80,11 @@ class Lobby:
                 # This message is sent by the frontend when a player changes the lobby settings
                 self.updateLobbySettings(message.msgData['data'])
                 self.CM.send_to_all_in_lobby(self.id, Message(MessageType.LOBBY_SETTINGS_UPDATED, self.gameSettings))
+                self.CM.send_to_all_in_lobby(self.id, Message(MessageType.CHAT, {
+                    "username": 'System',
+                    "variant": 'beam',
+                    "text": "Lobby settings updated."
+                }))
 
             #URL messages get sent whenever we get to the Lobby page. If they joined via the join/create lobby buttons, the message will be routed here, as their ID will have already been assigned
             # Basically, it means we don't need to do anything with the message, so just drop it.
@@ -127,7 +134,7 @@ class Lobby:
 
 
     def startGame(self):
-        self.game = Game(self.players, self.gameSettings.maxTurns, self.gameSettings.timeLimit, self.gameSettings.wordGeneration, self.CM, self)
+        self.game = Game(self.players, self.gameSettings['maxTurns'], self.gameSettings['timeLimit'], self.gameSettings['wordGeneration'], self.CM, self)
 
     def getLobbyState(self) -> dict:
         return {
