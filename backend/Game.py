@@ -37,6 +37,7 @@ class Game:
         self.gameEnded = False
         self.turnActive = False
         self.turnStart = False
+        self.gameHistory = [] # list of all turns in the game, each turn is a dict with player submissions and scores
 
         #dictionary to hold the ranks of each player
         self.playerRank = {}
@@ -151,8 +152,26 @@ class Game:
 
     def gameShouldEnd(self):
         return self.turn == self.maxTurns
+    
+    def scoresToJSON(self):
+        scores = {}
+        for player, score in self.scores.items():
+            scores[player.id] = int(score)
+        return scores
+    
+    def wordSubmissionsToJSON(self):
+        submissions = {}
+        for player, word in self.wordSubmissions.items():
+            submissions[player.id] = word
+        return submissions
 
     def endTurn(self):
+        self.gameHistory.append({
+            'turn': self.turn,
+            'curWord': self.curWord,
+            'submissions': self.wordSubmissionsToJSON(),
+            'scores': self.scoresToJSON()
+        })
         for player in self.players:
             self.readyForNextTurn[player.id] = False
             
@@ -174,7 +193,10 @@ class Game:
         for player, rank in self.playerRank.items():
             player.rank = self.playerRank[player]
             results.append(player.toJSON()) #appended in order of rank
-        self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.RESULTS, {"scores": results}))
+        self.CM.send_to_all_in_lobby(self.lobby.id, Message(MessageType.RESULTS, {
+            "scores": results,
+            "gameHistory": self.gameHistory,
+            }))
 
 
     def processReadyForNextRound(self, player: Player):
