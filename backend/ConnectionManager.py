@@ -70,6 +70,11 @@ class ConnectionManager:
                     else:
                         self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.PLAYER_LEAVE, { 'playerID': player.id, 'username': player.username}))
                         self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
+                        self.send_to_all_in_lobby(player.lobbyID, Message(MessageType.CHAT, {
+                            "username": player.username,
+                            "variant": player.variant,
+                            "text": "Left the lobby."
+                        }))
 
                 self.connections.remove(sock)
                 del self.socketToPlayer[sock]

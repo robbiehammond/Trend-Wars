@@ -26,6 +26,11 @@ def handlePlayerJoinMsg(player, CM: ConnectionManager, lobbies, lobbyID):
                 if player.username == '':
                     player.username = 'Player ' + str(lobby.size())
                 CM.send_to_player(player, Message(MessageType.LOBBY_JOINED, {"lobbyID": lobby.id, "lobby_state": lobby.getLobbyState()}))
+                CM.send_to_all_in_lobby(lobbyID, Message(MessageType.CHAT, {
+                    "username": player.username,
+                    "variant": player.variant,
+                    "text": "Joined the lobby."
+                }))
                 CM.send_to_all_in_lobby(lobbyID, Message(MessageType.LOBBY_STATE, lobby.getLobbyState()))
                 warnings.warn(colored(f"Sending lobby settings: {lobby.gameSettings}", "yellow"))
                 if lobby.gameSettings != DEFAULT_LOBBY_SETTINGS:
